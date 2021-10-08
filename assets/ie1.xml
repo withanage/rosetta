@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<mets:dmdSec xmlns:dc="http://purl.org/dc/elements/1.1/" ID="ie-dmd">
+		<mets:mdWrap MDTYPE="DC">
+			<mets:xmlData>
+				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
+						   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+					<dc:title xml:lang="en_US">Predicting E-commerce Item Sales With Web Environment Temporal
+						Background
+					</dc:title>
+					<dc:creator>Yihong Zhang</dc:creator>
+					<dc:creator>Takahiro Hara</dc:creator>
+					<dc:date>2021-07-02</dc:date>
+					<dcterms:isPartOf>BIS</dcterms:isPartOf>
+					<dcterms:abstract xml:lang="en_US">In this paper, we study the effect of Web environment temporal
+						background in pre-dicting e-commerce item sales, especially those in temporary sales. Temporary
+						sales nowadaysare a popular strategy for quickly clearing inventories. For traditional
+						recommender systems,predicting the sales of an item is done based on its past purchase records.
+						For temporarysales items, however, such records are not available. In order to make
+						recommendation forsuch items, contextual information, such as product descriptions, is usually
+						used. We investi-gate whether temporal background in the Web environment can be additional
+						useful contextualinformation in recommender systems. It is assumed that items consistent with
+						the temporalbackground would have higher demands. We propose a method for representing the
+						temporalbackground using word embeddings of e-commerce activities and social media data, and
+						eval-uate their effect on sales prediction. Through empirical analysis with real-world data, we
+						foundthat temporal background does have positive effects for sales prediction. The findings in
+						thispaper can be conveniently incorporated into future recommender system designs.
+					</dcterms:abstract>
+					<dcterms:issued>2021</dcterms:issued>
+					<dc:identifier>10.52825/bis.v1i.37</dc:identifier>
+					<dcterms:modified>2021-07-16 05:51:51</dcterms:modified>
+					<dc:publisher>TIB Open Publishing (Technische Informationsbibliothek (TIB))</dc:publisher>
+					<dc:type>status-type:publishedVersion</dc:type>
+					<dc:type>doc-type:article</dc:type>
+					<dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
+					<dc:language>en_US</dc:language>
+					<dc:rights>https://creativecommons.org/licenses/by/4.0</dc:rights>
+				</dc:record>
+			</mets:xmlData>
+		</mets:mdWrap>
+	</mets:dmdSec>
+	<mets:amdSec xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				 ID="ie-amd">
+		<mets:techMD ID="ie-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalIECharacteristics">
+							<record>
+								<key id="status">ACTIVE</key>
+								<key id="IEEntityType">Article</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:sourceMD xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					   ID="ie-amd-source-1">
+			<mets:mdWrap xmlns:mets="http://www.loc.gov/METS/" MDTYPE="OTHER" OTHERMDTYPE="MODS">
+				<mets:xmlData>
+					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
+							   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							   version="3.7">
+						<mods:titleInfo>
+							<mods:title xml:lang="en_US">Predicting E-commerce Item Sales With Web Environment Temporal
+								Background
+							</mods:title>
+						</mods:titleInfo>
+						<mods:abstract xml:lang="en_US">&lt;p&gt;&lt;span style="left: 206.362px; top: 469.835px;
+							font-size: 18.1818px; font-family: sans-serif; transform: scaleX(1.01183);"&gt;In this
+							paper, we study the effect of Web environment temporal background in pre-&lt;/span&gt;&lt;span
+							style="left: 117.6px; top: 492.416px; font-size: 18.1818px; font-family: sans-serif;
+							transform: scaleX(0.984366);"&gt;dicting e-commerce item sales, especially&amp;nbsp; those
+							in temporary sales. Temporary sales nowadays&lt;/span&gt;&lt;span style="left: 117.6px; top:
+							514.998px; font-size: 18.1818px; font-family: sans-serif; transform: scaleX(1.01503);"&gt;are
+							a popular strategy for quickly clearing inventories. For traditional&amp;nbsp; recommender
+							systems,&lt;/span&gt;&lt;span style="left: 117.6px; top: 537.58px; font-size: 18.1818px;
+							font-family: sans-serif; transform: scaleX(1.04026);"&gt;predicting the sales of an item is
+							done based on its past purchase records. For temporary&lt;/span&gt;&lt;span style="left:
+							117.6px; top: 560.163px; font-size: 18.1818px; font-family: sans-serif; transform:
+							scaleX(1.02883);"&gt;sales items, however, such records are not available. In order to make
+							recommendation for&lt;/span&gt;&lt;span style="left: 117.6px; top: 582.745px; font-size:
+							18.1818px; font-family: sans-serif; transform: scaleX(1.01002);"&gt;such items, contextual
+							information, such as product descriptions, is usually used. We investi-&lt;/span&gt;&lt;span
+							style="left: 117.6px; top: 605.326px; font-size: 18.1818px; font-family: sans-serif;
+							transform: scaleX(0.993539);"&gt;gate whether temporal background in the Web environment can
+							be additional useful contextual&lt;/span&gt;&lt;span style="left: 117.6px; top: 627.908px;
+							font-size: 18.1818px; font-family: sans-serif; transform: scaleX(1.03037);"&gt;information
+							in recommender systems. It is assumed that items consistent with the temporal&lt;/span&gt;&lt;span
+							style="left: 117.6px; top: 650.49px; font-size: 18.1818px; font-family: sans-serif;
+							transform: scaleX(1.00284);"&gt;background would have higher demands. We propose a method
+							for representing the temporal&lt;/span&gt;&lt;span style="left: 117.6px; top: 673.073px;
+							font-size: 18.1818px; font-family: sans-serif; transform: scaleX(0.995914);"&gt;background
+							using word embeddings of e-commerce activities and social media data, and eval-&lt;/span&gt;&lt;span
+							style="left: 117.6px; top: 695.655px; font-size: 18.1818px; font-family: sans-serif;
+							transform: scaleX(1.00309);"&gt;uate their effect on sales prediction. Through empirical
+							analysis with real-world data, we found&lt;/span&gt;&lt;span style="left: 117.6px; top:
+							718.236px; font-size: 18.1818px; font-family: sans-serif; transform: scaleX(1.01669);"&gt;that
+							temporal background does have positive effects for sales prediction. The findings in this&lt;/span&gt;&lt;span
+							style="left: 117.6px; top: 740.818px; font-size: 18.1818px; font-family: sans-serif;
+							transform: scaleX(0.998749);"&gt;paper can be conveniently incorporated into future
+							recommender system designs.&lt;/span&gt;&lt;/p&gt;
+						</mods:abstract>
+						<mods:name type="personal">
+							<mods:namePart xml:lang="en_US" type="family">Zhang</mods:namePart>
+							<mods:namePart xml:lang="en_US" type="given">Yihong</mods:namePart>
+							<mods:affiliation xml:lang="en_US">Osaka University</mods:affiliation>
+							<mods:description xml:lang="en_US"/>
+							<mods:displayForm xml:lang="en_US"/>
+							<mods:role>
+								<mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+								<mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:affiliation script="country">JP</mods:affiliation>
+						</mods:name>
+						<mods:name type="personal">
+							<mods:namePart xml:lang="en_US" type="family">Hara</mods:namePart>
+							<mods:namePart xml:lang="en_US" type="given">Takahiro</mods:namePart>
+							<mods:affiliation xml:lang="en_US">Osaka University</mods:affiliation>
+							<mods:description xml:lang="en_US"/>
+							<mods:displayForm xml:lang="en_US"/>
+							<mods:role>
+								<mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+								<mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:affiliation script="country">JP</mods:affiliation>
+						</mods:name>
+						<mods:subject xml:lang="en_US" authority="keywords">e-commerce</mods:subject>
+						<mods:subject xml:lang="en_US" authority="keywords">recommender</mods:subject>
+						<mods:subject xml:lang="en_US" authority="keywords">social media</mods:subject>
+						<mods:location displayLabel="coverage"/>
+						<mods:accessCondition displayLabel="rights"/>
+						<mods:identifier type="doi">10.52825/bis.v1i.37</mods:identifier>
+						<mods:recordInfo>
+							<mods:recordContentSource/>
+						</mods:recordInfo>
+						<mods:originInfo>
+							<mods:publisher/>
+						</mods:originInfo>
+						<mods:genre/>
+					</mods:mods>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+	</mets:amdSec>
+	<mets:amdSec ID="rep1-amd">
+		<mets:techMD ID="rep1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalRepCharacteristics">
+							<record>
+								<key id="preservationType">PRESERVATION_MASTER</key>
+								<key id="usageType">VIEW</key>
+								<key id="RevisionNumber">1</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid1-1-amd">
+		<mets:techMD ID="fid1-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileOriginalPath">
+									/bis-37-v1/content/streams/MASTER/37-26-1122-1-10-20210702.pdf
+								</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">8ca4b582c9f9b81d33211c3f9312c495</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:fileSec>
+		<mets:fileGrp ID="rep1" ADMID="rep1-amd">
+			<mets:file ID="fid1-1" ADMID="fid1-1-amd">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL"
+							 xlink:href="file://MASTER/37-26-1122-1-10-20210702.pdf"/>
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+	<mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Preservation Master">
+			<mets:div LABEL="rep1">
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid1-1"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+</mets:mets>

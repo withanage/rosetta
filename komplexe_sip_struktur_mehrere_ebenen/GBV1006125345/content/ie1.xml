@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/">
+	<mets:dmdSec ID="ie-dmd">
+		<mets:mdWrap MDTYPE="DC">
+			<mets:xmlData>
+				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/">
+					<dc:title>World Renewable Energy Congress-17 : Manama, Kingdom of Bahrain, December 4-8, 2016
+					</dc:title>
+					<dc:creator>World Renewable Energy Congress 17. 2016 al- @Manama (VerfasserIn)</dc:creator>
+					<dc:contributor>WREC 17 ; Manama : 2016.12.04-08</dc:contributor>
+					<dc:contributor>World Renewable Energy Congress 17 ; Manama : 2016.12.04-08</dc:contributor>
+					<dc:language>eng</dc:language>
+					<dcterms:isPartOf xmlns:dcterms="http://purl.org/dc/terms/">E3S web of conferences ; volume 23
+						(2017) ( ZDB-ID: 2755680-3)
+					</dcterms:isPartOf>
+					<dc:identifier>DPS:194.95.114.4:TIB:GBV1006125345</dc:identifier>
+					<dc:contributor>Alnaser, W. E. (HerausgeberIn)</dc:contributor>
+					<dc:publisher>Les Ulis : EDP Sciences</dc:publisher>
+					<dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/">2017</dcterms:issued>
+					<dcterms:license xmlns:dcterms="http://purl.org/dc/terms/">TIB_nicht-OA_v1_bis_12_09_2014
+					</dcterms:license>
+				</dc:record>
+			</mets:xmlData>
+		</mets:mdWrap>
+	</mets:dmdSec>
+	<mets:amdSec ID="rep1-amd">
+		<mets:techMD ID="rep1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalRepCharacteristics">
+							<record>
+								<key id="preservationType">PRESERVATION_MASTER</key>
+								<key id="usageType">VIEW</key>
+								<key id="RevisionNumber">1</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="rep1-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="rep1-amd-source">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="rep1-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="rep2-amd">
+		<mets:techMD ID="rep2-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalRepCharacteristics">
+							<record>
+								<key id="preservationType">DERIVATIVE_COPY</key>
+								<key id="usageType">VIEW</key>
+								<key id="RevisionNumber">1</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="rep2-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="rep2-amd-source">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="rep2-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid1-2-amd">
+		<mets:techMD ID="fid1-2-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileMIMEType">application/pdf</key>
+								<key id="note">null : application/pdf</key>
+								<key id="fileOriginalPath">
+									/GBV1006125345/content/streams/DERIVATIVE_COPY/757419577.pdf
+								</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">eedd43c0ab3163ec95be33cea66148c4</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="fid1-2-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="fid1-2-amd-source">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="fid1-2-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid1-1-amd">
+		<mets:techMD ID="fid1-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileMIMEType">application/pdf</key>
+								<key id="note">null : application/pdf</key>
+								<key id="fileOriginalPath">/GBV1006125345/content/streams/MASTER/2013-CNAM-01.pdf</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">83e04608def299b768362fd5c91279fa</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="fid1-1-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="fid1-1-amd-source">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="fid1-1-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="ie-amd">
+		<mets:techMD ID="ie-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="CMS">
+							<record>
+								<key id="system">TIB</key>
+								<key id="recordId">GBV1006125345</key>
+							</record>
+						</section>
+						<section id="generalIECharacteristics">
+							<record>
+								<key id="status">ACTIVE</key>
+								<key id="IEEntityType">GreyLiterature</key>
+								<key id="UserDefinedA">MR_born-digital</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="ie-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="accessRightsPolicy">
+							<record>
+								<key id="policyId">AR_EVERYONE</key>
+								<key id="policyDescription">Keine Beschränkung</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="ie-amd-source">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="ie-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Preservation Master">
+			<mets:div LABEL="rep1">
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid1-1"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+	<mets:structMap ID="rep2-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Derivative Copy">
+			<mets:div LABEL="rep2">
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid1-2"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+	<mets:fileSec>
+		<mets:fileGrp ID="rep1" ADMID="rep1-amd">
+			<mets:file ID="fid1-1" ADMID="fid1-1-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink"
+							 LOCTYPE="URL"
+							 xlin:href="file://MASTER/2013-CNAM-01.pdf"/>
+			</mets:file>
+		</mets:fileGrp>
+		<mets:fileGrp ID="rep2" ADMID="rep2-amd">
+			<mets:file ID="fid1-2" ADMID="fid1-2-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink"
+							 LOCTYPE="URL"
+							 xlin:href="file://DERIVATIVE_COPY/757419577.pdf"/>
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+
+</mets:mets>

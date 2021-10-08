@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE schema SYSTEM "../../../lib/pkp/dtd/xmlSchema.dtd">
+
+<schema version="0.2">
+	<!--
+	 *
+	 * TABLE rosetta
+	 *
+	 -->
+	<table name="rosetta">
+		<field name="rosetta_id" type="I8">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="context_id" type="I8">
+			<NOTNULL/>
+		</field>
+		<field name="submission_id" type="I8">
+			<NOTNULL/>
+		</field>
+		<field name="sip" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="response" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="status" type="I1">
+			<NOTNULL/>
+			<DEFAULT VALUE="0"/>
+		</field>
+		<field name="date_uploaded" type="T">
+			<NOTNULL/>
+		</field>
+		<field name="date_modified" type="T">
+			<NOTNULL/>
+		</field>
+		<descr>Rosetta digital assets</descr>
+		<index name="rosetta_rosetta_id">
+			<col>rosetta_id</col>
+		</index>
+		<index name="rosetta_context_id">
+			<col>context_id</col>
+		</index>
+		<index name="rosetta_submission_id">
+			<col>submission_id</col>
+		</index>
+
+	</table>
+
+</schema>

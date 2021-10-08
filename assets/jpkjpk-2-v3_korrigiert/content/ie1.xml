@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/">
+	<mets:dmdSec ID="ie-dmd">
+		<mets:mdWrap MDTYPE="DC">
+			<mets:xmlData>
+				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+					<dcterms:abstract xml:lang="en_US">The effects of pressed beet pulp silage (PBPS) replacing barley
+						for 10% and 20% (DM basis) were studied on heavy pigs fed dairy whey-diluted diets. 60 Hypor
+						pigs (average initial weight of 28 kg), 30 barrows and 30 gilts, were homogeneously allocated to
+						three exper- imental groups: T1 (control) in which pigs were fed a traditional sweet whey-
+						diluted diet (the ratio between whey and dry matter was 4.5/1); T2 in which PBPS replaced barley
+						for 10% (DM basis) during a first period (from the beginning to the 133rd day of trial) and
+						thereafter for 20% (DM basis); T3 in which PBPS replaced barley for 20% (DM basis) throughout
+						the experimental period. In diets T2 and T3 feed was dairy whey-diluted as in group T1. No
+						significant (P&gt;0.05) differences were observed concerning growth parameters (ADG and FCR).
+						Pigs on diets contain- ing PBPS showed significantly higher (P&lt;0.05) percentages of lean cuts
+						and lower percentages of fat cuts. On the whole, ham weight losses during seasoning were
+						moderate but significantly (P&lt;0.05) more marked for PBPS-fed pigs as a prob- able consequence
+						of their lower adiposity degree. Fatty acid composition of ham fat was unaffected by diets. With
+						regard to m. Semimembranosus colour, pigs receiving PBPS showed lower (P&lt;0.05) "L", "a" and
+						"Chroma" values. From an economical point of view it can be concluded that the use of PBPS
+						(partially replacing barley) and dairy whey in heavy pig production could be of particular
+						interest in areas where both these by products are readily available.
+					</dcterms:abstract>
+					<dcterms:abstract xml:lang="fr_CA">fr abstract</dcterms:abstract>
+					<dc:creator xml:lang="plugins.importexport.rosetta.dc.authorNotDefined">Preferred Public Name
+					</dc:creator>
+					<dc:creator xml:lang="plugins.importexport.rosetta.dc.authorNotDefined">co author</dc:creator>
+					<dcterms:issued>2021</dcterms:issued>
+					<dcterms:date>2021-02-05</dcterms:date>
+					<dc:identifier xml:lang="plugins.importexport.rosetta.dc.doiNotDefined">10.1234/jpkjpk.v1i2.2
+					</dc:identifier>
+					<dcterms:modified>2021-02-10 15:09:33</dcterms:modified>
+					<dc:publisher xml:lang="plugins.importexport.rosetta.dc.publisherNotDefined">Public Knowledge
+						Project
+					</dc:publisher>
+					<dc:title xml:lang="en_US">The influence of lactation on the quantity and quality of cashmere
+						production
+					</dc:title>
+					<dc:title xml:lang="fr_CA">fr titlte</dc:title>
+					<dc:type>status-type:publishedVersion</dc:type>
+					<dc:type>doc-type:article</dc:type>
+					<dc:language>en_US</dc:language>
+					<dc:rights>https://creativecommons.org/licenses/by-nc/4.0</dc:rights>
+					<dc:rights>test</dc:rights>
+				</dc:record>
+			</mets:xmlData>
+		</mets:mdWrap>
+	</mets:dmdSec>
+	<mets:amdSec ID="ie-amd">
+		<mets:techMD ID="ie-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalIECharacteristics">
+							<record>
+								<key id="status">ACTIVE</key>
+								<key id="IEEntityType">Article</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:sourceMD ID="ie-amd-source-1">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="MODS">
+				<mets:xmlData>
+					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
+							   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							   version="3.7">
+						<mods:titleInfo>
+							<mods:title xml:lang="en_US">the The influence of lactation on the quantity and quality of
+								cashmere production
+							</mods:title>
+							<mods:title xml:lang="fr_CA">fr fr titlte</mods:title>
+							<mods:subTitle xml:lang="en_US">Edited subtitle</mods:subTitle>
+							<mods:subTitle xml:lang="fr_CA">fr subtitlte</mods:subTitle>
+						</mods:titleInfo>
+						<mods:abstract xml:lang="en_US">&lt;p&gt;The effects of pressed beet pulp silage (PBPS)
+							replacing barley for 10% and 20% (DM basis) were studied on heavy pigs fed dairy
+							whey-diluted diets. 60 Hypor pigs (average initial weight of 28 kg), 30 barrows and 30
+							gilts, were homogeneously allocated to three exper- imental groups: T1 (control) in which
+							pigs were fed a traditional sweet whey- diluted diet (the ratio between whey and dry matter
+							was 4.5/1); T2 in which PBPS replaced barley for 10% (DM basis) during a first period (from
+							the beginning to the 133rd day of trial) and thereafter for 20% (DM basis); T3 in which PBPS
+							replaced barley for 20% (DM basis) throughout the experimental period. In diets T2 and T3
+							feed was dairy whey-diluted as in group T1. No significant (P&gt;0.05) differences were
+							observed concerning growth parameters (ADG and FCR). Pigs on diets contain- ing PBPS showed
+							significantly higher (P&lt;0.05) percentages of lean cuts and lower percentages of fat cuts.
+							On the whole, ham weight losses during seasoning were moderate but significantly (P&lt;0.05)
+							more marked for PBPS-fed pigs as a prob- able consequence of their lower adiposity degree.
+							Fatty acid composition of ham fat was unaffected by diets. With regard to m. Semimembranosus
+							colour, pigs receiving PBPS showed lower (P&lt;0.05) "L", "a" and "Chroma" values. From an
+							economical point of view it can be concluded that the use of PBPS (partially replacing
+							barley) and dairy whey in heavy pig production could be of particular interest in areas
+							where both these by products are readily available.&lt;/p&gt;
+						</mods:abstract>
+						<mods:abstract xml:lang="fr_CA">&lt;p&gt;fr abstract&lt;/p&gt;</mods:abstract>
+						<mods:name type="personal">
+							<mods:namePart xml:lang="en_US" type="family">Corino</mods:namePart>
+							<mods:namePart xml:lang="en_US" type="given">Carlo</mods:namePart>
+							<mods:affiliation xml:lang="en_US">University of Basel</mods:affiliation>
+							<mods:affiliation xml:lang="fr_CA">Universit&#xE9; de b&#xE2;le</mods:affiliation>
+							<mods:description xml:lang="en_US">&lt;div&gt;&#xD;
+								&lt;div id="mceu_32" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_32-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_48" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019090f29634_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&lt;span
+								id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;Bio Statement (e.g.,
+								department and rank)&lt;/span&gt;&lt;span
+								id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;Bio Statement (e.g.,
+								department and rank)&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank&lt;/label&gt;&lt;/span&gt;Bio statement&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;p&gt;&lt;span id="biography-localization-popover-container-6019090f29634"
+								class="localization_popover_container"&gt;&lt;label class="sub_label"
+								for="biography-en_US-6019090f29634"&gt; Bio Statement (e.g., department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/p&gt;
+							</mods:description>
+							<mods:description xml:lang="fr_CA">&lt;div id="mceu_32" class="mce-tinymce mce-container
+								mce-panel" style="visibility: hidden; border-width: 1px; width: 100%;" tabindex="-1"
+								role="application"&gt;&#xD;
+								&lt;div id="mceu_32-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_48" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;p&gt;Bio statement&lt;/p&gt;
+							</mods:description>
+							<mods:displayForm xml:lang="en_US">Preferred Public Name</mods:displayForm>
+							<mods:displayForm xml:lang="fr_CA">Preferred Public Name</mods:displayForm>
+							<mods:role>
+								<mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+								<mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:namePart xml:lang="fr_CA" type="family">corino</mods:namePart>
+							<mods:namePart xml:lang="fr_CA" type="given">Carlo</mods:namePart>
+							<mods:affiliation xml:lang="en_US">University of Basel</mods:affiliation>
+							<mods:affiliation xml:lang="fr_CA">Universit&#xE9; de b&#xE2;le</mods:affiliation>
+							<mods:description xml:lang="en_US">&lt;div&gt;&#xD;
+								&lt;div id="mceu_32" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_32-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_48" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019090f29634_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&#xD;
+								&lt;div id="mceu_204" class="mce-tinymce mce-container mce-panel" style="visibility:
+								hidden; border-width: 1px; width: 100%;" tabindex="-1" role="application"&gt;&#xD;
+								&lt;div id="mceu_204-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_220" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&lt;iframe
+								id="biography-en_US-6019101274ea1_ifr" style="width: 100%; height: 200px; display:
+								block;" title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press
+								ALT-0 for help" frameborder="0"&gt;&lt;/iframe&gt;&lt;span
+								id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;Bio Statement (e.g.,
+								department and rank)&lt;/span&gt;&lt;span
+								id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;Bio Statement (e.g.,
+								department and rank)&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;div&gt;&#xD;
+								&lt;div id="mceLocalizationIcon-biography-en_US-6019101274ea1"
+								class="mceLocalizationIcon localizable mceGlobe"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;span id="biography-localization-popover-container-6019101274ea1"
+								class="localization_popover_container localizationIncomplete"&gt;&lt;label
+								class="sub_label" for="biography-en_US-6019101274ea1"&gt; Bio Statement (e.g.,
+								department and rank&lt;/label&gt;&lt;/span&gt;Bio statement&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;p&gt;&lt;span id="biography-localization-popover-container-6019090f29634"
+								class="localization_popover_container"&gt;&lt;label class="sub_label"
+								for="biography-en_US-6019090f29634"&gt; Bio Statement (e.g., department and rank)&lt;/label&gt;&lt;/span&gt;&lt;/p&gt;
+							</mods:description>
+							<mods:description xml:lang="fr_CA">&lt;div id="mceu_32" class="mce-tinymce mce-container
+								mce-panel" style="visibility: hidden; border-width: 1px; width: 100%;" tabindex="-1"
+								role="application"&gt;&#xD;
+								&lt;div id="mceu_32-body" class="mce-container-body mce-stack-layout"&gt;&#xD;
+								&lt;div id="mceu_48" class="mce-edit-area mce-container mce-panel mce-stack-layout-item
+								mce-last" style="border-width: 1px 0px 0px;" tabindex="-1" role="group"&gt;&amp;nbsp;&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;/div&gt;&#xD;
+								&lt;p&gt;Bio statement&lt;/p&gt;
+							</mods:description>
+							<mods:displayForm xml:lang="en_US">Preferred Public Name</mods:displayForm>
+							<mods:displayForm xml:lang="fr_CA">Preferred Public Name</mods:displayForm>
+							<mods:role>
+								<mods:roleTerm xml:lang="fr_CA" type="text">Auteur-e</mods:roleTerm>
+								<mods:roleTerm xml:lang="fr_CA" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:affiliation script="url">http://user.home</mods:affiliation>
+							<mods:affiliation script="country">IT</mods:affiliation>
+						</mods:name>
+						<mods:name type="personal">
+							<mods:namePart xml:lang="en_US" type="family">author</mods:namePart>
+							<mods:namePart xml:lang="en_US" type="given">co</mods:namePart>
+							<mods:affiliation xml:lang="en_US"/>
+							<mods:affiliation xml:lang="fr_CA"/>
+							<mods:description xml:lang="en_US"/>
+							<mods:description xml:lang="fr_CA"/>
+							<mods:displayForm xml:lang="en_US"/>
+							<mods:displayForm xml:lang="fr_CA"/>
+							<mods:role>
+								<mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+								<mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:namePart xml:lang="fr_CA" type="family">auhto</mods:namePart>
+							<mods:namePart xml:lang="fr_CA" type="given">ci</mods:namePart>
+							<mods:affiliation xml:lang="en_US"/>
+							<mods:affiliation xml:lang="fr_CA"/>
+							<mods:description xml:lang="en_US"/>
+							<mods:description xml:lang="fr_CA"/>
+							<mods:displayForm xml:lang="en_US"/>
+							<mods:displayForm xml:lang="fr_CA"/>
+							<mods:role>
+								<mods:roleTerm xml:lang="fr_CA" type="text">Auteur-e</mods:roleTerm>
+								<mods:roleTerm xml:lang="fr_CA" type="code">AU</mods:roleTerm>
+							</mods:role>
+							<mods:affiliation script="orcid">https://sandbox.orcid.org/0000-0002-5308-4346
+							</mods:affiliation>
+							<mods:affiliation script="country">BD</mods:affiliation>
+						</mods:name>
+						<mods:subject xml:lang="en_US" authority="disciplines">Disciplines</mods:subject>
+						<mods:subject xml:lang="fr_CA" authority="disciplines">Disciplines</mods:subject>
+						<mods:subject xml:lang="en_US" authority="keywords">pigs</mods:subject>
+						<mods:subject xml:lang="en_US" authority="keywords">food security</mods:subject>
+						<mods:subject xml:lang="fr_CA" authority="keywords">food security</mods:subject>
+						<mods:subject xml:lang="en_US" authority="languages">languages</mods:subject>
+						<mods:subject xml:lang="fr_CA" authority="languages">languages</mods:subject>
+						<mods:subject xml:lang="en_US" authority="subjects">subjects</mods:subject>
+						<mods:subject xml:lang="fr_CA" authority="subjects">sub</mods:subject>
+						<mods:subject xml:lang="en_US" authority="supportingAgencies">support1</mods:subject>
+						<mods:subject xml:lang="en_US" authority="supportingAgencies">support2</mods:subject>
+						<mods:subject xml:lang="fr_CA" authority="supportingAgencies">support22</mods:subject>
+						<mods:location xml:lang="en_US" displayLabel="coverage">coverage3</mods:location>
+						<mods:location xml:lang="fr_CA" displayLabel="coverage">cover2</mods:location>
+						<mods:accessCondition xml:lang="en_US" displayLabel="rights">rights</mods:accessCondition>
+						<mods:accessCondition xml:lang="fr_CA" displayLabel="rights">rights2</mods:accessCondition>
+						<mods:identifier type="doi">10.1234/jpkjpk.v1i2.2</mods:identifier>
+						<mods:recordInfo>
+							<mods:recordContentSource xml:lang="en_US">The source may be an ID, such as a DOI, of
+								another work or resource from which the submission is derived.
+							</mods:recordContentSource>
+							<mods:recordContentSource xml:lang="fr_CA">sources</mods:recordContentSource>
+						</mods:recordInfo>
+						<mods:originInfo>
+							<mods:publisher>publisher id</mods:publisher>
+						</mods:originInfo>
+						<mods:genre xml:lang="en_US">type</mods:genre>
+						<mods:genre xml:lang="fr_CA">typeas</mods:genre>
+					</mods:mods>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+	</mets:amdSec>
+	<mets:amdSec ID="rep1-amd">
+		<mets:techMD ID="rep1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalRepCharacteristics">
+							<record>
+								<key id="preservationType">PRESERVATION_MASTER</key>
+								<key id="usageType">VIEW</key>
+								<key id="RevisionNumber">0</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid1-1-amd">
+		<mets:techMD ID="fid1-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileOriginalPath">jpkjpk-2-v3/content/streams/MASTER/2-10-8-1-17-20210122.png
+								</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">b925b045165597424c35ef4add820bde</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid2-1-amd">
+		<mets:techMD ID="fid2-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileOriginalPath">jpkjpk-2-v3/content/streams/MASTER/2-1-6-1-10-20210120.pdf
+								</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">adf090464b2b1a204185c291b1adb034</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:amdSec ID="fid3-1-amd">
+		<mets:techMD ID="fid3-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileOriginalPath">jpkjpk-2-v3/content/streams/MASTER/2-1-7-1-10-20210122.xml
+								</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">0850ff532739f3b6bf5423927ee2b87f</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:fileSec>
+		<mets:fileGrp ID="rep1" ADMID="rep1-amd">
+			<mets:file ID="fid1-1" ADMID="fid1-1-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink" LOCTYPE="URL"
+							 xlin:href="file://MASTER/2-1-6-1-10-20210120.pdf"/>
+			</mets:file>
+			<mets:file ID="fid2-1" ADMID="fid2-1-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink" LOCTYPE="URL"
+							 xlin:href="file://MASTER/2-1-7-1-10-20210122.xml"/>
+			</mets:file>
+			<mets:file ID="fid3-1" ADMID="fid3-1-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink" LOCTYPE="URL"
+							 xlin:href="file://MASTER/2-10-8-1-17-20210122.png"/>
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+	<mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Preservation Master">
+			<mets:div LABEL="rep1">
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid1-1"/>
+				</mets:div>
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid2-1"/>
+				</mets:div>
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid3-1"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+</mets:mets>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2 20190208//EN"
+		"JATS-archivearticle1.dtd">
+<article xmlns:ali="http://www.niso.org/schemas/ali/1.0"
+		 article-type="research-article">
+	<front>
+		<article-meta>
+			<article-categories>
+				<subj-group>
+					<subject content-type="display-channel">Research Article</subject>
+					<subject content-type="heading">Computational and Systems Biology</subject>
+					<subject content-type="display-channel">Artículo de investigación</subject>
+					<subject content-type="heading">Biología computacional y de sistemas</subject>
+				</subj-group>
+			</article-categories>
+			<title-group>
+				<article-title>Kitchen Sink</article-title>
+				<subtitle>A word processor for structured content</subtitle>
+			</title-group>
+			<contrib-group content-type="author">
+				<contrib id="author-1" contrib-type="person" equal-contrib="yes" corresp="yes" deceased="no">
+					<name>
+						<surname>Doe</surname>
+						<given-names>John</given-names>
+					</name>
+					<email>john.doe@university</email>
+					<xref ref-type="aff" rid="aff1"/>
+					<xref ref-type="aff" rid="aff2"/>
+				</contrib>
+				<contrib id="author-2" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+					<name>
+						<surname>Mustermann</surname>
+						<given-names>Hansjörg</given-names>
+					</name>
+					<xref ref-type="aff" rid="aff1"/>
+					<xref ref-type="aff" rid="aff3"/>
+					<xref ref-type="aff" rid="aff5"/>
+				</contrib>
+				<contrib id="group-1" contrib-type="group" equal-contrib="yes" corresp="no">
+					<collab>
+						<named-content content-type="name">The Mouse Genome Sequencing Consortium</named-content>
+						<email>mouse-project@example.com</email>
+						<xref ref-type="aff" rid="aff2"/>
+						<xref ref-type="award" rid="fund1"/>
+						<contrib-group contrib-type="group-member">
+							<contrib id="author-3" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+								<name>
+									<surname>Kelly</surname>
+									<given-names>Laura A.</given-names>
+								</name>
+								<xref ref-type="aff" rid="aff2"/>
+							</contrib>
+							<contrib id="author-4" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+								<name>
+									<surname>Randall</surname>
+									<given-names>Daniel Lee</given-names>
+									<suffix>Jr.</suffix>
+								</name>
+								<string-name content-type="alias">Dan Randall</string-name>
+								<bio>
+									<p id="bio1_p1">This is a bio example.</p>
+									<p id="bio1_p2">With multiparagraphs.</p>
+								</bio>
+								<xref ref-type="aff" rid="aff3"/>
+							</contrib>
+						</contrib-group>
+					</collab>
+				</contrib>
+			</contrib-group>
+			<contrib-group content-type="editor">
+				<contrib id="editor-1" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+					<name>
+						<surname>Kastner</surname>
+						<given-names>Sabine</given-names>
+					</name>
+					<xref ref-type="aff" rid="aff1"/>
+				</contrib>
+			</contrib-group>
+			<aff id="aff1">
+				<institution content-type="orgname">German Primate Center GmbH</institution>
+				<institution content-type="orgdiv1">Neurobiology Laboratory</institution>
+				<city>Göttingen</city>
+				<country>Germany</country>
+			</aff>
+			<aff id="aff2">
+				<institution content-type="orgname">The Rockefeller University</institution>
+				<institution content-type="orgdiv1">Laboratory of Neural Systems</institution>
+				<city>New York</city>
+				<country>United States</country>
+			</aff>
+			<aff id="aff3">
+				<institution content-type="orgname">University of Göttingen</institution>
+				<institution content-type="orgdiv1">Department of Biology</institution>
+				<city>Göttingen</city>
+				<country>Germany</country>
+			</aff>
+			<aff id="aff4">
+				<institution content-type="orgname">Princeton University</institution>
+				<city>Princeton</city>
+				<country>United States</country>
+			</aff>
+			<aff id="aff5">
+				<institution content-type="orgname">The Rockefeller University</institution>
+				<institution content-type="orgdiv1">Another Laboratory</institution>
+				<city>New York</city>
+				<country>United States</country>
+			</aff>
+			<pub-date date-type="pub" iso-8601-date="1999-01-29">
+				<day>29</day>
+				<month>01</month>
+				<year>1999</year>
+			</pub-date>
+			<volume>318</volume>
+			<issue>7187</issue>
+			<issue-title>Des zones d’incertitudes en traduction</issue-title>
+			<fpage>837</fpage>
+			<lpage>841</lpage>
+			<page-range>837-841</page-range>
+			<history>
+				<date date-type="accepted" iso-8601-date="1998-06-06">
+					<day>06</day>
+					<month>06</month>
+					<year>1998</year>
+				</date>
+				<date date-type="received" iso-8601-date="1998-01-05">
+					<day>05</day>
+					<month>01</month>
+					<year>1998</year>
+				</date>
+				<date date-type="rev-recd" iso-8601-date="1998-05-24">
+					<day>24</day>
+					<month>05</month>
+					<year>1998</year>
+				</date>
+				<date date-type="rev-request" iso-8601-date="1998-03-14">
+					<day>14</day>
+					<month>03</month>
+					<year>1998</year>
+				</date>
+			</history>
+			<permissions id="permission-1">
+				<copyright-statement>© 2018 Substance Consortium</copyright-statement>
+				<copyright-year>2018</copyright-year>
+				<copyright-holder>Substance Consortium</copyright-holder>
+				<license>
+					<ali:license_ref>http://creativecommons.org/licenses/by/4.0/</ali:license_ref>
+					<license-p>This is an open access article distributed under the terms of the Creative Commons
+						Attribution License, which permits unrestricted use, distribution, reproduction and adaptation
+						in any medium and for any purpose provided that it is properly attributed. For attribution, the
+						original author(s), title, publication source (PeerJ) and either DOI or URL of the article must
+						be cited.
+					</license-p>
+				</license>
+			</permissions>
+			<abstract>
+				<p id="p-1">Please note, this article uses content from different open access articles (eLife) for
+					demoing purposes.
+				</p>
+			</abstract>
+			<abstract abstract-type="executive-summary">
+				<title>eLife Digest</title>
+				<p id="p-1-1">This is an example of executive summary with sub sections.</p>
+				<sec id="sec-1">
+					<title>Custom abstract sub section</title>
+					<p id="p-1-1-1">Sub section content.</p>
+				</sec>
+			</abstract>
+			<abstract abstract-type="web-summary">
+				<p id="p-1-2">This is an example of web summary.</p>
+			</abstract>
+			<kwd-group>
+				<kwd content-type="author-keyword">optogenetics</kwd>
+				<kwd content-type="author-keyword">two-photon</kwd>
+				<kwd content-type="author-keyword">calcium imaging</kwd>
+				<kwd content-type="research-organism">Mouse</kwd>
+				<kwd content-type="author-keyword">nada</kwd>
+				<kwd content-type="author-keyword">si</kwd>
+			</kwd-group>
+			<funding-group>
+				<award-group id="fund1">
+					<funding-source>
+						<institution-wrap>
+							<institution-id institution-id-type="FundRef">https://dx.doi.org/10.13039/100000011
+							</institution-id>
+							<institution>Howard Hughes Medical Institute</institution>
+						</institution-wrap>
+					</funding-source>
+					<award-id>F32 GM089018</award-id>
+				</award-group>
+			</funding-group>
+		</article-meta>
+	</front>
+
+
+</article>

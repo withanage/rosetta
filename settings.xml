@@ -1,0 +1,33 @@
+<settings>
+	<!--  Technical metadata -->id
+	<container id="ie-amd-tech" type="techMD">
+		<section id="CMS">
+			<record>
+				<key id="system">TIB</key>
+				<key id="recordId">GBV1006125345</key>
+			</record>
+		</section>
+		<section id="generalIECharacteristics">
+			<record>
+				<key id="status">ACTIVE</key>
+				<key id="IEEntityType">GreyLiterature</key>
+				<key id="UserDefinedA">MR_born-digital</key>
+			</record>
+		</section>
+	</container>
+	<!--  Rights metadata -->
+	<container id="ie-amd-rights" type="rightsMD">
+		<section id="accessRightsPolicy">
+			<record>
+				<key id="policyId">AR_EVERYONE</key>
+				<key id="policyDescription">Keine Beschränkung</key>
+			</record>
+		</section>
+	</container>
+	<!-- Source metadata -->
+	<container id="ie-amd-source" type="sourceMD">
+	</container>
+	<!-- digi prov -->
+	<container id="ie-amd-digiprov" type="digiprovMD">
+	</container>
+</settings>

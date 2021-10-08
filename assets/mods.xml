@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3"
+	  xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
+	<titleInfo>
+		<title>Papers from the First International Workshop on Plasma-Based Ion Implantation</title>
+		<subTitle>4-6 August 1993, University of Wisconsin--Madison, Madison, Wisconsin</subTitle>
+	</titleInfo>
+	<name type="conference">
+		<namePart>International Workshop on Plasma-Based Ion Implantation (1st : 1993 : University of
+			Wisconsin--Madison)
+		</namePart>
+	</name>
+	<name type="personal">
+		<namePart>Conrad, John R.</namePart>
+	</name>
+	<name type="personal">
+		<namePart>Sridharan, Kumar.</namePart>
+	</name>
+	<name type="corporate">
+		<namePart>Applied Science and Technology (ASTeX), Inc.</namePart>
+	</name>
+	<typeOfResource>text</typeOfResource>
+	<genre authority="marcgt">bibliography</genre>
+	<genre authority="marcgt">conference publication</genre>
+	<originInfo>
+		<place>
+			<placeTerm type="code" authority="marccountry">nyu</placeTerm>
+		</place>
+		<issuance>monographic</issuance>
+		<place>
+			<placeTerm type="text">New York</placeTerm>
+		</place>
+		<publisher>Published for the American Vacuum Society by the American Institute of Physics</publisher>
+		<dateIssued>1994</dateIssued>
+	</originInfo>
+	<language>
+		<languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+	</language>
+	<physicalDescription>
+		<form authority="marcform">print</form>
+		<extent>p. 813-998 : ill. ; 30 cm.</extent>
+	</physicalDescription>
+	<note type="statement of responsibility">sponsored by Applied Science and Technology (ASTeX), Inc. ... [et al.] ;
+		editors for the workshop, John R. Conrad, Kumar Sridharan.
+	</note>
+	<note>"Published in both 1994 March/April issue of the Journal of vacuum science and technology B, vol. 12, no.
+		2"--T.p. verso.
+	</note>
+	<note type="bibliography">Includes bibliographical references and index.</note>
+	<subject authority="lcsh">
+		<topic>Ion implantation</topic>
+		<topic>Congresses</topic>
+	</subject>
+	<classification authority="lcc">TS695.25 .I57 1993</classification>
+	<classification authority="ddc" edition="21">621.3815/2</classification>
+	<relatedItem type="host">
+		<titleInfo>
+			<title>Journal of vacuum science &amp; technology. B, Microelectronics and nanometer structures processing,
+				measurement and phenomena
+			</title>
+		</titleInfo>
+		<identifier type="issn">1071-1023</identifier>
+		<identifier type="local">(OCoLC)23276603</identifier>
+		<identifier type="local">(DLC)sn 92021098</identifier>
+		<part>
+			<text>2nd ser., v. 12, no. 2</text>
+		</part>
+	</relatedItem>
+	<identifier type="isbn">1563963442</identifier>
+	<identifier type="lccn">97129132</identifier>
+	<identifier type="oclc">35547175</identifier>
+	<recordInfo>
+		<descriptionStandard>aacr</descriptionStandard>
+		<recordContentSource authority="marcorg">DLC</recordContentSource>
+		<recordCreationDate encoding="marc">940504</recordCreationDate>
+		<recordChangeDate encoding="iso8601">19970618142736.9</recordChangeDate>
+		<recordIdentifier>4968605</recordIdentifier>
+		<recordOrigin>Converted from MARCXML to MODS version 3.7 using MARC21slim2MODS3-7.xsl
+			(Revision 1.140 20200717)
+		</recordOrigin>
+	</recordInfo>
+</mods>

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/">
+	<mets:dmdSec ID="ie-dmd">
+		<mets:mdWrap MDTYPE="DC">
+			<mets:xmlData>
+				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
+						   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+					<dc:title>Von zwei Welten zu zwei Begriffen von Natur – Anmerkungen zur Kantischen Kritik der
+						teleologischen Urteilskraft
+					</dc:title>
+					<dc:creator>Bensch, Hans-Georg</dc:creator>
+					<dc:publisher>Würzburg : Königshausen &amp; Neumann</dc:publisher>
+					<dc:date>2013-08-01</dc:date>
+					<dc:type>status-type:publishedVersion</dc:type>
+					<dc:type>doc-type:bookPart</dc:type>
+					<dc:language>ger</dc:language>
+					<dc:rights>CC BY 3.0 DE</dc:rights>
+					<dc:rights>http://creativecommons.org/licenses/by/3.0/de/</dc:rights>
+					<!-- -->
+					<dc:identifier>http://dx.doi.org/10.15488/9939</dc:identifier>
+					<dc:identifier xsi:type="dcterms:URI">https://www.repo.uni-hannover.de/handle/123456789/9997
+					</dc:identifier>
+					<dcterms:license>LUH_Repo_Deposit_License_v1_ab_2015</dcterms:license>
+				</dc:record>
+			</mets:xmlData>
+		</mets:mdWrap>
+	</mets:dmdSec>
+	<mets:amdSec ID="REP9724202-amd">
+		<mets:techMD ID="REP9724202-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalRepCharacteristics">
+							<record>
+								<key id="preservationType">PRESERVATION_MASTER</key>
+								<key id="usageType">VIEW</key>
+								<key id="RevisionNumber">1</key>
+								<key id="DigitalOriginal">false</key>
+							</record>
+						</section>
+						<section id="internalIdentifier">
+							<record>
+								<key id="internalIdentifierType">SIPID</key>
+								<key id="internalIdentifierValue">1495103</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">PID</key>
+								<key id="internalIdentifierValue">REP9724202</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">DepositSetID</key>
+								<key id="internalIdentifierValue">1571165</key>
+							</record>
+						</section>
+						<section id="objectCharacteristics">
+							<record>
+								<key id="objectType">REPRESENTATION</key>
+								<key id="creationDate">2020-07-25 04:57:03</key>
+								<key id="createdBy">LUHAutoDeposit</key>
+								<key id="modificationDate">2020-07-25 04:57:05</key>
+								<key id="modifiedBy">LUHAutoDeposit</key>
+								<key id="owner">CRS00.TIB.TIB01</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="REP9724202-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:digiprovMD ID="REP9724202-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="FL9724203-amd">
+		<mets:techMD ID="FL9724203-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="objectCharacteristics">
+							<record>
+								<key id="objectType">FILE</key>
+								<key id="creationDate">2020-07-25 04:57:03</key>
+								<key id="createdBy">LUHAutoDeposit</key>
+								<key id="modificationDate">2020-07-25 04:57:05</key>
+								<key id="modifiedBy">LUHAutoDeposit</key>
+								<key id="owner">CRS00.TIB.TIB01</key>
+							</record>
+						</section>
+						<section id="internalIdentifier">
+							<record>
+								<key id="internalIdentifierType">SIPID</key>
+								<key id="internalIdentifierValue">1495103</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">PID</key>
+								<key id="internalIdentifierValue">FL9724203</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">DepositSetID</key>
+								<key id="internalIdentifierValue">1571165</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="agent">REG_SA_JAVA5_FIXITY</key>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">791911ad2507e3148e3caec74cffb603</key>
+							</record>
+							<record>
+								<key id="agent">REG_SA_JAVA5_FIXITY</key>
+								<key id="fixityType">CRC32</key>
+								<key id="fixityValue">cc496b81</key>
+							</record>
+							<record>
+								<key id="agent">REG_SA_JAVA5_FIXITY</key>
+								<key id="fixityType">SHA256</key>
+								<key id="fixityValue">18c65469393af7d85f9391e0d265564e8abadb191c7dddbd0a07930407e89a80
+								</key>
+							</record>
+						</section>
+						<section id="vsOutcome">
+							<record>
+								<key id="checkDate">2020-07-25 04:57:04</key>
+								<key id="type">CHECKSUM</key>
+								<key id="vsAgent">REG_SA_JAVA5_FIXITY</key>
+								<key id="result">PASSED</key>
+								<key id="vsEvaluation">PASSED</key>
+							</record>
+							<record>
+								<key id="checkDate">2020-07-25 04:57:05</key>
+								<key id="type">VIRUSCHECK</key>
+								<key id="vsAgent">ClamAV 0.101.5/25883/Fri Jul 24 16:43:10 2020</key>
+								<key id="result">PASSED</key>
+								<key id="vsEvaluation">PASSED</key>
+							</record>
+							<record>
+								<key id="checkDate">2020-07-25 04:57:05</key>
+								<key id="type">FILE_FORMAT</key>
+								<key id="vsAgent">REG_SA_DROID , Version 6.4 , Signature version Binary SF v.96/
+									Container SF v.25
+								</key>
+								<key id="result">PASSED</key>
+								<key id="vsEvaluation">PASSED</key>
+							</record>
+							<record>
+								<key id="checkDate">2020-07-25 04:57:05</key>
+								<key id="type">TECHMD</key>
+								<key id="vsAgent">JHOVE 1.17.0, PDF-hul 1.9 , Plugin Version 5.0</key>
+								<key id="result">PASSED</key>
+								<key id="vsEvaluation">PASSED</key>
+							</record>
+							<record>
+								<key id="checkDate">2020-07-25 04:57:05</key>
+								<key id="type">RISK_ANALYSIS</key>
+								<key id="vsAgent">REG_SA_DPS</key>
+								<key id="result">PASSED</key>
+								<key id="vsEvaluation">PASSED</key>
+							</record>
+						</section>
+						<section id="fileVirusCheck">
+							<record>
+								<key id="status">PASSED</key>
+								<key id="agent">ClamAV 0.101.5/25883/Fri Jul 24 16:43:10 2020</key>
+							</record>
+						</section>
+						<section id="fileFormat">
+							<record>
+								<key id="agent">REG_SA_DROID</key>
+								<key id="formatRegistry">PRONOM</key>
+								<key id="formatRegistryId">fmt/17</key>
+								<key id="formatName">fmt/17</key>
+								<key id="formatVersion">1.3</key>
+								<key id="formatDescription">Portable Document Format</key>
+								<key id="exactFormatIdentification">true</key>
+								<key id="mimeType">application/pdf</key>
+								<key id="agentVersion">6.4</key>
+								<key id="agentSignatureVersion">Binary SF v.96/ Container SF v.25</key>
+								<key id="identificationMethod">SIGNATURE</key>
+								<key id="formatLibraryVersion">6.1096</key>
+							</record>
+						</section>
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="label">Von zwei Welten ReposLUH</key>
+								<key id="fileModificationDate">2020-07-25 03:00:00</key>
+								<key id="fileLocationType">FILE</key>
+								<key id="fileOriginalName">Von zwei Welten ReposLUH.pdf</key>
+								<key id="fileOriginalPath">Von zwei Welten ReposLUH.pdf</key>
+								<key id="fileOriginalID">
+									/exlibris1/deposit_storage//1571001-1572000/dep_1571165/deposit/content/streams/Von
+									zwei Welten ReposLUH.pdf
+								</key>
+								<key id="fileExtension">pdf</key>
+								<key id="fileMIMEType">application/pdf</key>
+								<key id="fileSizeBytes">148948</key>
+								<key id="formatLibraryId">fmt/17</key>
+							</record>
+						</section>
+						<section id="significantProperties">
+							<record>
+								<key id="significantPropertiesType">pdf.filterPipeline</key>
+								<key id="significantPropertiesValue">FlateDecode</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.freeObjects</key>
+								<key id="significantPropertiesValue">1</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.ID</key>
+								<key id="significantPropertiesValue">[0xb40adac3c8bb6c7606d82f0fb84d1602,
+									0xb40adac3c8bb6c7606d82f0fb84d1602]
+								</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.incrementalUpdates</key>
+								<key id="significantPropertiesValue">0</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.creationDate</key>
+								<key id="significantPropertiesValue">Thu Jul 23 08:46:30 CEST 2020</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.originalFormatCreatingApplication</key>
+								<key id="significantPropertiesValue">Word</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.modifiedDate</key>
+								<key id="significantPropertiesValue">Thu Jul 23 08:46:30 CEST 2020</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">object.creatingApplication</key>
+								<key id="significantPropertiesValue">macOS Version 10.15.5 (Build 19F101) Quartz
+									PDFContext
+								</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">object.title</key>
+								<key id="significantPropertiesValue">Microsoft Word - Von zwei Welten ReposLUH.docx
+								</key>
+							</record>
+							<record>
+								<key id="significantPropertiesType">pdf.objectsCount</key>
+								<key id="significantPropertiesValue">96</key>
+							</record>
+						</section>
+						<section id="fileValidation">
+							<record>
+								<key id="agent">JHOVE 1.17.0, PDF-hul 1.9 , Plugin Version 5.0</key>
+								<key id="pluginName">PDF-hul-1.17</key>
+								<key id="format">PDF</key>
+								<key id="version">1.3</key>
+								<key id="mimeType">application/pdf</key>
+								<key id="isValid">true</key>
+								<key id="isWellFormed">true</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="FL9724203-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:digiprovMD ID="FL9724203-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="event">
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:04</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">27</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Fixity check performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">REG_SA_JAVA5_FIXITY</key>
+								<key id="eventOutcomeDetail1">
+									IE_PID=IE9724201;COPY_ID=null;ALGORITHM_NAME=MD5;DEPOSIT_ACTIVITY_ID=1571165;FILE_PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;FILE_NAME=Von
+									zwei Welten ReposLUH.pdf;DATE=25 07 2020
+									04:57:04;STATUS=SUCCESS;REP_PID=REP9724202;TASK_ID=1;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:04</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">27</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Fixity check performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">REG_SA_JAVA5_FIXITY</key>
+								<key id="eventOutcomeDetail1">
+									IE_PID=IE9724201;COPY_ID=null;ALGORITHM_NAME=CRC32;DEPOSIT_ACTIVITY_ID=1571165;FILE_PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;FILE_NAME=Von
+									zwei Welten ReposLUH.pdf;DATE=25 07 2020
+									04:57:04;STATUS=SUCCESS;REP_PID=REP9724202;TASK_ID=1;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:04</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">27</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Fixity check performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">REG_SA_JAVA5_FIXITY</key>
+								<key id="eventOutcomeDetail1">
+									IE_PID=IE9724201;COPY_ID=null;ALGORITHM_NAME=SHA256;DEPOSIT_ACTIVITY_ID=1571165;FILE_PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;FILE_NAME=Von
+									zwei Welten ReposLUH.pdf;DATE=25 07 2020
+									04:57:04;STATUS=SUCCESS;REP_PID=REP9724202;TASK_ID=1;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:05</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">24</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Virus check performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">ClamAV 0.101.5/25883/Fri Jul 24 16:43:10 2020
+								</key>
+								<key id="eventOutcomeDetail1">
+									DEPOSIT_ACTIVITY_ID=1571165;PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;TASK_ID=7;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:05</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">25</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Format Identification performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">REG_SA_DROID , Version 6.4 , Signature version
+									Binary SF v.96/ Container SF v.25
+								</key>
+								<key id="eventOutcomeDetail1">
+									FORMAT_ID=fmt/17;IDENTIFICATION_METHOD=SIGNATURE;FILE_EXTENSION=pdf;DEPOSIT_ACTIVITY_ID=1571165;PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;TASK_ID=48;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:05</key>
+								<key id="eventType">VALIDATION</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">165</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventDescription">Technical Metadata extraction performed on file</key>
+								<key id="linkingAgentIdentifierType1">SOFTWARE</key>
+								<key id="linkingAgentIdentifierValue1">JHOVE 1.17.0, PDF-hul 1.9 , Plugin Version 5.0
+								</key>
+								<key id="eventOutcomeDetail1">
+									DEPOSIT_ACTIVITY_ID=1571165;PID=FL9724203;SIP_ID=1495103;PRODUCER_ID=140631548;TASK_ID=49;PROCESS_ID=;MF_ID=140650888;
+								</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:amdSec ID="ie-amd">
+		<mets:techMD ID="ie-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="internalIdentifier">
+							<record>
+								<key id="internalIdentifierType">SIPID</key>
+								<key id="internalIdentifierValue">1495103</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">PID</key>
+								<key id="internalIdentifierValue">IE9724201</key>
+							</record>
+							<record>
+								<key id="internalIdentifierType">DepositSetID</key>
+								<key id="internalIdentifierValue">1571165</key>
+							</record>
+						</section>
+						<section id="objectCharacteristics">
+							<record>
+								<key id="objectType">INTELLECTUAL_ENTITY</key>
+								<key id="creationDate">2020-07-25 04:57:03</key>
+								<key id="createdBy">LUHAutoDeposit</key>
+								<key id="modificationDate">2020-07-25 04:57:06</key>
+								<key id="modifiedBy">Admin</key>
+								<key id="owner">CRS00.TIB.TIB01</key>
+							</record>
+						</section>
+						<section id="generalIECharacteristics">
+							<record>
+								<key id="status">ACTIVE</key>
+								<key id="Version">1</key>
+								<key id="IEEntityType">LUHRepo</key>
+								<key id="UserDefinedA">LUHRep_born-digital</key>
+							</record>
+						</section>
+						<section id="retentionPolicy">
+							<record>
+								<key id="policyId">NO_RETENTION</key>
+								<key id="policyDescription">No Retention Policy</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+		<mets:rightsMD ID="ie-amd-rights">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="accessRightsPolicy">
+							<record>
+								<key id="policyId">14996</key>
+								<key id="policyDescription">TIB_STAFF only</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:rightsMD>
+		<mets:sourceMD ID="ie-amd-source-DC-1">
+			<mets:mdWrap MDTYPE="DC">
+				<mets:xmlData>
+					<oai_dc:dc
+							xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							xmlns:dc="http://purl.org/dc/elements/1.1/"
+							xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+						<dc:title xml:lang="ger">Von zwei Welten zu zwei Begriffen von Natur – Anmerkungen zur
+							Kantischen Kritik der teleologischen Urteilskraft
+						</dc:title>
+						<dc:creator>Bensch, Hans-Georg</dc:creator>
+						<dc:subject xml:lang="eng">Faculty of judgement</dc:subject>
+						<dc:subject xml:lang="eng">notions of nature</dc:subject>
+						<dc:subject xml:lang="eng">natural constants</dc:subject>
+						<dc:subject xml:lang="eng">purposiveness of nature</dc:subject>
+						<dc:subject xml:lang="eng">understand an example and give an example</dc:subject>
+						<dc:subject xml:lang="ger">Urteilskraft</dc:subject>
+						<dc:subject xml:lang="ger">Naturbegriffe</dc:subject>
+						<dc:subject xml:lang="ger">Naturkonstanten</dc:subject>
+						<dc:subject xml:lang="ger">Zweckmäßigkeit der Natur</dc:subject>
+						<dc:subject xml:lang="ger">Beispielgeben und Beispielverstehen</dc:subject>
+						<dc:subject>ddc:100</dc:subject>
+						<dc:subject>Fundamentalkonstante</dc:subject>
+						<dc:subject>Zweckmäßigkeit</dc:subject>
+						<dc:description xml:lang="ger">Mit der Kritik der Urteilskraft (KdU) ist weiteres oberes
+							Erkenntnisvermögen Gegenstand der Untersuchung bei Kant. Im zweiten Teil der KdU – der
+							teleologischen Urteilskraft – gelangt Kant zu Bestimmungen der Natur, die bis zur Grenze des
+							Erkennbaren reichen. Die Komposition des Textes selbst wird zum Beispiel dessen, was allein
+							nur noch gezeigt werden kann. Zwei (kantische) Begriffe von Natur können so die
+							üblicherweise Kant zugeschriebene Zwei-Welten-Lehre überwinden. Aktuell ist der Kant-Text
+							dadurch, dass sowohl gegenwärtige Debatten zum Für-und-Wider des Intelligent Design (ID) als
+							auch das Beispielgeben und das Beispielverstehen beurteilt werden können.
+						</dc:description>
+						<dc:type>status-type:publishedVersion</dc:type>
+						<dc:publisher>Würzburg : Königshausen &amp; Neumann</dc:publisher>
+						<dc:date>2013-08-01</dc:date>
+						<dc:type>doc-type:bookPart</dc:type>
+						<dc:type>doc-type:Text</dc:type>
+						<dc:identifier>http://dx.doi.org/10.15488/9939</dc:identifier>
+						<dc:identifier>https://www.repo.uni-hannover.de/handle/123456789/9997</dc:identifier>
+						<dc:relation>ISBN:978-3-8260-5103-6</dc:relation>
+						<dc:source>Die Natur denken : Studien zur Naturphilosophie, Bd. 3</dc:source>
+						<dc:source>Studien zur Naturphilosophie;3</dc:source>
+						<dc:language>ger</dc:language>
+						<dc:rights>CC BY 3.0 DE</dc:rights>
+						<dc:rights>http://creativecommons.org/licenses/by/3.0/de/</dc:rights>
+						<dc:rights>frei zugänglich</dc:rights>
+					</oai_dc:dc>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:sourceMD>
+		<mets:digiprovMD ID="ie-amd-digiprov">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx version="1.0" xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="producer">
+							<record>
+								<key id="address1">Welfengarten 1B</key>
+								<key id="address3">Hannover</key>
+								<key id="address4">Germany</key>
+								<key id="defaultLanguage">en</key>
+								<key id="emailAddress">support.lza@tib.eu</key>
+								<key id="firstName">Leibniz Universität Hannover</key>
+								<key id="lastName">LUH Repository</key>
+								<key id="telephone1">051176219073</key>
+								<key id="authorativeName">LUH Repository</key>
+								<key id="producerId">140631548</key>
+								<key id="userIdAppId">140631547</key>
+								<key id="zip">30167</key>
+							</record>
+						</section>
+						<section id="producerAgent">
+							<record>
+								<key id="firstName">LUH</key>
+								<key id="lastName">Automatischer Deposit</key>
+							</record>
+						</section>
+						<section id="event">
+							<record>
+								<key id="eventDateTime">2020-07-25 04:57:06</key>
+								<key id="eventType">PROCESSING</key>
+								<key id="eventIdentifierType">DPS</key>
+								<key id="eventIdentifierValue">414</key>
+								<key id="eventOutcome1">SUCCESS</key>
+								<key id="eventOutcomeDetail1">IE_PID=IE9724201;TASK_ID=62;PROCESS_ID=;</key>
+								<key id="eventDescription">Representation metadata has been updated</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:digiprovMD>
+	</mets:amdSec>
+	<mets:fileSec>
+		<mets:fileGrp ID="REP9724202" ADMID="REP9724202-amd">
+			<mets:file ID="FL9724203" ADMID="FL9724203-amd">
+				<mets:FLocat xmlns:xlin="http://www.w3.org/1999/xlink"
+							 LOCTYPE="URL"
+							 xlin:href="/exlibris1/permanent_storage/tib/file/2020/07/25/file_1/V1-FL9724203.pdf"/>
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+	<mets:structMap ID="REP9724202-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Preservation Master">
+			<mets:div LABEL="Table of Contents">
+				<mets:div LABEL="Von zwei Welten ReposLUH" TYPE="FILE">
+					<mets:fptr FILEID="FL9724203"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+</mets:mets>
