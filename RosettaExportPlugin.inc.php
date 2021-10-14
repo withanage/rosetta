@@ -188,17 +188,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		$this->updateSetting($context->getId(), 'enabled', $enabled, 'bool');
 	}
 
-
-	/**
-	 * Determine whether or not this plugin is currently enabled.
-	 * @return boolean
-	 */
-	function getEnabled() {
-		$context = Application::get()->getRequest()->getContext();
-		return $this->getSetting($context->getId(), 'enabled');
-	}
-
-
 	/**
 	 * @param The $scriptName
 	 * @param Parameters $args
@@ -211,18 +200,16 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		if ($journal == false) {
 
 
-		$contextDao = Application::getContextDAO(); /* @var $contextDao JournalDAO */
-		$journalFactory = $contextDao->getAll(true);
+			$contextDao = Application::getContextDAO();
+			/* @var $contextDao JournalDAO */
+			$journalFactory = $contextDao->getAll(true);
 
-		while($journal = $journalFactory->next()) {
-			$x = $this->getEnabled($journal->getData('id'));
-
-			$deployment = new RosettaExportDeployment($journal, $this);
-			$deployment->depositSubmissions();
-
-
-			$deployment->depositSubmissions();
-		}
+			while ($journal = $journalFactory->next()) {
+				if ($this->getEnabled($journal)) {
+					$deployment = new RosettaExportDeployment($journal, $this);
+					$deployment->depositSubmissions();
+				}
+			}
 		} else {
 			// Deploy submissions
 			$deployment = new RosettaExportDeployment($journal, $this);
@@ -233,27 +220,13 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	}
 
 	/**
-	 * Display the command-line usage information
+	 * Determine whether or not this plugin is currently enabled.
+	 * @return boolean
 	 */
-	function usage($scriptName) {
-		echo __('plugins.importexport.rosetta.cliUsage', array(
-				'scriptName' => $scriptName,
-				'pluginName' => $this->getName()
-			)) . "\n";
-	}
+	function getEnabled($context = null) {
+		if ($context == null) $context = Application::get()->getRequest()->getContext();
 
-	/**
-	 * @see Plugin::getName()
-	 */
-	function getName() {
-		return __CLASS__;
-	}
-
-	/**
-	 * @copydoc Plugin::getContextSpecificPluginSettingsFile()
-	 */
-	function getContextSpecificPluginSettingsFile() {
-		return $this->getPluginPath() . '/settings.xml';
+		return $this->getSetting($context->getId(), 'enabled');
 	}
 
 	function getSetting($contextId, $name) {
@@ -286,15 +259,39 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		return $config_value ?: parent::getSetting($contextId, $name);
 	}
 
+	/**
+	 * Display the command-line usage information
+	 */
+	function usage($scriptName) {
+		echo __('plugins.importexport.rosetta.cliUsage', array(
+				'scriptName' => $scriptName,
+				'pluginName' => $this->getName()
+			)) . "\n";
+	}
+
+	/**
+	 * @see Plugin::getName()
+	 */
+	function getName() {
+		return __CLASS__;
+	}
+
+	/**
+	 * @copydoc Plugin::getContextSpecificPluginSettingsFile()
+	 */
+	function getContextSpecificPluginSettingsFile() {
+		return $this->getPluginPath() . '/settings.xml';
+	}
+
 	function depositXML($objects, $context, $filename) {
 		// TODO: Implement depositXML() method.
 	}
 }
 
-	function getName() {
-		// TODO: Implement getName() method.
-	}
+function getName() {
+	// TODO: Implement getName() method.
+}
 
-	function depositXML($objects, $context, $filename) {
-		// TODO: Implement depositXML() method.
-	}
+function depositXML($objects, $context, $filename) {
+	// TODO: Implement depositXML() method.
+}
