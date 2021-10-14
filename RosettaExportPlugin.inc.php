@@ -3,6 +3,8 @@
 error_reporting(E_ERROR | E_PARSE);
 
 import('classes.plugins.PubObjectsExportPlugin');
+import('plugins.importexport.rosetta.RosettaExportDeployment');
+
 
 class RosettaExportPlugin extends PubObjectsExportPlugin {
 	/**
@@ -32,23 +34,16 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	}
 
 	/**
-	 * @copydoc ImportExportPlugin::getPluginSettingsPrefix()
-	 */
-	function getPluginSettingsPrefix() {
-		return 'rosetta';
-	}
-
-	/**
 	 * @copydoc DOIPubIdExportPlugin::getSettingsFormClassName()
 	 */
 	function getSettingsFormClassName() {
 		return 'RosettaSettingsForm';
 	}
 
-
 	function getUnregisteredArticles($context) {
 		// Retrieve all published submissions that have not yet been registered.
-		$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
+		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
+		/* @var $submissionDao SubmissionDAO */
 		$articles = $submissionDao->getExportable(
 			$context->getId(),
 			null,
@@ -61,11 +56,17 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		);
 		return $articles->toArray();
 	}
+
 	public function getDepositStatusSettingName() {
-		return $this->getPluginSettingsPrefix().'::status';
+		return $this->getPluginSettingsPrefix() . '::status';
 	}
 
-
+	/**
+	 * @copydoc ImportExportPlugin::getPluginSettingsPrefix()
+	 */
+	function getPluginSettingsPrefix() {
+		return 'rosetta';
+	}
 
 	/**
 	 * @copydoc PubObjectsExportPlugin::getExportDeploymentClassName()
@@ -174,6 +175,30 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		return parent::manage($args, $request);
 	}
 
+	function getCanEnable() {
+		return true;
+	}
+
+	function getCanDisable() {
+		return true;
+	}
+
+	function setEnabled($enabled) {
+		$context = Application::get()->getRequest()->getContext();
+		$this->updateSetting($context->getId(), 'enabled', $enabled, 'bool');
+	}
+
+
+	/**
+	 * Determine whether or not this plugin is currently enabled.
+	 * @return boolean
+	 */
+	function getEnabled() {
+		$context = Application::get()->getRequest()->getContext();
+		return $this->getSetting($context->getId(), 'enabled');
+	}
+
+
 	/**
 	 * @param The $scriptName
 	 * @param Parameters $args
@@ -182,16 +207,24 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journal = $journalDao->getByPath($journalPath);
+
 		if ($journal == false) {
-			if ($journalPath != '') {
-				echo __('plugins.importexport.rosetta.cliError') . "\n";
-				echo __('plugins.importexport.rosetta.error.unknownJournal', array('journalPath' => $journalPath)) . "\n\n";
-			}
-			$this->usage($scriptName);
-			return;
+
+
+		$contextDao = Application::getContextDAO(); /* @var $contextDao JournalDAO */
+		$journalFactory = $contextDao->getAll(true);
+
+		while($journal = $journalFactory->next()) {
+			$x = $this->getEnabled($journal->getData('id'));
+
+			$deployment = new RosettaExportDeployment($journal, $this);
+			$deployment->depositSubmissions();
+
+
+			$deployment->depositSubmissions();
+		}
 		} else {
 			// Deploy submissions
-			import('plugins.importexport.rosetta.RosettaExportDeployment');
 			$deployment = new RosettaExportDeployment($journal, $this);
 			$deployment->depositSubmissions();
 
@@ -231,7 +264,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 			case 'rosettaInstitutionCode':
 				$config_value = Config::getVar('rosetta', 'institution_code');
 				break;
-			case 'rosettaSubDirectoryName':
+			case 'subDirectoryName':
 				$config_value = Config::getVar('rosetta', 'subDirectoryName');
 				break;
 			case 'rosettaUsername':
@@ -257,3 +290,11 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		// TODO: Implement depositXML() method.
 	}
 }
+
+	function getName() {
+		// TODO: Implement getName() method.
+	}
+
+	function depositXML($objects, $context, $filename) {
+		// TODO: Implement depositXML() method.
+	}

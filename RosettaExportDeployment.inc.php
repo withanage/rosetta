@@ -60,12 +60,12 @@ class RosettaExportDeployment {
 	}
 
 	private function depositSubmission(Context $context, Submission $submission, Publication $publication) {
-		$rosettaDepositShare = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
+		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
 
 		$oldmask = umask(0);
-		if (is_dir($rosettaDepositShare)) {
+		if (is_dir($subDirectoryName)) {
 			$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-			$pubPath = $rosettaDepositShare . '/' . $ingestPath;
+			$pubPath = $subDirectoryName . '/' . $ingestPath;
 			if (is_dir($pubPath) == false) {
 				mkdir($pubPath, 0777);
 
@@ -210,11 +210,11 @@ class RosettaExportDeployment {
 	 * @return string
 	 */
 	private function createSIPPath(Context $context, Submission $submission, Publication $publication): string {
-		$rosettaDepositShare = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
-		if (is_dir($rosettaDepositShare)) {
-			return $rosettaDepositShare . '/' . PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version') . '.zip';
+		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
+		if (is_dir($subDirectoryName)) {
+			return $subDirectoryName . '/' . PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version') . '.zip';
 		} else {
-			var_dump("Exception:  rosettaDepositShare " . $rosettaDepositShare . " not available");
+			var_dump("Exception:  subDirectoryName " . $subDirectoryName . " not available");
 			return '';
 		}
 	}

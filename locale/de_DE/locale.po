@@ -72,8 +72,15 @@ msgstr "Issue not found"
 msgid "plugins.importexport.rosetta.rosettaHost"
 msgstr "Rosetta Host"
 
-msgid "plugins.importexport.rosetta.rosettaDepositShare"
+msgid "plugins.importexport.rosetta.subDirectoryName"
 msgstr "Rosetta Deposit Share"
+
+
+msgid "plugins.importexport.rosetta.rosettaProducerId"
+msgstr "Producer Id"
+
+msgid "plugins.importexport.rosetta.rosettaMaterialFlowId"
+msgstr "Material Flow Id"
 
 msgid "plugins.importexport.rosetta.rosettaHostInstructions"
 msgstr "Credentials"

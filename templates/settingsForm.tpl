@@ -10,21 +10,20 @@
     {fbvFormArea id="rosettaSettingsFormArea"}
 		<p class="pkp_help">{translate key="plugins.importexport.rosetta.description"}</p>
     {/fbvFormArea}
-    {*
+
 	{fbvFormSection}
-	{fbvElement type="text" required="true" id="rosettaHost" value=$rosettaHost label="plugins.importexport.rosetta.rosettaHost" maxlength="50" size=$fbvStyles.size.SMALL}
-	{fbvElement type="text" required="true" id="rosettaDepositShare" value=$rosettaDepositShare label="plugins.importexport.rosetta.rosettaDepositShare" maxlength="50" size=$fbvStyles.size.SMALL}
-	{fbvElement type="text" required="true"  id="rosettaClientSystemID" value=$rosettaClientSystemID label="plugins.importexport.rosetta.rosettaClientSystemID" maxlength="10" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false" id="rosettaHost" value=$rosettaHost label="plugins.importexport.rosetta.rosettaHost" maxlength="50" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false" id="subDirectoryName" value=$subDirectoryName label="plugins.importexport.rosetta.subDirectoryName" maxlength="50" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false"  id="rosettaProducerId" value=$rosettaProducerId label="plugins.importexport.rosetta.rosettaProducerId" maxlength="10" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false"  id="rosettaMaterialFlowId" value=$rosettaMaterialFlowId label="plugins.importexport.rosetta.rosettaMaterialFlowId" maxlength="10" size=$fbvStyles.size.SMALL}
 	{/fbvFormSection}
 	{fbvFormSection}
 		<span class="instruct">{translate key="plugins.importexport.rosetta.rosettaHostInstructions"}</span>
-	{fbvElement type="text" required="true" id="rosettaUsername" value=$rosettaUsername label="plugins.importexport.rosetta.rosettaUsername" maxlength="24" size=$fbvStyles.size.SMALL}
-	{fbvElement type="text" required="true" password="true" id="rosettaPassword" value=$rosettaPassword label="plugins.importexport.rosetta.rosettaPassword" maxlength="24" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false" id="rosettaUsername" value=$rosettaUsername label="plugins.importexport.rosetta.rosettaUsername" maxlength="24" size=$fbvStyles.size.SMALL}
+	{fbvElement type="text" disabled="true" required="false" password="true" id="rosettaPassword" value=$rosettaPassword label="plugins.importexport.rosetta.rosettaPassword" maxlength="24" size=$fbvStyles.size.SMALL}
 
 	{/fbvFormSection}
 
-	{/fbvFormArea}
-	{fbvFormButtons submitText="common.save" hideCancel="true"}
-	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
-*}
+
+
 </form>

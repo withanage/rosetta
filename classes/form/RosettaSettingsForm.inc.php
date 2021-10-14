@@ -7,7 +7,8 @@ class RosettaSettingsForm extends Form {
 	/** @var $plugin RosettaExportPlugin */
 	private $plugin;
 	/** @var $fields array */
-	private $fields = ['rosettaHost', 'rosettaDepositShare', 'rosettaUsername', 'rosettaPassword'];
+	private $fields = ['rosettaHost', 'subDirectoryName', 'rosettaUsername', 'rosettaPassword','rosettaProducerId','rosettaMaterialFlowId','journals'];
+
 
 	/**
 	 * Constructor
@@ -37,6 +38,14 @@ class RosettaSettingsForm extends Form {
 	 */
 	public function readInputData() {
 		$this->readUserVars($this->fields);
+	}
+
+	function getFormFields() {
+		return  $this->fields;
+	}
+
+	function isOptional($settingName) {
+		return in_array($settingName, $this->fields);
 	}
 
 	/**
