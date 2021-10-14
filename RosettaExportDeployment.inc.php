@@ -60,7 +60,7 @@ class RosettaExportDeployment {
 	}
 
 	private function depositSubmission(Context $context, Submission $submission, Publication $publication) {
-		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
+		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 
 		$oldmask = umask(0);
 		if (is_dir($subDirectoryName)) {
