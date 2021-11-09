@@ -37,13 +37,14 @@ class RosettaExportDeployment {
 			if (is_a($submission, 'Submission')) {
 				foreach ($submission->getData('publications') as $publication) {
 					$this->depositSubmission($context, $submission, $publication);
+
 				}
 			}
 
 		}
 	}
 
-	/**
+	/**op
 	 * Get the import/export context.
 	 * @return Context
 	 */
@@ -193,6 +194,7 @@ class RosettaExportDeployment {
 		else {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
+			$date = new DateTime();
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), ROSETTA_STATUS_DEPOSITED);
 			$submissionDao->updateObject($submission);
 

@@ -57,7 +57,10 @@ class RosettaDCDom extends DOMDocument {
 
 		// context
 		$acronym = $this->getContext()->getData("acronym", "en_US");
-		$this->createElementDCTerms("dcterms:isPartOf", $acronym);
+		$issueDao = DAORegistry::getDAO('IssueDAO'); /** @var $issueDao IssueDAO */
+		$issue = $issueDao->getById($this->publication,$this->getContext());
+		$rosettaIssue = 'Open Access E-Journals/TIB OP/'. $acronym.'/'.$issue->getData('year').'/'.$issue->getData('volume').'/'.$issue->getData('id').'/';
+		$this->createElementDCTerms("dcterms:isPartOf", $rosettaIssue);
 
 		// abstract
 		$abstracts = $this->publication->getData("abstract");
@@ -77,14 +80,14 @@ class RosettaDCDom extends DOMDocument {
 		$issueId = $this->publication->getData('issueId');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		/* @var $issueDao IssueDAO */
-		$issue = $issueDao->getById($issueId, $this->context->getId());
+		$rosettalIssue = $issueDao->getById($issueId, $this->context->getId());
 
 		//TODO add eindeutige id, doi usw,
 
 		// identifiers
 		$doi = $this->publication->getData("pub-id::doi");
 		if ($doi !== null) {
-			$node = $this->createElement("dc:identifier", htmlspecialchars($doi, ENT_COMPAT, 'UTF-8'));
+			$node = $this->createElement("dc:identifier", htmlspecialchars('DOI:'.$doi, ENT_COMPAT, 'UTF-8'));
 			$xsiType = $this->createAttribute("xsi:type");
 			$xsiType->value = "dcterms:URI";
 			$node->appendChild($xsiType);
@@ -107,7 +110,7 @@ class RosettaDCDom extends DOMDocument {
 		$this->createElementDCTerms("dcterms:license", "TIB_OJS_Lizenzvereinbarung");
 
 		//language
-		$this->createQualifiedElement("dc:language", $this->publication->getData('locale'));
+		$this->createQualifiedElement("dc:language", str_replace('_','-',$this->publication->getData('locale')));
 
 		//license URL
 
