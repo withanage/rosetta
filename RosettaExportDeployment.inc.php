@@ -112,7 +112,7 @@ class RosettaExportDeployment {
 						}
 					}
 
-					//$this->_doRequest($context, $ingestPath, $submission);
+					$this->_doRequest($context, $ingestPath, $submission);
 					unlink($xmlExport);
 
 				}
@@ -195,7 +195,7 @@ class RosettaExportDeployment {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
 			$date = new DateTime();
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), ROSETTA_STATUS_DEPOSITED);
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
 
 		}
