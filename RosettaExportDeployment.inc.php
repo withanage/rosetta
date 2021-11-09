@@ -113,7 +113,7 @@ class RosettaExportDeployment {
 					}
 
 					$this->_doRequest($context, $ingestPath, $submission);
-					unlink($xmlExport);
+					//unlink($xmlExport);
 
 				}
 			}
