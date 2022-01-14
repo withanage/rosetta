@@ -58,7 +58,7 @@ class ModsDOM extends DOMDocument {
 
 		// publisher
 		$originInfo = $this->createElementNS(MODS_NS, "mods:originInfo");
-		$this->createDataElement("pub-id::publisher-id", $this->publication, $originInfo, "publisher");
+		$this->createDataElement("copyrightHolder", $this->publication, $originInfo, "publisher");
 		$this->record->appendChild($originInfo);
 		$this->createDataElement("type", $this->publication, $this->record, "genre");
 		// Add  Context Info
