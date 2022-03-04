@@ -79,8 +79,6 @@ class RosettaWebservice {
 		$result = true;
 		$response = curl_exec($curlCh);
 
-		// We do not localize our error messages as they are all
-		// fatal errors anyway and must be analyzed by technical staff.
 		if ($response === false) {
 			$result = 'OJS-Rosetta: Expected string response.';
 		}

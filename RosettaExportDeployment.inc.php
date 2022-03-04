@@ -6,7 +6,8 @@ import('lib.pkp.classes.xml.XMLCustomWriter');
 
 const ROSETTA_STATUS_DEPOSITED = 'deposited';
 
-class RosettaExportDeployment {
+class RosettaExportDeployment
+{
 	/** @var Context The current import/export context */
 	var $_context;
 	/** @var Plugin The current import/export plugin */
@@ -17,7 +18,8 @@ class RosettaExportDeployment {
 	 * @param $context Context
 	 * @param $plugin DOIPubIdExportPlugin
 	 */
-	function __construct($context, $plugin) {
+	function __construct($context, $plugin)
+	{
 		$this->setContext($context);
 		$this->setPlugin($plugin);
 	}
@@ -28,7 +30,8 @@ class RosettaExportDeployment {
 	/**
 	 * Deploy all articles
 	 */
-	function depositSubmissions() {
+	function depositSubmissions()
+	{
 		$context = $this->getContext();
 		// Load DOI settings
 		PluginRegistry::loadCategory('pubIds', true, $context->getId());
@@ -48,7 +51,8 @@ class RosettaExportDeployment {
 	 * Get the import/export context.
 	 * @return Context
 	 */
-	function getContext() {
+	function getContext()
+	{
 		return $this->_context;
 	}
 
@@ -56,11 +60,13 @@ class RosettaExportDeployment {
 	 * Set the import/export context.
 	 * @param $context Context
 	 */
-	function setContext($context) {
+	function setContext($context)
+	{
 		$this->_context = $context;
 	}
 
-	private function depositSubmission(Context $context, Submission $submission, Publication $publication) {
+	private function depositSubmission(Context $context, Submission $submission, Publication $publication)
+	{
 		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 
 		$oldmask = umask(0);
@@ -126,7 +132,8 @@ class RosettaExportDeployment {
 	 * Get the import/export plugin.
 	 * @return ImportExportPlugin
 	 */
-	function getPlugin() {
+	function getPlugin()
+	{
 		return $this->_plugin;
 	}
 
@@ -134,7 +141,8 @@ class RosettaExportDeployment {
 	 * Set the import/export plugin.
 	 * @param $plugin ImportExportPlugin
 	 */
-	function setPlugin($plugin) {
+	function setPlugin($plugin)
+	{
 		$this->_plugin = $plugin;
 	}
 
@@ -143,7 +151,8 @@ class RosettaExportDeployment {
 	 * @param string $ingestPath
 	 * @param Submission $submission
 	 */
-	private function _doRequest(Context $context, string $ingestPath, Submission $submission): void {
+	private function _doRequest(Context $context, string $ingestPath, Submission $submission): void
+	{
 		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
 		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
 		$password = $this->getPlugin()->getSetting($context->getId(), 'rosettaPassword');
@@ -187,17 +196,16 @@ class RosettaExportDeployment {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		$result = curl_exec($ch);
-		if (curl_errno($ch)) {
-			echo 'Error:' . curl_error($ch);
-			echo 'Error:' . $result;
-		}
-		else {
+		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if ($response_code == 200) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
 			$date = new DateTime();
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
 
+		} else {
+			echo $result;
 		}
 
 		curl_close($ch);
@@ -211,7 +219,8 @@ class RosettaExportDeployment {
 	 * @param Publication $publication
 	 * @return string
 	 */
-	private function createSIPPath(Context $context, Submission $submission, Publication $publication): string {
+	private function createSIPPath(Context $context, Submission $submission, Publication $publication): string
+	{
 		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 		if (is_dir($subDirectoryName)) {
 			return $subDirectoryName . '/' . PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version') . '.zip';
@@ -227,7 +236,8 @@ class RosettaExportDeployment {
 	 * @param Publication $publication
 	 * @param string $archivePath
 	 */
-	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath) {
+	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath)
+	{
 
 		if (self::zipFunctional()) {
 			if (file_exists($archivePath) == false) {
@@ -287,7 +297,8 @@ array(
 	 * Return true if the zip extension is loaded.
 	 * @return boolean
 	 */
-	static function zipFunctional(): bool {
+	static function zipFunctional(): bool
+	{
 		return (extension_loaded('zip'));
 	}
 
