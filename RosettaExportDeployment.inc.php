@@ -274,25 +274,6 @@ class RosettaExportDeployment
 				}
 
 			}
-			$pdsHandle = null; //TODO retrieve
-			/*	$soap = new SoapClient(
-$endpoint,
-array(
-
-	"soap_version" => SOAP_1_1,
-	"trace" => 1
-)
-				);
-				#retval = dpws.submitDepositActivity(pdsHandle,materialFlowId, folder, producerId, depositSetId);
-				$params = array("pdsHandle" => $pdsHandle,
-"materialFlowId" => $materialFlowId,
-"folder" => $subDirectoryName,
-"producerId" => $producerId
-				);
-
-				$result = $soap->__doRequest();
-				var_dump($result);*/
-
 		} else {
 			fatalError('ZIP not installed');
 		}
