@@ -146,6 +146,8 @@ class RosettaExportDeployment
 		$this->_plugin = $plugin;
 	}
 
+
+
 	/**
 	 * @param Context $context
 	 * @param string $ingestPath
@@ -188,6 +190,9 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch, CURLOPT_NOBODY, 1);
 
 		$headers = array();
 		$headers[] = 'Content-Type: text/xml';
@@ -205,10 +210,10 @@ class RosettaExportDeployment
 			$submissionDao->updateObject($submission);
 
 		} else {
-			echo $result;
+			$this->getPlugin()->logError($result);
 		}
-
 		curl_close($ch);
+
 
 
 	}

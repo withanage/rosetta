@@ -228,6 +228,26 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 
 		return $this->getSetting($context->getId(), 'enabled');
 	}
+	public function logError($message) {
+		self::writeLog($message, 'ERROR');
+	}
+
+
+	/**
+	 * @param $message
+	 * @param $level
+	 */
+	private static function writeLog($message, $level) :void {
+		$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
+		error_log("$fineStamp $level $message\n", 3, self::logFilePath());
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function logFilePath():string {
+		return Config::getVar('files', 'files_dir') . '/rosetta.log';
+	}
 
 	function getSetting($contextId, $name) {
 		switch ($name) {
