@@ -275,7 +275,7 @@ class RosettaExportDeployment
 
 			}
 		} else {
-			fatalError('ZIP not installed');
+			$this->getPlugin()->logError('ZIP not installed');
 		}
 	}
 

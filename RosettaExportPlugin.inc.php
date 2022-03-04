@@ -6,7 +6,8 @@ import('classes.plugins.PubObjectsExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 
 
-class RosettaExportPlugin extends PubObjectsExportPlugin {
+class RosettaExportPlugin extends PubObjectsExportPlugin
+{
 	/**
 	 * @copydoc Plugin::register()
 	 * @param $category
@@ -14,7 +15,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	 * @param null $mainContextId
 	 * @return bool
 	 */
-	public function register($category, $path, $mainContextId = null) {
+	public function register($category, $path, $mainContextId = null)
+	{
 		return parent::register($category, $path, $mainContextId);
 
 	}
@@ -22,25 +24,29 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	/**
 	 * @see Plugin::getDisplayName()
 	 */
-	function getDisplayName() {
+	function getDisplayName()
+	{
 		return __('plugins.importexport.rosetta.displayName');
 	}
 
 	/**
 	 * @see Plugin::getDescription()
 	 */
-	function getDescription() {
+	function getDescription()
+	{
 		return __('plugins.importexport.rosetta.description');
 	}
 
 	/**
 	 * @copydoc DOIPubIdExportPlugin::getSettingsFormClassName()
 	 */
-	function getSettingsFormClassName() {
+	function getSettingsFormClassName()
+	{
 		return 'RosettaSettingsForm';
 	}
 
-	function getUnregisteredArticles($context) {
+	function getUnregisteredArticles($context)
+	{
 		// Retrieve all published submissions that have not yet been registered.
 		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 		/* @var $submissionDao SubmissionDAO */
@@ -57,25 +63,29 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		return $articles->toArray();
 	}
 
-	public function getDepositStatusSettingName() {
+	public function getDepositStatusSettingName()
+	{
 		return $this->getPluginSettingsPrefix() . '::status';
 	}
 
 	/**
 	 * @copydoc ImportExportPlugin::getPluginSettingsPrefix()
 	 */
-	function getPluginSettingsPrefix() {
+	function getPluginSettingsPrefix()
+	{
 		return 'rosetta';
 	}
 
 	/**
 	 * @copydoc PubObjectsExportPlugin::getExportDeploymentClassName()
 	 */
-	function getExportDeploymentClassName() {
+	function getExportDeploymentClassName()
+	{
 		return 'RosettaExportDeployment';
 	}
 
-	function _tarFiles($targetPath, $targetFile, $sourceFiles) {
+	function _tarFiles($targetPath, $targetFile, $sourceFiles)
+	{
 		assert((boolean)$this->createSIP());
 		//TODO change the commands
 		$tarCommand = Config::getVar('cli', 'tar') . ' -czf ' . escapeshellarg($targetFile);
@@ -90,7 +100,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		exec($tarCommand);
 	}
 
-	function checkZIPCommand() {
+	function checkZIPCommand()
+	{
 		$zipBinary = Config::getVar('cli', 'zip');
 		if (empty($zipBinary) || is_executable($zipBinary) == false) {
 			$result = array(
@@ -109,7 +120,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	 * @param $context Context
 	 * @param $object Issue|Submission|ArticleGalley
 	 */
-	function _getObjectUrl($request, $context, $object) {
+	function _getObjectUrl($request, $context, $object)
+	{
 		$router = $request->getRouter();
 		// Retrieve the article of article files.
 		if (is_a($object, 'ArticleGalley')) {
@@ -138,7 +150,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	/**
 	 * @copydoc ImportExportPlugin::display()
 	 */
-	public function display($args, $request) {
+	public function display($args, $request)
+	{
 		parent::display($args, $request);
 		$templateManager = TemplateManager::getManager();
 		$journal = $request->getContext();
@@ -152,7 +165,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	/**
 	 * @copydoc Plugin::manage()
 	 */
-	public function manage($args, $request) {
+	public function manage($args, $request)
+	{
 		if ($request->getUserVar('verb') == 'settings') {
 			$user = $request->getUser();
 			$this->addLocaleData();
@@ -175,15 +189,18 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		return parent::manage($args, $request);
 	}
 
-	function getCanEnable() {
+	function getCanEnable()
+	{
 		return true;
 	}
 
-	function getCanDisable() {
+	function getCanDisable()
+	{
 		return true;
 	}
 
-	function setEnabled($enabled) {
+	function setEnabled($enabled)
+	{
 		$context = Application::get()->getRequest()->getContext();
 		$this->updateSetting($context->getId(), 'enabled', $enabled, 'bool');
 	}
@@ -192,7 +209,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	 * @param The $scriptName
 	 * @param Parameters $args
 	 */
-	function executeCLI($scriptName, &$args) {
+	function executeCLI($scriptName, &$args)
+	{
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journal = $journalDao->getByPath($journalPath);
@@ -223,33 +241,15 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	 * Determine whether or not this plugin is currently enabled.
 	 * @return boolean
 	 */
-	function getEnabled($context = null) {
+	function getEnabled($context = null)
+	{
 		if ($context == null) $context = Application::get()->getRequest()->getContext();
 
 		return $this->getSetting($context->getId(), 'enabled');
 	}
-	public function logError($message) {
-		self::writeLog($message, 'ERROR');
-	}
 
-
-	/**
-	 * @param $message
-	 * @param $level
-	 */
-	private static function writeLog($message, $level) :void {
-		$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
-		error_log("$fineStamp $level $message\n", 3, self::logFilePath());
-	}
-
-	/**
-	 * @return string
-	 */
-	public static function logFilePath():string {
-		return Config::getVar('files', 'files_dir') . '/rosetta.log';
-	}
-
-	function getSetting($contextId, $name) {
+	function getSetting($contextId, $name)
+	{
 		switch ($name) {
 			case 'rosettaHost':
 				$config_value = Config::getVar('rosetta', 'host');
@@ -279,10 +279,34 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 		return $config_value ?: parent::getSetting($contextId, $name);
 	}
 
+	public function logError($message)
+	{
+		self::writeLog($message, 'ERROR');
+	}
+
+	/**
+	 * @param $message
+	 * @param $level
+	 */
+	private static function writeLog($message, $level): void
+	{
+		$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
+		error_log("$fineStamp $level $message\n", 3, self::logFilePath());
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function logFilePath(): string
+	{
+		return Config::getVar('files', 'files_dir') . '/rosetta.log';
+	}
+
 	/**
 	 * Display the command-line usage information
 	 */
-	function usage($scriptName) {
+	function usage($scriptName)
+	{
 		echo __('plugins.importexport.rosetta.cliUsage', array(
 				'scriptName' => $scriptName,
 				'pluginName' => $this->getName()
@@ -292,26 +316,31 @@ class RosettaExportPlugin extends PubObjectsExportPlugin {
 	/**
 	 * @see Plugin::getName()
 	 */
-	function getName() {
+	function getName()
+	{
 		return __CLASS__;
 	}
 
 	/**
 	 * @copydoc Plugin::getContextSpecificPluginSettingsFile()
 	 */
-	function getContextSpecificPluginSettingsFile() {
+	function getContextSpecificPluginSettingsFile()
+	{
 		return $this->getPluginPath() . '/settings.xml';
 	}
 
-	function depositXML($objects, $context, $filename) {
+	function depositXML($objects, $context, $filename)
+	{
 		// TODO: Implement depositXML() method.
 	}
 }
 
-function getName() {
+function getName()
+{
 	// TODO: Implement getName() method.
 }
 
-function depositXML($objects, $context, $filename) {
+function depositXML($objects, $context, $filename)
+{
 	// TODO: Implement depositXML() method.
 }
