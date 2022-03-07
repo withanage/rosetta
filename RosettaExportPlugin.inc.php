@@ -238,6 +238,24 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	}
 
 	/**
+	 * @param $dir
+	 */
+	function rrmdir($dir) :void  {
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (filetype($dir."/".$object) == "dir")
+						$this->rrmdir($dir."/".$object);
+					else unlink   ($dir."/".$object);
+				}
+			}
+			reset($objects);
+			rmdir($dir);
+		}
+	}
+
+	/**
 	 * Determine whether or not this plugin is currently enabled.
 	 * @return boolean
 	 */

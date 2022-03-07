@@ -65,22 +65,28 @@ class RosettaExportDeployment
 		$this->_context = $context;
 	}
 
-	private function depositSubmission(Context $context, Submission $submission, Publication $publication)
+	/**
+	 * @param Context $context
+	 * @param Submission $submission
+	 * @param Publication $publication
+	 * @return void
+	 */
+	private function depositSubmission(Context $context, Submission $submission, Publication $publication): void
 	{
 		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 
 		$oldmask = umask(0);
 		if (is_dir($subDirectoryName)) {
 			$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-			$pubPath = $subDirectoryName . '/' . $ingestPath;
-			if (is_dir($pubPath) == false) {
-				mkdir($pubPath, 0777);
+			$sipPath = $subDirectoryName . '/' . $ingestPath;
+			if (is_dir($sipPath) == false) {
+				mkdir($sipPath, 0777);
 
 				$dcDom = new RosettaDCDom($context, $publication);
 
-				file_put_contents($pubPath . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+				file_put_contents($sipPath . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-				$pubContentPath = join(DIRECTORY_SEPARATOR, array($pubPath, 'content'));
+				$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
 
 				if (is_dir($pubContentPath) == false) {
 					mkdir($pubContentPath, 0777);
@@ -118,7 +124,7 @@ class RosettaExportDeployment
 						}
 					}
 
-					$this->_doRequest($context, $ingestPath, $submission);
+					$this->_doRequest($context, $ingestPath, $sipPath, $submission);
 					unlink($xmlExport);
 
 				}
@@ -126,13 +132,14 @@ class RosettaExportDeployment
 		}
 
 		umask($oldmask);
+
 	}
 
 	/**
 	 * Get the import/export plugin.
 	 * @return ImportExportPlugin
 	 */
-	function getPlugin()
+	function getPlugin(): ImportExportPlugin
 	{
 		return $this->_plugin;
 	}
@@ -141,19 +148,19 @@ class RosettaExportDeployment
 	 * Set the import/export plugin.
 	 * @param $plugin ImportExportPlugin
 	 */
-	function setPlugin($plugin)
+	function setPlugin($plugin): void
 	{
 		$this->_plugin = $plugin;
 	}
 
 
-
 	/**
 	 * @param Context $context
 	 * @param string $ingestPath
+	 * @param string $sipPath
 	 * @param Submission $submission
 	 */
-	private function _doRequest(Context $context, string $ingestPath, Submission $submission): void
+	private function _doRequest(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
 	{
 		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
 		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
@@ -209,12 +216,11 @@ class RosettaExportDeployment
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
 
-		} else {
-			$this->getPlugin()->logError($result);
-		}
+
+		} else $this->getPlugin()->logError($result);
+
+		$this->getPlugin()->rrmdir($sipPath);
 		curl_close($ch);
-
-
 
 	}
 
@@ -223,6 +229,8 @@ class RosettaExportDeployment
 	 * @param Submission $submission
 	 * @param Publication $publication
 	 * @return string
+	 * @deprecated
+	 *
 	 */
 	private function createSIPPath(Context $context, Submission $submission, Publication $publication): string
 	{
@@ -235,13 +243,15 @@ class RosettaExportDeployment
 		}
 	}
 
-	/**
+	/***
 	 * @param Context $context
 	 * @param Submission $submission
 	 * @param Publication $publication
 	 * @param string $archivePath
+	 * @deprecated
+	 *
 	 */
-	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath)
+	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath): void
 	{
 
 		if (self::zipFunctional()) {
