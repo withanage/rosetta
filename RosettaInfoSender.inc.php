@@ -1,10 +1,12 @@
 <?php
 import('lib.pkp.classes.scheduledTask.ScheduledTask');
 
-class RosettaInfoSender extends ScheduledTask {
+class RosettaInfoSender extends ScheduledTask
+{
 	var $_plugin;
 
-	function __construct($args) {
+	function __construct($args)
+	{
 		PluginRegistry::loadCategory('importexport');
 		$plugin = PluginRegistry::getPlugin('importexport', 'RosettaExportPlugin');
 		$this->_plugin = $plugin;
@@ -17,14 +19,16 @@ class RosettaInfoSender extends ScheduledTask {
 	/**
 	 * @copydoc ScheduledTask::getName()
 	 */
-	function getName() {
+	function getName()
+	{
 		return __('plugins.importexport.rosetta.senderTask.name');
 	}
 
 	/**
 	 * @param $result
 	 */
-	function _addLogEntry($result) {
+	function _addLogEntry($result)
+	{
 		if (is_array($result)) {
 			foreach ($result as $error) {
 				assert(is_array($error) && count($error) >= 1);
@@ -44,7 +48,8 @@ class RosettaInfoSender extends ScheduledTask {
 	/**
 	 * @copydoc ScheduledTask::executeActions()
 	 */
-	protected function executeActions() {
+	protected function executeActions()
+	{
 		if ($this->_plugin == false) return false;
 		$plugin = $this->_plugin;
 		$journalDao = DAORegistry::getDAO('JournalDAO');

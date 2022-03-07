@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file plugins/importexport/Rosetta/classes/MedraWebservice.inc.php
  *
@@ -16,16 +15,13 @@
  * it doesn't support multipart SOAP messages.
  */
 
-
 import('lib.pkp.classes.xml.XMLNode');
-
 define('ROSETTA_WS_ENDPOINT_DEV', 'https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl');
 define('ROSETTA_WS_ENDPOINT', '');
 define('ROSETTA_WS_RESPONSE_OK', 200);
 
-
-class RosettaWebservice {
-
+class RosettaWebservice
+{
 
 	var $_context;
 	/** @var Plugin The current import/export plugin */
@@ -36,14 +32,14 @@ class RosettaWebservice {
 	 * @param $context Context
 	 * @param $plugin Plugin
 	 */
-	function __construct($context, $plugin) {
+	function __construct($context, $plugin)
+	{
 		$this->_context = $context;
 		$this->_plugin = $plugin;
 	}
 
-
-	function deposit() {
-
+	function deposit()
+	{
 		$soapMessage =
 			'<soap:Envelope soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"' .
 			'xmlns:dbs="http://dps.exlibris.com/"' .
@@ -60,14 +56,11 @@ class RosettaWebservice {
 			'</soap:Body>' .
 			'</soap:Envelope>';
 
-
 		// Prepare HTTP session.
 		import('lib.pkp.classes.helpers.PKPCurlHelper');
 		$curlCh = PKPCurlHelper::getCurlObject();
-
 		curl_setopt($curlCh, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curlCh, CURLOPT_POST, true);
-
 		curl_setopt($curlCh, CURLOPT_URL, $this->_endpoint);
 		$extraHeaders = array(
 			'SOAPAction: ""',
@@ -75,20 +68,15 @@ class RosettaWebservice {
 		);
 		curl_setopt($curlCh, CURLOPT_HTTPHEADER, $extraHeaders);
 		curl_setopt($curlCh, CURLOPT_POSTFIELDS, $soapMessage);
-
 		$result = true;
 		$response = curl_exec($curlCh);
-
 		if ($response === false) {
 			$result = 'OJS-Rosetta: Expected string response.';
 		}
-
 		if ($result === true && ($status = curl_getinfo($curlCh, CURLINFO_HTTP_CODE)) != ROSETTA_WS_RESPONSE_OK) {
 			$result = 'OJS-Rosetta: Expected ' . ROSETTA_WS_RESPONSE_OK . ' response code, got ' . $status . ' instead.';
 		}
-
 		curl_close($curlCh);
-
 
 		return $result;
 	}
@@ -99,7 +87,8 @@ class RosettaWebservice {
 	 * @param $content string
 	 * @return string
 	 */
-	function _getMimePart($contentId, $content) {
+	function _getMimePart($contentId, $content)
+	{
 		return
 			"Content-Type: text/xml; charset=utf-8\r\n" .
 			"Content-ID: <${contentId}>\r\n" .
@@ -112,7 +101,8 @@ class RosettaWebservice {
 	 * @param $prefix string
 	 * @return string
 	 */
-	function _getContentId($prefix) {
+	function _getContentId($prefix)
+	{
 		return $prefix . md5(uniqid()) . '@Rosetta.org';
 	}
 
@@ -120,7 +110,8 @@ class RosettaWebservice {
 	 * Escape XML entities.
 	 * @param $string string
 	 */
-	function _escapeXmlEntities($string) {
+	function _escapeXmlEntities($string)
+	{
 		return XMLNode::xmlentities($string);
 	}
 }

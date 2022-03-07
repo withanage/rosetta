@@ -1,10 +1,12 @@
 <?php
 
-class Rosetta extends DataObject {
+class Rosetta extends DataObject
+{
 	/**
 	 * @return int
 	 */
-	function getContextId() {
+	function getContextId()
+	{
 		return $this->getData('contextId');
 	}
 
@@ -12,7 +14,8 @@ class Rosetta extends DataObject {
 	 * Set context ID.
 	 * @param $contextId int
 	 */
-	function setContextId($contextId) {
+	function setContextId($contextId)
+	{
 		return $this->setData('contextId', $contextId);
 	}
 
@@ -20,7 +23,8 @@ class Rosetta extends DataObject {
 	 * Get submission ID.
 	 * @return int
 	 */
-	function getSubmissionId() {
+	function getSubmissionId()
+	{
 		return $this->getData('submissionId');
 	}
 
@@ -28,39 +32,45 @@ class Rosetta extends DataObject {
 	 * Set submission ID.
 	 * @param $submissionId int
 	 */
-	function setSubmissionId($submissionId) {
+	function setSubmissionId($submissionId)
+	{
 		return $this->setData('submissionId', $submissionId);
 	}
 
 	/**
 	 * @return string
 	 */
-	function getSIP() {
+	function getSIP()
+	{
 		return $this->getData('sip');
 	}
 
 	/**
 	 * @param $sip
 	 */
-	function setSIP($sip) {
+	function setSIP($sip)
+	{
 		return $this->setData('submissionId', $sip);
 	}
 
 	/**
 	 * @return string
 	 */
-	function getResponse() {
+	function getResponse()
+	{
 		return $this->getData('response');
 	}
 
 	/**
 	 * @return string
 	 */
-	function getStatus() {
+	function getStatus()
+	{
 		return $this->getData('status');
 	}
 
-	function setStatus($status) {
+	function setStatus($status)
+	{
 		return $this->setData('status', $status);
 	}
 
@@ -68,7 +78,8 @@ class Rosetta extends DataObject {
 	 * Get uploaded date of file.
 	 * @return date
 	 */
-	function getDateUploaded() {
+	function getDateUploaded()
+	{
 		return $this->getData('dateUploaded');
 	}
 
@@ -76,7 +87,8 @@ class Rosetta extends DataObject {
 	 * Set uploaded date of file.
 	 * @param $dateUploaded date
 	 */
-	function setDateUploaded($dateUploaded) {
+	function setDateUploaded($dateUploaded)
+	{
 		return $this->SetData('dateUploaded', $dateUploaded);
 	}
 
@@ -84,7 +96,8 @@ class Rosetta extends DataObject {
 	 * Get modified date of file.
 	 * @return date
 	 */
-	function getDateModified() {
+	function getDateModified()
+	{
 		return $this->getData('dateModified');
 	}
 
@@ -92,7 +105,8 @@ class Rosetta extends DataObject {
 	 * Set modified date of file.
 	 * @param $dateModified date
 	 */
-	function setDateModified($dateModified) {
+	function setDateModified($dateModified)
+	{
 		return $this->SetData('dateModified', $dateModified);
 	}
 }

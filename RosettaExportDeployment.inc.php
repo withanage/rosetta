@@ -3,9 +3,7 @@ import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.RosettaMETSDom');
 import('lib.pkp.classes.xml.XMLCustomWriter');
-
 const ROSETTA_STATUS_DEPOSITED = 'deposited';
-
 class RosettaExportDeployment
 {
 	/** @var Context The current import/export context */
@@ -24,7 +22,6 @@ class RosettaExportDeployment
 		$this->setPlugin($plugin);
 	}
 
-
 	// Getter/setters
 
 	/**
@@ -40,10 +37,8 @@ class RosettaExportDeployment
 			if (is_a($submission, 'Submission')) {
 				foreach ($submission->getData('publications') as $publication) {
 					$this->depositSubmission($context, $submission, $publication);
-
 				}
 			}
-
 		}
 	}
 
@@ -74,42 +69,31 @@ class RosettaExportDeployment
 	private function depositSubmission(Context $context, Submission $submission, Publication $publication): void
 	{
 		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
-
 		$oldmask = umask(0);
 		if (is_dir($subDirectoryName)) {
 			$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
 			$sipPath = $subDirectoryName . '/' . $ingestPath;
 			if (is_dir($sipPath) == false) {
 				mkdir($sipPath, 0777);
-
 				$dcDom = new RosettaDCDom($context, $publication);
-
 				file_put_contents($sipPath . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-
 				$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-
 				if (is_dir($pubContentPath) == false) {
 					mkdir($pubContentPath, 0777);
 
-
 					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
 					file_put_contents(join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml")), $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
-
 					// Add dependent files
 					$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
-
 					list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
 					shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
-
 
 					$galleyFiles = $metsDom->getGalleyFiles();
 					if (file_exists($xmlExport)) {
 						array_push($galleyFiles, $exportFile);
 					}
 
-
 					foreach ($galleyFiles as $file) {
-
 						if (is_dir($streamsPath) == false) {
 							mkdir($streamsPath, 0777);
 						}
@@ -118,21 +102,16 @@ class RosettaExportDeployment
 							mkdir($masterPath, 0777);
 						}
 						copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
-
 						foreach ($file["dependentFiles"] as $dependentFile) {
 							copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 						}
 					}
-
 					$this->_doRequest($context, $ingestPath, $sipPath, $submission);
 					unlink($xmlExport);
-
 				}
 			}
 		}
-
 		umask($oldmask);
-
 	}
 
 	/**
@@ -153,7 +132,6 @@ class RosettaExportDeployment
 		$this->_plugin = $plugin;
 	}
 
-
 	/**
 	 * @param Context $context
 	 * @param string $ingestPath
@@ -169,10 +147,8 @@ class RosettaExportDeployment
 		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
 		//$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
 		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
-
 		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
 		$base64_credentials = base64_encode($password);
-
 
 		$payload = '<?xml version="1.0" encoding="UTF-8"?>' .
 			'<soap:Envelope' .
@@ -191,7 +167,6 @@ class RosettaExportDeployment
 			'  </soap:Body>' .
 			'</soap:Envelope>';
 
-
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $endpoint);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -200,13 +175,11 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_NOBODY, 1);
-
 		$headers = array();
 		$headers[] = 'Content-Type: text/xml';
 		$headers[] = 'SoapAction: ""';
 		$headers[] = 'Authorization: local ' . $base64_credentials;
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
 		$result = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($response_code == 200) {
@@ -216,12 +189,9 @@ class RosettaExportDeployment
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
 
-
 		} else $this->getPlugin()->logError($result);
-
 		$this->getPlugin()->rrmdir($sipPath);
 		curl_close($ch);
-
 	}
 
 	/**
@@ -253,12 +223,10 @@ class RosettaExportDeployment
 	 */
 	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath): void
 	{
-
 		if (self::zipFunctional()) {
 			if (file_exists($archivePath) == false) {
 				$zip = new ZipArchive();
 				if ($zip->open($archivePath, ZIPARCHIVE::CREATE) == true) {
-
 					$dcDom = new RosettaDCDom($context, $publication);
 					$dcDom->preserveWhiteSpace = false;
 					$dcDom->formatOutput = true;
@@ -279,10 +247,8 @@ class RosettaExportDeployment
 							$zip->addFile($dFilePath, $fiePath . basename($dFilePath));
 						}
 					}
-
 					$zip->close();
 				}
-
 			}
 		} else {
 			$this->getPlugin()->logError('ZIP not installed');
@@ -297,6 +263,5 @@ class RosettaExportDeployment
 	{
 		return (extension_loaded('zip'));
 	}
-
 
 }

@@ -1,71 +1,58 @@
 <?php
 declare(strict_types=1);
 
-class SubmitDeposit {
-
+class SubmitDeposit
+{
 	protected ?string $pdsHandle;
 	protected ?string $materialFlowId;
 	protected ?string $subDirectoryName;
 	protected ?string $producerId;
 	protected ?string $depositSetId;
 
-	public function __construct() {
-
+	public function __construct()
+	{
 	}
 
-	public function submitDepositActivity(string $pdsHandle, string $materialFlowId, string $subDirectoryName, string $producerId, string $depositSetId): self {
-
+	public function submitDepositActivity(string $pdsHandle, string $materialFlowId, string $subDirectoryName, string $producerId, string $depositSetId): self
+	{
 		$this->depositSetId = $depositSetId;
 		$this->materialFlowId = $materialFlowId;
 		$this->pdsHandle = $pdsHandle;
 		$this->producerId = $producerId;
 		$this->subDirectoryName = $subDirectoryName;
-
 		return $this;
 
-
 	}
-
 }
-
 
 $wsdl = "https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl";
 $options = [
 	'cache_wsdl' => WSDL_CACHE_NONE,
 	'classmap' => [
 		'SubmitDeposit' => SubmitDeposit::class,
-
 	],
 	'exceptions' => true,
 	'soap_version' => SOAP_1_1,
 	'trace' => 1,
 ];
 $client = new SoapClient($wsdl, $options);
-
 $header = new SoapHeader('http://soapinterop.org/echoheader/',
 	'Authorization',
 	base64_encode('tibojsauthdep-institutionCode-tib:Pbojs4TR=dA'));
-
 $client->__setSoapHeaders($header);
-
 $sd = new  SubmitDeposit();
-
 $s = ($sd)->submitDepositActivity("", "76780103", "/exchange/lza/lza-tib/ojs-test", "76780038", "");
 try {
-
 	$response = $client->submitDepositActivity($s);
 } catch (Exception $e) {
 	throw new Exception("Response:\n" . $client->__getLastResponse() . "\n" . $client->__getLastRequest());
 }
-
 
 var_dump(
 	$client->__getLastRequest(),
 	$client->__getLastResponse(),
 	$response
 );
-
-
 
 
 /**

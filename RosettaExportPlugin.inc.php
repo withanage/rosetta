@@ -1,10 +1,7 @@
 <?php
-
 error_reporting(E_ERROR | E_PARSE);
-
 import('classes.plugins.PubObjectsExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
-
 
 class RosettaExportPlugin extends PubObjectsExportPlugin
 {
@@ -18,7 +15,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	public function register($category, $path, $mainContextId = null)
 	{
 		return parent::register($category, $path, $mainContextId);
-
 	}
 
 	/**
@@ -75,44 +71,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	{
 		return 'rosetta';
 	}
-
-	/**
-	 * @copydoc PubObjectsExportPlugin::getExportDeploymentClassName()
-	 */
-	function getExportDeploymentClassName()
-	{
-		return 'RosettaExportDeployment';
-	}
-
-	function _tarFiles($targetPath, $targetFile, $sourceFiles)
-	{
-		assert((boolean)$this->createSIP());
-		//TODO change the commands
-		$tarCommand = Config::getVar('cli', 'tar') . ' -czf ' . escapeshellarg($targetFile);
-		$tarCommand .= ' -C ' . escapeshellarg($targetPath);
-		$tarCommand .= ' --owner 0 --group 0 --';
-		foreach ($sourceFiles as $sourceFile) {
-			assert(dirname($sourceFile) . '/' === $targetPath);
-			if (dirname($sourceFile) . '/' !== $targetPath) continue;
-			$tarCommand .= ' ' . escapeshellarg(basename($sourceFile));
-		}
-		// Execute the command.
-		exec($tarCommand);
-	}
-
-	function checkZIPCommand()
-	{
-		$zipBinary = Config::getVar('cli', 'zip');
-		if (empty($zipBinary) || is_executable($zipBinary) == false) {
-			$result = array(
-				array('manager.plugins.zipCommandNotFound')
-			);
-		} else {
-			$result = true;
-		}
-		return $result;
-	}
-
 
 	/**
 	 * Get the canonical URL of an object.
@@ -214,14 +172,11 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journal = $journalDao->getByPath($journalPath);
-
 		if ($journal == false) {
-
 
 			$contextDao = Application::getContextDAO();
 			/* @var $contextDao JournalDAO */
 			$journalFactory = $contextDao->getAll(true);
-
 			while ($journal = $journalFactory->next()) {
 				if ($this->getEnabled($journal)) {
 					$deployment = new RosettaExportDeployment($journal, $this);
@@ -233,25 +188,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			$deployment = new RosettaExportDeployment($journal, $this);
 			$deployment->depositSubmissions();
 
-
-		}
-	}
-
-	/**
-	 * @param $dir
-	 */
-	function rrmdir($dir) :void  {
-		if (is_dir($dir)) {
-			$objects = scandir($dir);
-			foreach ($objects as $object) {
-				if ($object != "." && $object != "..") {
-					if (filetype($dir."/".$object) == "dir")
-						$this->rrmdir($dir."/".$object);
-					else unlink   ($dir."/".$object);
-				}
-			}
-			reset($objects);
-			rmdir($dir);
 		}
 	}
 
@@ -262,7 +198,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	function getEnabled($context = null)
 	{
 		if ($context == null) $context = Application::get()->getRequest()->getContext();
-
 		return $this->getSetting($context->getId(), 'enabled');
 	}
 
@@ -293,8 +228,26 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			default:
 				return parent::getSetting($contextId, $name);
 		}
-
 		return $config_value ?: parent::getSetting($contextId, $name);
+	}
+
+	/**
+	 * @param $dir
+	 */
+	function rrmdir($dir): void
+	{
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (filetype($dir . "/" . $object) == "dir")
+						$this->rrmdir($dir . "/" . $object);
+					else unlink($dir . "/" . $object);
+				}
+			}
+			reset($objects);
+			rmdir($dir);
+		}
 	}
 
 	public function logError($message)
@@ -350,6 +303,14 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	function depositXML($objects, $context, $filename)
 	{
 		// TODO: Implement depositXML() method.
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	function getExportDeploymentClassName()
+	{
+		// TODO: Implement getExportDeploymentClassName() method.
 	}
 }
 
