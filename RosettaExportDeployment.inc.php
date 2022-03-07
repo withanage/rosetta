@@ -106,7 +106,7 @@ class RosettaExportDeployment
 							copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 						}
 					}
-					$this->_doRequest($context, $ingestPath, $sipPath, $submission);
+					$this->doRequest($context, $ingestPath, $sipPath, $submission);
 					unlink($xmlExport);
 				}
 			}
@@ -138,7 +138,7 @@ class RosettaExportDeployment
 	 * @param string $sipPath
 	 * @param Submission $submission
 	 */
-	private function _doRequest(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
+	function doRequest(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
 	{
 		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
 		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
@@ -150,22 +150,7 @@ class RosettaExportDeployment
 		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
 		$base64_credentials = base64_encode($password);
 
-		$payload = '<?xml version="1.0" encoding="UTF-8"?>' .
-			'<soap:Envelope' .
-			'	soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"' .
-			'	xmlns:dbs="http://dps.exlibris.com/"' .
-			'	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' .
-			'	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"' .
-			'	xmlns:xsd="http://www.w3.org/2001/XMLSchema"' .
-			'	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
-			'  <soap:Body>' .
-			'	<dbs:submitDepositActivity>' .
-			'	  <arg1>' . $materialFlowId . '</arg1>' .
-			'	  <arg2>' . $ingestPath . '</arg2>' .
-			'	  <arg3>' . $producerId . '</arg3>' .
-			'	</dbs:submitDepositActivity>' .
-			'  </soap:Body>' .
-			'</soap:Envelope>';
+		$payload = $this->getSoapPayload($materialFlowId, $ingestPath, $producerId);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -188,10 +173,37 @@ class RosettaExportDeployment
 			$date = new DateTime();
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
+			$this->getPlugin()->rrmdir($sipPath);
 
 		} else $this->getPlugin()->logError($result);
-		$this->getPlugin()->rrmdir($sipPath);
 		curl_close($ch);
+	}
+
+	/**
+	 * @param $materialFlowId
+	 * @param string $ingestPath
+	 * @param $producerId
+	 * @return string
+	 */
+	private function getSoapPayload($materialFlowId, string $ingestPath, $producerId): string
+	{
+		$payload = '<?xml version="1.0" encoding="UTF-8"?>' .
+			'<soap:Envelope' .
+			'	soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"' .
+			'	xmlns:dbs="http://dps.exlibris.com/"' .
+			'	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' .
+			'	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"' .
+			'	xmlns:xsd="http://www.w3.org/2001/XMLSchema"' .
+			'	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
+			'  <soap:Body>' .
+			'	<dbs:submitDepositActivity>' .
+			'	  <arg1>' . $materialFlowId . '</arg1>' .
+			'	  <arg2>' . $ingestPath . '</arg2>' .
+			'	  <arg3>' . $producerId . '</arg3>' .
+			'	</dbs:submitDepositActivity>' .
+			'  </soap:Body>' .
+			'</soap:Envelope>';
+		return $payload;
 	}
 
 	/**

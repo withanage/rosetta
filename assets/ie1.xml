@@ -4,7 +4,7 @@
 		<mets:mdWrap MDTYPE="DC">
 			<mets:xmlData>
 				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
-						   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+				>
 					<dc:title xml:lang="en_US">Predicting E-commerce Item Sales With Web Environment Temporal
 						Background
 					</dc:title>
@@ -39,7 +39,7 @@
 			</mets:xmlData>
 		</mets:mdWrap>
 	</mets:dmdSec>
-	<mets:amdSec xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	<mets:amdSec xmlns:mods="http://www.loc.gov/mods/v3"
 				 ID="ie-amd">
 		<mets:techMD ID="ie-amd-tech">
 			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
@@ -55,12 +55,11 @@
 				</mets:xmlData>
 			</mets:mdWrap>
 		</mets:techMD>
-		<mets:sourceMD xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		<mets:sourceMD xmlns:mods="http://www.loc.gov/mods/v3"
 					   ID="ie-amd-source-1">
 			<mets:mdWrap xmlns:mets="http://www.loc.gov/METS/" MDTYPE="OTHER" OTHERMDTYPE="MODS">
 				<mets:xmlData>
 					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
-							   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 							   version="3.7">
 						<mods:titleInfo>
 							<mods:title xml:lang="en_US">Predicting E-commerce Item Sales With Web Environment Temporal
