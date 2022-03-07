@@ -235,7 +235,7 @@ class RosettaExportDeployment
 	 */
 	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath): void
 	{
-		if (self::zipFunctional()) {
+		if (self::isZipFunctioanl()) {
 			if (file_exists($archivePath) == false) {
 				$zip = new ZipArchive();
 				if ($zip->open($archivePath, ZIPARCHIVE::CREATE) == true) {
@@ -271,7 +271,7 @@ class RosettaExportDeployment
 	 * Return true if the zip extension is loaded.
 	 * @return boolean
 	 */
-	static function zipFunctional(): bool
+	static function isZipFunctioanl(): bool
 	{
 		return (extension_loaded('zip'));
 	}
