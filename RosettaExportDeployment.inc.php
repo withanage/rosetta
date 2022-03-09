@@ -206,66 +206,6 @@ class RosettaExportDeployment
 		return $payload;
 	}
 
-	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @return string
-	 * @deprecated
-	 *
-	 */
-	private function createSIPPath(Context $context, Submission $submission, Publication $publication): string
-	{
-		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
-		if (is_dir($subDirectoryName)) {
-			return $subDirectoryName . '/' . PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version') . '.zip';
-		} else {
-			var_dump("Exception:  subDirectoryName " . $subDirectoryName . " not available");
-			return '';
-		}
-	}
-
-	/***
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @param string $archivePath
-	 * @deprecated
-	 *
-	 */
-	private function copyPublicationToShareZIPFile(Context $context, Submission $submission, Publication $publication, string $archivePath): void
-	{
-		if (self::isZipFunctioanl()) {
-			if (file_exists($archivePath) == false) {
-				$zip = new ZipArchive();
-				if ($zip->open($archivePath, ZIPARCHIVE::CREATE) == true) {
-					$dcDom = new RosettaDCDom($context, $publication);
-					$dcDom->preserveWhiteSpace = false;
-					$dcDom->formatOutput = true;
-//$dcDom->createInstance();
-					$zip->addFromString("dc.xml", $dcDom->saveXML());
-					$zip->addEmptyDir("content");
-					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-					$metsDom->preserveWhiteSpace = false;
-					$metsDom->formatOutput = true;
-// create mets file
-					$zip->addFromString("content/ie1.xml", $metsDom->saveXML());
-// add files
-					foreach ($metsDom->getGalleyFiles() as $file) {
-						$fiePath = "content/streams/{$file["path"]}/";
-						$zip->addFile($file["fullFilePath"], $fiePath . basename($file["fullFilePath"]));
-						foreach ($file["dependentFiles"] as $dFile) {
-							$dFilePath = $dFile["fullFilePath"];
-							$zip->addFile($dFilePath, $fiePath . basename($dFilePath));
-						}
-					}
-					$zip->close();
-				}
-			}
-		} else {
-			$this->getPlugin()->logError('ZIP not installed');
-		}
-	}
 
 	/**
 	 * Return true if the zip extension is loaded.

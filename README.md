@@ -39,71 +39,71 @@ in OJS sind meiste Felder multilingual
 
 | Metadata | Type | Implemented | Remarks|
 | ---- | ---- | ---- | ---- |
-|id | integer | :question:|
+|id | integer | |
 | abstract |string | dcterms:abstract|
-| accessStatus | integer | :question: | ARTICLE_ACCESS_OPEN usw. |
+| accessStatus | integer |  | ARTICLE_ACCESS_OPEN usw. |
 | authors |string | dc:contributors|
-| categories| string |:question: |
+| categories| string | |
 | copyrightHolder |string |dcterms:rightsHolder |
 | copyrightYear| integer | dcterms:issued |
 | datePublished |string | dcterms:date |
 | disciplines |string | dcterms:audience |
-|issue | integer | :question: |
+|issue | integer |  |
 | keywords|string | dcterms:subject|
 | languages |string |dc:language |
 |lastModified |string | dcterms:modified|
 | locale |string | dc:language |
-| prefix |string | :question:|
+| prefix |string | |
 | primaryContact|string | dcterms:creator in auhtors |
 | publisherInstitution|string | dc:publisher |
-| section |string | :question:|
-| seq| integer | :question:|
-| subjects |string | :question:|
-| subTitle |string | :question:|
-| supportingAgencies |string | :question:|
+| section |string | |
+| seq| integer | |
+| subjects |string | |
+| subTitle |string | |
+| supportingAgencies |string | |
 | title |string | dc:title|
-| version | integer | :question:|
-| urlPath |string | :question:|
-| citationsRaw |string | :question: | Zitationen getrennt durch  Line-breaks|
-| pages |string | :question:|
-| coverage |string | :question:|
-| coverImage |string | :question:|
-| coverImage:dateUploaded |string | :question:|
-| coverImage:altText |string | :question:|
+| version | integer | |
+| urlPath |string | |
+| citationsRaw |string |  | Zitationen getrennt durch  Line-breaks|
+| pages |string | |
+| coverage |string | |
+| coverImage |string | |
+| coverImage:dateUploaded |string | |
+| coverImage:altText |string | |
 | pub-id::published-id|string |dc:identifier |
-| rights |string | :question:|
-| source |string | :question:|
-| supportingAgencies |string | :question:|
-| type |string | :question:|
+| rights |string | |
+| source |string | |
+| supportingAgencies |string | |
+| type |string | |
 
 ### Submission
 
 | Metadata | Type | Implemented |
 | ---- | ---- | ---- |
-| id | integer| :question:| |
-|context | string| :question:| |
-|dateLastActivity | string | :question:|
-| dateSubmitted | string | :question:|
-| lastModified | string | :question:| |
+| id | integer| | |
+|context | string| | |
+|dateLastActivity | string | |
+| dateSubmitted | string | |
+| lastModified | string | | |
 
 ### Authors
 
 | Metadata | Type | Implemented
 | ---- | ---- | ---- |
 | authors |string |dc:contributor" |
-| ROR ID| :question:| |
-| Orcid Id ID| :question:| |
+| ROR ID| | |
+| Orcid Id ID| | |
 
 ### Galleys / Publication Formats
 
 | Metadata | Type | Implemented | Remarks|
 | ---- | ---- | ---- | ---- |
-| Label | string | :question:| |
-| Locale |string | :question:| |
-| fileId |string | :question:| |
-| urlPath |string | :question:| |
-| seq |string | :question:| |
-| urlRemote |string | :question:| |
+| Label | string | | |
+| Locale |string | | |
+| fileId |string | | |
+| urlPath |string | | |
+| seq |string | | |
+| urlRemote |string | | |
 
 # Entity Types
 
