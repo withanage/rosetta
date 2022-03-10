@@ -197,8 +197,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	 */
 	function getEnabled($context = null)
 	{
-		if ($context == null) $context = Application::get()->getRequest()->getContext();
-		return $this->getSetting($context->getId(), 'enabled');
+		return  ($context != null) ? $this->getSetting($context->getId(), 'enabled'): false;
 	}
 
 	function getSetting($contextId, $name)
