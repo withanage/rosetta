@@ -158,8 +158,6 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_NOBODY, 1);
 		$headers = array();
 		$headers[] = 'Content-Type: text/xml';
 		$headers[] = 'SoapAction: ""';
