@@ -164,7 +164,6 @@ class RosettaExportDeployment
 		$headers[] = 'Authorization: local ' . $base64_credentials;
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		$result = curl_exec($ch);
-		echo $result;
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($response_code == 200) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
