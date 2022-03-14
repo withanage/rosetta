@@ -249,16 +249,25 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		}
 	}
 
-	public function logError($message)
+	public function logError( String $message)
 	{
 		self::writeLog($message, 'ERROR');
+	}
+
+	/***
+	 * @copyDoc  writeLog
+	 * @param $message
+	 */
+	public function logInfo( String $message) : void
+	{
+		self::writeLog($message, 'INFO');
 	}
 
 	/**
 	 * @param $message
 	 * @param $level
 	 */
-	private static function writeLog($message, $level): void
+	private static function writeLog(String $message, String $level): void
 	{
 		$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
 		error_log("$fineStamp $level $message\n", 3, self::logFilePath());

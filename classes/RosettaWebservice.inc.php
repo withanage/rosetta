@@ -16,7 +16,6 @@
  */
 
 import('lib.pkp.classes.xml.XMLNode');
-define('ROSETTA_WS_ENDPOINT_DEV', 'https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl');
 define('ROSETTA_WS_ENDPOINT', '');
 define('ROSETTA_WS_RESPONSE_OK', 200);
 
