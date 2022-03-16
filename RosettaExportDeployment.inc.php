@@ -75,7 +75,7 @@ class RosettaExportDeployment
 			$sipPath = $subDirectoryName . '/' . $ingestPath;
 			if (is_dir($sipPath) == false) {
 				mkdir($sipPath, 0777);
-				$dcDom = new RosettaDCDom($context, $publication);
+				$dcDom = new RosettaDCDom($context, $publication, false);
 				file_put_contents($sipPath . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 				$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
 				if (is_dir($pubContentPath) == false) {
