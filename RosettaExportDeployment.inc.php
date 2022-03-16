@@ -172,7 +172,7 @@ class RosettaExportDeployment
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
 			$submissionDao->updateObject($submission);
 
-			sleep(5);
+			sleep(30);
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id')."-".$submission->getData('id'));
 

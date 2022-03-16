@@ -36,6 +36,7 @@ class RosettaDCDom extends DOMDocument
 		// title
 		$disciplines = $this->publication->getData("title");
 		foreach ($disciplines as $language => $title) {
+			$node = $this->createElement($qName, $value);
 			$this->createQualifiedElement("dc:title", $title, $language);
 		}
 		// authors
