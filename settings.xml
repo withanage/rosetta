@@ -1,4 +1,5 @@
 <settings>
+
 	<!--  Technical metadata -->
 	<container id="ie-amd-tech" type="techMD">
 		<section id="CMS">
@@ -30,4 +31,5 @@
 	<!-- digi prov -->
 	<container id="ie-amd-digiprov" type="digiprovMD">
 	</container>
+
 </settings>

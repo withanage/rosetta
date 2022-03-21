@@ -100,7 +100,7 @@ class RosettaDCDom extends DOMDocument
 
 		//type
 		$this->createQualifiedElement("dc:type", "status-type:publishedVersion");
-		$this->createQualifiedElement("dc:type", ", doc-type:article");
+		$this->createQualifiedElement("dc:type", "doc-type:article");
 		$this->createElementDCTerms("dcterms:license", "TIB_OJS_Lizenzvereinbarung");
 		//language
 		$this->createQualifiedElement("dc:language", str_replace('_', '-', $this->publication->getData('locale')));
