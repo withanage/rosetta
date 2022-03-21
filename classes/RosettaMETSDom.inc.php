@@ -44,7 +44,7 @@ class RosettaMETSDom extends DOMDocument
 		$repIdSuffix = "1";
 		$this->createRootElement();
 		// create dmdSec
-		$dcDom = new RosettaDCDom($this->context, $this->publication);
+		$dcDom = new RosettaDCDom($this->context, $this->publication, false);
 		$dc = $this->importNode($dcDom->getRecord(), true);
 		// Dublin core Metadata
 		$dmdSec = $this->createMetsDCElement("ie-dmd", "mets:dmdSec", "DC", $dc);

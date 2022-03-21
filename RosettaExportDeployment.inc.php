@@ -145,7 +145,6 @@ class RosettaExportDeployment
 		$password = $this->getPlugin()->getSetting($context->getId(), 'rosettaPassword');
 		$institutionCode = $this->getPlugin()->getSetting($context->getId(), 'rosettaInstitutionCode');
 		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
-		//$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'rosettaSubDirectoryName');
 		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
 		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
 		$base64_credentials = base64_encode($password);
