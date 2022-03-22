@@ -1,6 +1,12 @@
-pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Articles/How_to_create_a_PDS_handle
-Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
 
+# OJS-Rosetta Plugin
+
+## Introduction
+
+
+
+
+## Configuration
 - die Institution in Rosetta, in die du ingesten willst (TIB),
 - der Username in Rosetta für deine Submission Application (tibojsautodep) und
 - das Passwort für deinen User in Rosetta (das Passwort für den User habe ich dir mal zugeschickt).
@@ -131,4 +137,13 @@ in OJS sind meiste Felder multilingual
 |Report|Report|
 |Website|Website|
 
+
+
 php tools/runScheduledTasks.php plugins/generic/usageStats/scheduledTasks.xml
+
+
+### Clean
+
+pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Articles/How_to_create_a_PDS_handle
+Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
+
