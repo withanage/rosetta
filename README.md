@@ -14,8 +14,7 @@
 - subDirectoryName - of the load directory: /exchange/lza/lza-tib/ojs-test
 - producerId - of the Producer: 76780038
 
-Passwort habe ich dir vor einer ganzen Weile zugeschickt, als ich die Konfiguration in Rosetta DEV angelegt habe. Es
-sollte für die DEV-Anbindung Pbojs4TR=dA sein.
+
 
 DEPOSIT_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl
 PRODUCER_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/ProducerWebServices?wsdl
