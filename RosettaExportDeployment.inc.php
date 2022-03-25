@@ -162,20 +162,20 @@ class RosettaExportDeployment
 		$headers[] = 'SoapAction: ""';
 		$headers[] = 'Authorization: local ' . $base64_credentials;
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		$result = curl_exec($ch);
+		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		if ($response_code == 200) {
+		$sipIdNode = $this->getSipIdNode($response);
+
+		if ($response_code == 200 && !is_null($sipIdNode)) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
-			$date = new DateTime();
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), $date->getTimestamp());
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), $sipIdNode->nodeValue);
 			$submissionDao->updateObject($submission);
-
 			sleep(30);
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id')."-".$submission->getData('id'));
 
-		} else $this->getPlugin()->logError($result);
+		} else $this->getPlugin()->logError($response);
 		curl_close($ch);
 	}
 
@@ -214,6 +214,21 @@ class RosettaExportDeployment
 	static function isZipFunctioanl(): bool
 	{
 		return (extension_loaded('zip'));
+	}
+
+	/**
+	 * @param $response
+	 * @return mixed
+	 */
+	protected function getSipIdNode($response)
+	{
+		$body = substr($response, curl_info['header_size']);
+		$doc = new DOMDocument();
+		$doc->loadXML(html_entity_decode($body));
+		$xpath = new DOMXpath($doc);
+		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
+		$sipIdNode = $xpath->query("//ser:sipIdNode")[0];
+		return $sipIdNode;
 	}
 
 }
