@@ -165,7 +165,6 @@ class RosettaExportDeployment
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSipIdNode($response);
-		echo($response);
 		echo($sipIdNode);
 		if ($response_code == 200 && !is_null($sipIdNode)) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
