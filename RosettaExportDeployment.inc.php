@@ -164,7 +164,7 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		$sipIdNode = $this->getSipIdNode($response);
+		$sipIdNode = $this->getSipIdNode($ch, $response);
 		echo($response);
 		echo($sipIdNode);
 		if ($response_code == 200 && !is_null($sipIdNode)) {
@@ -221,13 +221,10 @@ class RosettaExportDeployment
 	 * @param $response
 	 * @return mixed
 	 */
-	protected function getSipIdNode($response)
+	protected function getSipIdNode($ch, $response)
 	{
-		echo $response;
-		$header_size = curl_getinfo['header_size'];
-		echo $header_size;
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
-		echo $body;
 		$doc = new DOMDocument();
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
