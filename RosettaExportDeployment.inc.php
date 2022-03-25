@@ -227,8 +227,7 @@ class RosettaExportDeployment
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
-		$sipIdNode = $xpath->query("//ser:sipIdNode")[0];
-		return $sipIdNode;
+		return $xpath->query("//ser:sipIdNode")[0]->nodeValue;
 	}
 
 }
