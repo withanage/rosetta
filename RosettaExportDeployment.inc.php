@@ -1,6 +1,6 @@
 <?php
 import('classes.core.Services');
-import('plugins.importexport.rosetta.classes.RosettaDCDom');
+import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.RosettaMETSDom');
 import('lib.pkp.classes.xml.XMLCustomWriter');
 const ROSETTA_STATUS_DEPOSITED = 'deposited';

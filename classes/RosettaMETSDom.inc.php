@@ -1,5 +1,6 @@
 <?php
 import('plugins.importexport.rosetta.classes.XMLUtils');
+import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 define('MASTER_PATH', 'MASTER');
 
 /**
