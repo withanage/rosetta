@@ -165,7 +165,6 @@ class RosettaExportDeployment
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSipIdNode($ch, $response);
-		var_dump($sipIdNode);
 		if ($response_code == 200 && !is_null($sipIdNode)) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
@@ -217,10 +216,11 @@ class RosettaExportDeployment
 	}
 
 	/**
+	 * @param $ch
 	 * @param $response
-	 * @return mixed
+	 * @return DOMElement
 	 */
-	protected function getSipIdNode($ch, $response)
+	protected function getSipIdNode($ch, $response) : DOMElement
 	{
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
