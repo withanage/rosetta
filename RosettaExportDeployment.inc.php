@@ -222,8 +222,10 @@ class RosettaExportDeployment
 	 */
 	protected function getSipIdNode($response)
 	{
-		$body = substr($response, curl_info['header_size']);
-		echo($body);
+		$header_size = curl_info['header_size'];
+		echo $header_size;
+		$body = substr($response, $header_size);
+		echo $body;
 		$doc = new DOMDocument();
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
