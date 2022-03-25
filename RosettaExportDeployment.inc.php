@@ -223,6 +223,7 @@ class RosettaExportDeployment
 	 */
 	protected function getSipIdNode($response)
 	{
+		echo $response;
 		$header_size = curl_info['header_size'];
 		echo $header_size;
 		$body = substr($response, $header_size);
