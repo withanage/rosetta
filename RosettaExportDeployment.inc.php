@@ -223,14 +223,12 @@ class RosettaExportDeployment
 	protected function getSipIdNode($ch, $response)
 	{
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-		echo $header_size;
 		$body = substr($response, $header_size);
-		echo $body;
 		$doc = new DOMDocument();
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
-		return $xpath->query("//ser:sipIdNode")[0]->nodeValue;
+		return $xpath->query("//ser:sipIdNode")[0];
 	}
 
 }
