@@ -4,8 +4,6 @@
 ## Introduction
 
 
-
-
 ## Configuration
 - die Institution in Rosetta, in die du ingesten willst (TIB),
 - der Username in Rosetta für deine Submission Application (tibojsautodep) und
@@ -146,3 +144,5 @@ php tools/runScheduledTasks.php plugins/generic/usageStats/scheduledTasks.xml
 pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Articles/How_to_create_a_PDS_handle
 Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
 
+### Testing
+` php lib/pkp/lib/vendor/phpunit/phpunit/phpunit  --configuration lib/pkp/tests/phpunit-env1.xm` $TESTS
