@@ -6,17 +6,13 @@ import('lib.pkp.tests.plugins.PluginTestCase');
 
 
 class FunctionalRosettaExportTest extends PluginTestCase {
-	const TEST_ACCOUNT = 'TEST_OJS';
 
-	/**
-	 * @see PHPUnit_Framework_TestCase::setUp()
-	 */
 	protected function setUp() : void {
 		$this->pluginId = 'rosetta';
 
 
 		$this->defaultPluginSettings = array(
-			'username' => self::TEST_ACCOUNT,
+			'username' => '',
 			'password' => '',
 			'registrantName' => 'Registrant',
 			'fromCompany' => 'From Company',
@@ -28,10 +24,15 @@ class FunctionalRosettaExportTest extends PluginTestCase {
 
 		parent::setUp('1749');
 	}
+	public function testExportRoseetaExport() {
+		$exportPages = array('issues', 'articles', 'galleys', 'all');
 
-	public function testMods34MetadataPlugin($appSpecificFilters = array()) {
-
+		// Test that the plug-in cannot be used when required configuration parameters are missing.
+		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO'); /* @var $pluginSettingsDao PluginSettingsDAO */
+		$pluginSettingsDao->updateSetting(1, $this->pluginId . 'exportplugin', 'registrantName', '');
+		$this->assertConfigurationError($exportPages, 'The plug-in is not fully set up');
 	}
+
 
 }
 
