@@ -145,5 +145,4 @@ pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Article
 Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
 
 ### Testing
-
-php lib/pkp/lib/vendor/phpunit/phpunit/phpunit  --configuration lib/pkp/tests/phpunit-env1.xml plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
+` php lib/pkp/lib/vendor/phpunit/phpunit/phpunit  --configuration lib/pkp/tests/phpunit-env1.xm` $TESTS
