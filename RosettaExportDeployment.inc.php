@@ -95,15 +95,10 @@ class RosettaExportDeployment
 	 */
 	function doRequest(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
 	{
-		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
-		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
-		$password = $this->getPlugin()->getSetting($context->getId(), 'rosettaPassword');
-		$institutionCode = $this->getPlugin()->getSetting($context->getId(), 'rosettaInstitutionCode');
-		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
-		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
-		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
-		$base64_credentials = base64_encode($password);
 
+		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
+		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
+		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
 		$payload = $this->getSoapPayload($materialFlowId, $ingestPath, $producerId);
 
 		$ch = curl_init();
@@ -115,11 +110,11 @@ class RosettaExportDeployment
 		$headers = array();
 		$headers[] = 'Content-Type: text/xml';
 		$headers[] = 'SoapAction: ""';
-		$headers[] = 'Authorization: local ' . $base64_credentials;
+		$headers[] = 'Authorization: local ' . $this->getBase64Credentials($context);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		$sipIdNode = $this->getSipIdNode($ch, $response);
+		$sipIdNode = $this->getResponseQueryPath($ch, $response)->query("//ser:sip_id")[0];
 		if ($response_code == 200 && !is_null($sipIdNode)) {
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
@@ -130,6 +125,7 @@ class RosettaExportDeployment
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
 		} else $this->getPlugin()->logError($response);
+
 		curl_close($ch);
 	}
 
@@ -138,7 +134,7 @@ class RosettaExportDeployment
 	 * @param $response
 	 * @return DOMElement
 	 */
-	protected function getSipIdNode($ch, $response): DOMElement
+	protected function getResponseQueryPath($ch, $response): DOMElement
 	{
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
@@ -146,7 +142,7 @@ class RosettaExportDeployment
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
-		return $xpath->query("//ser:sip_id")[0];
+		return $xpath;
 	}
 
 	/**
@@ -228,6 +224,21 @@ class RosettaExportDeployment
 			'  </soap:Body>' .
 			'</soap:Envelope>';
 		return $payload;
+	}
+
+	/**
+	 * @param Context $context
+	 * @return string
+	 */
+	private function getBase64Credentials(Context $context): string
+	{
+		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
+		$password = $this->getPlugin()->getSetting($context->getId(), 'rosettaPassword');
+		$institutionCode = $this->getPlugin()->getSetting($context->getId(), 'rosettaInstitutionCode');
+
+		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
+		$base64_credentials = base64_encode($password);
+		return $base64_credentials;
 	}
 
 }
