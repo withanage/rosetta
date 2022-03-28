@@ -134,7 +134,7 @@ class RosettaExportDeployment
 	 * @param $response
 	 * @return DOMElement
 	 */
-	protected function getResponseQueryPath($ch, $response): DOMElement
+	protected function getResponseQueryPath($ch, $response): DOMXPath
 	{
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
