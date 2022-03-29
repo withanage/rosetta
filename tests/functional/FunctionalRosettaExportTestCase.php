@@ -196,64 +196,26 @@ class FunctionalRosettaExportTest extends PluginTestCase {
 			->will($this->returnValue($galleys));
 		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
 		// FIXME: ArticleGalleyDAO::getBySubmissionId returns iterator; array expected here. Fix expectations.
-
-		//
-		// Test
-		//
-
-		// OAI record
-		$record = new OAIRecord();
-		$record->setData('article', $article);
-		$record->setData('galleys', $galleys);
-		$record->setData('journal', $journal);
-		$record->setData('section', $section);
-		$record->setData('issue', $issue);
-
-		// Instantiate the OAI meta-data format.
+		$pluginInstance = $this->instantiatePlugin('RosettaExportPlugin');
+		$hookName = 'submissiondao::getAdditionalFieldNames';
+		HookRegistry::register($hookName, array($pluginInstance, 'getAdditionalFieldNames'));
+		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
+		$testObject = $submissionDao->getById(1);
 
 
-		#$xml = $mdFormat->toXml($record);
-		self::assertXmlStringEqualsXmlFile('tests/plugins/oaiMetadataFormats/dc/expectedResult.xml', $xml);
-	}
-
-
-	//
-	// Public helper methods
-	//
-	/**
-	 * Callback for journal settings.
-	 * @param $settingName string
-	 */
-	function getJournalSetting($settingName)
-	{
-		switch ($settingName) {
-			case 'name':
-				return array('en_US' => 'journal-title');
-
-			case 'licenseTerms':
-				return array('en_US' => 'journal-copyright');
-
-			case 'publisherInstitution':
-				return array('journal-publisher');
-
-			case 'onlineIssn':
-				return 'onlineIssn';
-
-			case 'printIssn':
-				return null;
-
-			default:
-				self::fail('Required journal setting is not necessary for the purpose of this test.');
+		// Remove the hook.
+		$hooks = HookRegistry::getHooks();
+		foreach($hooks[$hookName] as $index => $hook) {
+			if (is_a($hook[0], 'RosettaExportPlugin')) {
+				unset($hooks[$hookName][$index]);
+				break;
+			}
 		}
+
 	}
 
 
-	//
-	// Private helper methods
-	//
-	/**
-	 * Callback for router url construction simulation.
-	 */
+
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
