@@ -24,7 +24,7 @@ class FunctionalRosettaExportTest extends PluginTestCase {
 
 		parent::setUp('1749');
 	}
-	public function testExportRoseetaExport() {
+	public function testExportRosettaExport() {
 		$exportPages = array('issues', 'articles', 'galleys', 'all');
 
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO'); /* @var $pluginSettingsDao PluginSettingsDAO */
