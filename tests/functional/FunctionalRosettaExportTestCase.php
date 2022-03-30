@@ -5,6 +5,7 @@ require_mock_env('env2');
 
 
 import('plugins.importexport.rosetta.RosettaExportPlugin');
+import('plugins.importexport.rosetta.RosettaExportDeployment');
 import('lib.pkp.tests.plugins.PluginTestCase');
 
 require_mock_env('env2');
@@ -15,31 +16,13 @@ import('lib.pkp.classes.oai.OAIStruct');
 import('lib.pkp.classes.oai.OAIUtils');
 import('plugins.oaiMetadataFormats.dc.OAIMetadataFormat_DC');
 import('plugins.oaiMetadataFormats.dc.OAIMetadataFormatPlugin_DC');
-
+import('lib.pkp.classes.core.PKPRouter');
 import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 
 
+class FunctionalRosettaExportTest extends PluginTestCase
+{
 
-class FunctionalRosettaExportTest extends PluginTestCase {
-
-
-
-
-	/**
-	 * @see PKPTestCase::getMockedDAOs()
-	 */
-	protected function getMockedDAOs()
-	{
-		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO');
-	}
-
-	/**
-	 * @see PKPTestCase::getMockedRegistryKeys()
-	 */
-	protected function getMockedRegistryKeys()
-	{
-		return array('request');
-	}
 
 	/**
 	 * @covers OAIMetadataFormat_DC
@@ -49,18 +32,16 @@ class FunctionalRosettaExportTest extends PluginTestCase {
 	{
 		#$this->markTestSkipped('Skipped because of weird class interaction with ControlledVocabDAO.');
 
+		$request = Application::get()->getRequest();
+		if (is_null($request->getRouter())) {
+			$router = new PKPRouter();
+			$request->setRouter($router);
+		}
 		//
 		// Create test data.
 		//
 		$journalId = 1;
 
-		// Enable the DOI plugin.
-		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
-		/* @var $pluginSettingsDao PluginSettingsDAO */
-		$pluginSettingsDao->updateSetting($journalId, 'doipubidplugin', 'enabled', 1);
-		$pluginSettingsDao->updateSetting($journalId, 'doipubidplugin', 'enableIssueDoi', 1);
-		$pluginSettingsDao->updateSetting($journalId, 'doipubidplugin', 'enablePublicationDoi', 1);
-		$pluginSettingsDao->updateSetting($journalId, 'doipubidplugin', 'enableRepresentationyDoi', 1);
 
 		// Author
 		import('classes.article.Author');
@@ -196,28 +177,35 @@ class FunctionalRosettaExportTest extends PluginTestCase {
 			->will($this->returnValue($galleys));
 		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
 		// FIXME: ArticleGalleyDAO::getBySubmissionId returns iterator; array expected here. Fix expectations.
-		$pluginInstance = $this->instantiatePlugin('RosettaExportPlugin');
-		$hookName = 'submissiondao::getAdditionalFieldNames';
-		HookRegistry::register($hookName, array($pluginInstance, 'getAdditionalFieldNames'));
-		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
-		$testObject = $submissionDao->getById(1);
+		$importExportPlugins = PluginRegistry::loadCategory('importexport');
+		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
 
+		$deployment = new RosettaExportDeployment($journal, $rosettaExportPlugin, 1);
+		$deployment->depositSubmissions();
 
-		// Remove the hook.
-		$hooks = HookRegistry::getHooks();
-		foreach($hooks[$hookName] as $index => $hook) {
-			if (is_a($hook[0], 'RosettaExportPlugin')) {
-				unset($hooks[$hookName][$index]);
-				break;
-			}
-		}
 
 	}
-
-
 
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
+
+	/**
+	 * @see PKPTestCase::getMockedDAOs()
+	 */
+	protected function getMockedDAOs()
+	{
+		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO');
+	}
+
+	/**
+	 * @see PKPTestCase::getMockedRegistryKeys()
+	 */
+	protected function getMockedRegistryKeys()
+	{
+		return array('request');
+	}
+
+
 }

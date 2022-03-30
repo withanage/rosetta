@@ -14,7 +14,9 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	 */
 	public function register($category, $path, $mainContextId = null)
 	{
-		return parent::register($category, $path, $mainContextId);
+		$success = parent::register($category, $path, $mainContextId);
+		$this->addLocaleData();
+		return $success;
 	}
 
 	/**
@@ -322,12 +324,3 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	}
 }
 
-function getName()
-{
-	// TODO: Implement getName() method.
-}
-
-function depositXML($objects, $context, $filename)
-{
-	// TODO: Implement depositXML() method.
-}
