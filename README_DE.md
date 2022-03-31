@@ -1,18 +1,15 @@
-
 # OJS-Rosetta Plugin
 
 ## Introduction
 
-
 ## Configuration
+
 - die Institution in Rosetta, in die du ingesten willst (TIB),
 - der Username in Rosetta für deine Submission Application (tibojsautodep) und
 - das Passwort für deinen User in Rosetta (das Passwort für den User habe ich dir mal zugeschickt).
 - materialFlowId - of the material flow used: 76780103
 - subDirectoryName - of the load directory: /exchange/lza/lza-tib/ojs-test
 - producerId - of the Producer: 76780038
-
-
 
 DEPOSIT_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl
 PRODUCER_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/ProducerWebServices?wsdl
@@ -134,10 +131,7 @@ in OJS sind meiste Felder multilingual
 |Report|Report|
 |Website|Website|
 
-
-
 php tools/runScheduledTasks.php plugins/generic/usageStats/scheduledTasks.xml
-
 
 ### Clean
 
@@ -145,4 +139,5 @@ pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Article
 Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
 
 ### Testing
-` php lib/pkp/lib/vendor/phpunit/phpunit/phpunit  --configuration lib/pkp/tests/phpunit-env1.xm` $TESTS
+
+` php lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration lib/pkp/tests/phpunit-env1.xm` $TESTS

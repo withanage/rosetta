@@ -180,6 +180,14 @@ class RosettaMETSDom extends DOMDocument
 	}
 
 	/**
+	 * @return Publication
+	 */
+	public function getPublication(): Publication
+	{
+		return $this->publication;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function appendImportExportFile(): array
@@ -272,14 +280,6 @@ class RosettaMETSDom extends DOMDocument
 		$fptrNode->setAttribute("FILEID", "fid" . $id . '-' . $fid);
 		$divDivDivNode->appendChild($fptrNode);
 		return $divDivDivNode;
-	}
-
-	/**
-	 * @return Publication
-	 */
-	public function getPublication(): Publication
-	{
-		return $this->publication;
 	}
 }
 

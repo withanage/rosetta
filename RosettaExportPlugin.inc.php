@@ -202,7 +202,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	 */
 	function getEnabled($context = null)
 	{
-		return  ($context != null) ? $this->getSetting($context->getId(), 'enabled'): false;
+		return ($context != null) ? $this->getSetting($context->getId(), 'enabled') : false;
 	}
 
 	function getSetting($contextId, $name)
@@ -254,25 +254,16 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		}
 	}
 
-	public function logError( String $message)
+	public function logError(string $message)
 	{
 		self::writeLog($message, 'ERROR');
-	}
-
-	/***
-	 * @copyDoc  writeLog
-	 * @param $message
-	 */
-	public function logInfo( String $message) : void
-	{
-		self::writeLog($message, 'INFO');
 	}
 
 	/**
 	 * @param $message
 	 * @param $level
 	 */
-	private static function writeLog(String $message, String $level): void
+	private static function writeLog(string $message, string $level): void
 	{
 		$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
 		error_log("$fineStamp $level $message\n", 3, self::logFilePath());
@@ -284,6 +275,15 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	public static function logFilePath(): string
 	{
 		return Config::getVar('files', 'files_dir') . '/rosetta.log';
+	}
+
+	/***
+	 * @copyDoc  writeLog
+	 * @param $message
+	 */
+	public function logInfo(string $message): void
+	{
+		self::writeLog($message, 'INFO');
 	}
 
 	/**

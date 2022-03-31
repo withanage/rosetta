@@ -18,7 +18,7 @@ class RosettaDCDom extends DOMDocument
 	 * @param $context Context
 	 * @param Publication $publication
 	 */
-	public function __construct(Context $context, Publication $publication, $isMultilingual= true)
+	public function __construct(Context $context, Publication $publication, $isMultilingual = true)
 	{
 		$this->context = $context;
 		$this->publication = $publication;
@@ -34,13 +34,12 @@ class RosettaDCDom extends DOMDocument
 	{
 		$this->createRootElement();
 		// title
-		if($isMultilingual) {
+		if ($isMultilingual) {
 			$titles = $this->publication->getData("title");
 			foreach ($titles as $language => $title) {
 				$this->createQualifiedElement("dc:title", $title, $language);
 			}
-		}
-		else {
+		} else {
 			$node = $this->createElement("dc:title", $this->publication->getLocalizedTitle());
 			$this->record->appendChild($node);
 		}

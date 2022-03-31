@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ONIXDOISerialArticleWorkRegistrationMessage
-	xmlns="http://www.editeur.org/onix/DOIMetadata/2.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.editeur.org/onix/DOIMetadata/2.0 http://medra.dev.cineca.it/schema/onix/DOIMetadata/2.0/ONIX_DOIMetadata_2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.editeur.org/onix/DOIMetadata/2.0"
+		xsi:schemaLocation="http://www.editeur.org/onix/DOIMetadata/2.0 http://medra.dev.cineca.it/schema/onix/DOIMetadata/2.0/ONIX_DOIMetadata_2.0.xsd">
 	<Header>
 		<FromCompany>From Company</FromCompany>
 		<FromPerson>From Person</FromPerson>
@@ -103,7 +103,8 @@
 			</Subject>
 			<Subject>
 				<SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
-				<SubjectSchemeName>Mathematics Subject Classification (http://www.ams.org/mathscinet/msc/msc2010.html)</SubjectSchemeName>
+				<SubjectSchemeName>Mathematics Subject Classification (http://www.ams.org/mathscinet/msc/msc2010.html)
+				</SubjectSchemeName>
 				<SubjectCode>22A10</SubjectCode>
 			</Subject>
 			<OtherText>
@@ -128,8 +129,8 @@
 				</WorkIdentifier>
 			</RelatedWork>
 			<!-- Further related works (will only occur when updating an article-as-work): -->
-				<!-- FIXME: Is a new version of an updated article-as-work -->
-				<!-- FIXME: Has a new version: the updated article-as-work -->
+			<!-- FIXME: Is a new version of an updated article-as-work -->
+			<!-- FIXME: Has a new version: the updated article-as-work -->
 			<!-- Is manifested in articles-as-manifestation (a.k.a. galleys) -->
 			<RelatedProduct>
 				<RelationCode>89</RelationCode>

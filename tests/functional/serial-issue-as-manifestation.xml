@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ONIXDOISerialIssueVersionRegistrationMessage
-	xmlns="http://www.editeur.org/onix/DOIMetadata/2.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.editeur.org/onix/DOIMetadata/2.0 http://medra.dev.cineca.it/schema/onix/DOIMetadata/2.0/ONIX_DOIMetadata_2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.editeur.org/onix/DOIMetadata/2.0"
+		xsi:schemaLocation="http://www.editeur.org/onix/DOIMetadata/2.0 http://medra.dev.cineca.it/schema/onix/DOIMetadata/2.0/ONIX_DOIMetadata_2.0.xsd">
 	<Header>
 		<FromCompany>From Company</FromCompany>
 		<FromPerson>From Person</FromPerson>
@@ -128,7 +128,7 @@
 			</ProductIdentifier>
 		</RelatedProduct>
 		<!-- Further possible related products (will only occur when updating an issue-as-manifestation): -->
-			<!-- Is a new version of an updated issue -->
-			<!-- Has a new version: the updated issue -->
+		<!-- Is a new version of an updated issue -->
+		<!-- Has a new version: the updated issue -->
 	</DOISerialIssueVersion>
 </ONIXDOISerialIssueVersionRegistrationMessage>
