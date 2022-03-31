@@ -1,5 +1,8 @@
 <?php
+
+
 error_reporting(E_ERROR | E_PARSE);
+
 import('classes.plugins.PubObjectsExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 

@@ -2,7 +2,7 @@
 import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.RosettaMETSDom');
-import('plugins.importexport.rosetta.files.RosettaFileService');
+import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 import('lib.pkp.classes.xml.XMLCustomWriter');
 const ROSETTA_STATUS_DEPOSITED = 'deposited';
 class RosettaExportDeployment
@@ -174,7 +174,7 @@ class RosettaExportDeployment
 					list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
 					shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
 
-					$galleyFiles = RosettaFileSerive::getGalleyFiles($publication);
+					$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 					if (file_exists($xmlExport)) {
 						array_push($galleyFiles, $exportFile);
 					}

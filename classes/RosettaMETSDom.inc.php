@@ -1,7 +1,7 @@
 <?php
 import('plugins.importexport.rosetta.classes.XMLUtils');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
-import('plugins.importexport.rosetta.files.RosettaFileService');
+import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 define('MASTER_PATH', 'MASTER');
 
 /**
@@ -71,7 +71,7 @@ class RosettaMETSDom extends DOMDocument
 		$this->createAmdSecMods($adminSec);
 
 		// get Galley files
-		$galleyFiles = RosettaFileSerive::getGalleyFiles();
+		$galleyFiles = RosettaFileService::getGalleyFiles();
 		// TODO append import export file
 		list($xmlExport, $exportFile) = $this->appendImportExportFile();
 		if (file_exists($xmlExport)) {
