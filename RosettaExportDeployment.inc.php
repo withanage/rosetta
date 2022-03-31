@@ -113,15 +113,21 @@ class RosettaExportDeployment
 		$headers[] = 'SoapAction: ""';
 		$headers[] = 'Authorization: local ' . $this->getBase64Credentials($context);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getResponseQueryPath($ch, $response)->query("//ser:sip_id")[0];
+
 		if ($response_code == 200 && !is_null($sipIdNode)) {
+
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), $sipIdNode->nodeValue);
 			$submissionDao->updateObject($submission);
+
+			// Wait for network to finish ingestion
 			sleep(30);
+
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 

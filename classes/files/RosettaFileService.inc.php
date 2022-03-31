@@ -3,7 +3,11 @@
 class RosettaFileService
 
 {
-	public static function getGalleyFiles($publication): array
+	/**
+	 * @param Publication $publication
+	 * @return array
+	 */
+	public static function getGalleyFiles(Publication $publication): array
 	{
 		// get all galleys
 
@@ -28,7 +32,14 @@ class RosettaFileService
 		return $files;
 	}
 
-	public static function getDependentFilePaths($submissionId, $fileId, string $path): array
+
+	/**
+	 * @param int $submissionId
+	 * @param int $fileId
+	 * @param string $path
+	 * @return array
+	 */
+	public static function getDependentFilePaths(int $submissionId, int $fileId, string $path): array
 	{
 		$submissionFileDao = DAORegistry::getDAO('SubmissionFileDAO');
 		import('lib.pkp.classes.submission.SubmissionFile'); // Constants

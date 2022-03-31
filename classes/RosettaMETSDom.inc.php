@@ -71,7 +71,7 @@ class RosettaMETSDom extends DOMDocument
 		$this->createAmdSecMods($adminSec);
 
 		// get Galley files
-		$galleyFiles = RosettaFileService::getGalleyFiles();
+		$galleyFiles = RosettaFileService::getGalleyFiles($this->getPublication());
 		// TODO append import export file
 		list($xmlExport, $exportFile) = $this->appendImportExportFile();
 		if (file_exists($xmlExport)) {
@@ -272,6 +272,14 @@ class RosettaMETSDom extends DOMDocument
 		$fptrNode->setAttribute("FILEID", "fid" . $id . '-' . $fid);
 		$divDivDivNode->appendChild($fptrNode);
 		return $divDivDivNode;
+	}
+
+	/**
+	 * @return Publication
+	 */
+	public function getPublication(): Publication
+	{
+		return $this->publication;
 	}
 }
 
