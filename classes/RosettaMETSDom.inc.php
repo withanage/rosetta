@@ -1,6 +1,7 @@
 <?php
 import('plugins.importexport.rosetta.classes.XMLUtils');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
+import('plugins.importexport.rosetta.files.RosettaFileService');
 define('MASTER_PATH', 'MASTER');
 
 /**
@@ -70,7 +71,7 @@ class RosettaMETSDom extends DOMDocument
 		$this->createAmdSecMods($adminSec);
 
 		// get Galley files
-		$galleyFiles = $this->getGalleyFiles();
+		$galleyFiles = RosettaFileSerive::getGalleyFiles();
 		// TODO append import export file
 		list($xmlExport, $exportFile) = $this->appendImportExportFile();
 		if (file_exists($xmlExport)) {
@@ -176,61 +177,6 @@ class RosettaMETSDom extends DOMDocument
 					["id" => "RevisionNumber", "value" => "0"],
 				))), "techMD", "tech", "rep1-amd", $adminSecRep);
 		$this->record->appendChild($adminSecRep);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getGalleyFiles(): array
-	{
-		// get all galleys
-
-		$files = array();
-
-		$galleysIterator = Services::get('galley')->getMany(['publicationIds' => $this->publication->getId()]);
-		foreach ($galleysIterator as $galley) {
-			$fileId = $galley->getData('fileId');
-			$galleyFile = $galley->getFile();
-			if (is_null($galleyFile) == false) {
-				$galleyFilePath = $galleyFile->getFilePath();
-				$dependentFilePaths = $this->getDependentFilePaths($this->publication->getData('submissionId'), $fileId, MASTER_PATH);
-				$files[] = array(
-					"label" => $galley->getLocalizedName(),
-					"revision" => $this->publication->getData("version"),
-					"fullFilePath" => $galleyFilePath,
-					"dependentFiles" => $dependentFilePaths,
-					"path" => MASTER_PATH);
-			}
-		}
-
-		return $files;
-	}
-
-	/**
-	 * @param $submissionId
-	 * @param $fileId
-	 * @param string $path
-	 * @return array
-	 */
-	public function getDependentFilePaths($submissionId, $fileId, string $path): array
-	{
-		$submissionFileDao = DAORegistry::getDAO('SubmissionFileDAO');
-		import('lib.pkp.classes.submission.SubmissionFile'); // Constants
-		$dependentFiles = $submissionFileDao->getLatestRevisionsByAssocId(
-			ASSOC_TYPE_SUBMISSION_FILE,
-			$fileId,
-			$submissionId,
-			SUBMISSION_FILE_DEPENDENT
-		);
-		$assetsFilePaths = array();
-		foreach ($dependentFiles as $dFile) {
-			$assetsFilePaths[$dFile->getOriginalFileName()] = array(
-				"fullFilePath" => $dFile->getFilePath(),
-				"path" => $path,
-				"originalFileName" => $dFile->getOriginalFileName()
-			);
-		}
-		return $assetsFilePaths;
 	}
 
 	/**
