@@ -81,51 +81,39 @@ class RosettaExportDeployment
 		$oldMask = umask(0);
 
 		if (is_dir($RosettaSubDirectory)) {
-			$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-			$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
-			$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-			$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
-			$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
-			if (is_dir($streamsPath) == false) {
-				mkdir($streamsPath, 0777);
+
+			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+
+
+			$dcDom = new RosettaDCDom($context, $publication, false);
+			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
+			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
+
+
+			$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
+			file_put_contents($IE1_XML, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+			list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
+			shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
+
+			if (file_exists($xmlExport)) {
+				array_push($galleyFiles, $exportFile);
 			}
-			if (is_dir($masterPath) == false) {
-				mkdir($masterPath, 0777);
-			}
-			if (is_dir($pubContentPath) == false) {
-				mkdir($pubContentPath, 0777);
-			}
 
-			if (is_dir($sipPath) == false) {
-				mkdir($sipPath, 0777);
-				$dcDom = new RosettaDCDom($context, $publication, false);
-				$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
-				file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-				$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
+			foreach ($galleyFiles as $file) {
 
-
-				$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-				file_put_contents($IE1_XML, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
-
-				list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
-				shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
-
-				if (file_exists($xmlExport)) {
-					array_push($galleyFiles, $exportFile);
+				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
+				foreach ($file["dependentFiles"] as $dependentFile) {
+					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
-
-				foreach ($galleyFiles as $file) {
-
-					copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
-					foreach ($file["dependentFiles"] as $dependentFile) {
-						copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
-					}
-				}
-					$this->doDeposit($context, $ingestPath, $sipPath, $submission);
-					unlink($xmlExport);
-
 			}
+			$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+			unlink($xmlExport);
+
+
 		}
 		umask($oldMask);
 	}
@@ -245,13 +233,37 @@ class RosettaExportDeployment
 	 */
 	protected function getSoapResponeXpath($ch, string $response): DOMXPath
 	{
-		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE);
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
 		$doc = new DOMDocument();
 		$doc->loadXML(html_entity_decode($body));
 		$xpath = new DOMXpath($doc);
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
 		return $xpath;
+	}
+
+	/**
+	 * @param Context $context
+	 * @param Submission $submission
+	 * @param Publication $publication
+	 * @param $RosettaSubDirectory
+	 * @return array
+	 */
+	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
+	{
+		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
+		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
+		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
+
+		if (is_dir($sipPath) == false) {
+			mkdir($sipPath, 0777);
+		}
+		mkdir($pubContentPath, 0777);
+		mkdir($streamsPath, 0777);
+		mkdir($masterPath, 0777);
+		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
 }
