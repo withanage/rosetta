@@ -34,10 +34,8 @@ class RosettaExportDeployment
 		return (extension_loaded('zip'));
 	}
 
-	/**
-	 * Deploy all articles
-	 */
-	function depositSubmissions()
+
+	function getSubmissions()
 	{
 		$context = $this->getContext();
 		// Load DOI settings
@@ -45,7 +43,8 @@ class RosettaExportDeployment
 		$notDepositedArticles = $this->_plugin->getUnregisteredArticles($context);
 		foreach ($notDepositedArticles as $submission) {
 			if (is_a($submission, 'Submission')) {
-				foreach ($submission->getData('publications') as $publication) {
+				$publications = $submission->getData('publications');
+				foreach ($publications as $publication) {
 					$this->depositSubmission($context, $submission, $publication);
 				}
 			}
@@ -78,50 +77,57 @@ class RosettaExportDeployment
 	 */
 	private function depositSubmission(Context $context, Submission $submission, Publication $publication): void
 	{
-		$subDirectoryName = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
-		$oldmask = umask(0);
-		if (is_dir($subDirectoryName)) {
+		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
+		$oldMask = umask(0);
+
+		if (is_dir($RosettaSubDirectory)) {
 			$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-			$sipPath = $subDirectoryName . '/' . $ingestPath;
+			$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
+			$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
+			$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
+			$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
+			if (is_dir($streamsPath) == false) {
+				mkdir($streamsPath, 0777);
+			}
+			if (is_dir($masterPath) == false) {
+				mkdir($masterPath, 0777);
+			}
+			if (is_dir($pubContentPath) == false) {
+				mkdir($pubContentPath, 0777);
+			}
+
 			if (is_dir($sipPath) == false) {
 				mkdir($sipPath, 0777);
 				$dcDom = new RosettaDCDom($context, $publication, false);
-				file_put_contents($sipPath . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-				$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-				if (is_dir($pubContentPath) == false) {
-					mkdir($pubContentPath, 0777);
+				$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
+				file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+				$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
 
-					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-					file_put_contents(join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml")), $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
-					// Add dependent files
-					$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
-					list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
-					shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
 
-					$galleyFiles = RosettaFileService::getGalleyFiles($publication);
-					if (file_exists($xmlExport)) {
-						array_push($galleyFiles, $exportFile);
-					}
+				$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
+				file_put_contents($IE1_XML, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-					foreach ($galleyFiles as $file) {
-						if (is_dir($streamsPath) == false) {
-							mkdir($streamsPath, 0777);
-						}
-						$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
-						if (is_dir($masterPath) == false) {
-							mkdir($masterPath, 0777);
-						}
-						copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
-						foreach ($file["dependentFiles"] as $dependentFile) {
-							copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
-						}
-					}
-					$this->doRequest($context, $ingestPath, $sipPath, $submission);
-					unlink($xmlExport);
+				list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
+				shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
+
+				if (file_exists($xmlExport)) {
+					array_push($galleyFiles, $exportFile);
 				}
+
+				foreach ($galleyFiles as $file) {
+
+					copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
+					foreach ($file["dependentFiles"] as $dependentFile) {
+						copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
+					}
+				}
+					$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+					unlink($xmlExport);
+
 			}
 		}
-		umask($oldmask);
+		umask($oldMask);
 	}
 
 	/**
@@ -148,7 +154,7 @@ class RosettaExportDeployment
 	 * @param string $sipPath
 	 * @param Submission $submission
 	 */
-	function doRequest(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
+	function doDeposit(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
 	{
 
 		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
@@ -170,7 +176,7 @@ class RosettaExportDeployment
 
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		$sipIdNode = $this->getResponseQueryPath($ch, $response)->query("//ser:sip_id")[0];
+		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
 
 		if ($response_code == 200 && !is_null($sipIdNode)) {
 
@@ -234,12 +240,12 @@ class RosettaExportDeployment
 
 	/**
 	 * @param $ch
-	 * @param $response
-	 * @return DOMElement
+	 * @param string $response
+	 * @return DOMXPath
 	 */
-	protected function getResponseQueryPath($ch, $response): DOMXPath
+	protected function getSoapResponeXpath($ch, string $response): DOMXPath
 	{
-		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE);
 		$body = substr($response, $header_size);
 		$doc = new DOMDocument();
 		$doc->loadXML(html_entity_decode($body));

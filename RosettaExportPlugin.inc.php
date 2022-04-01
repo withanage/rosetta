@@ -185,13 +185,13 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			while ($journal = $journalFactory->next()) {
 				if ($this->getEnabled($journal)) {
 					$deployment = new RosettaExportDeployment($journal, $this);
-					$deployment->depositSubmissions();
+					$deployment->getSubmissions();
 				}
 			}
 		} else {
 			// Deploy submissions
 			$deployment = new RosettaExportDeployment($journal, $this);
-			$deployment->depositSubmissions();
+			$deployment->getSubmissions();
 
 		}
 	}
