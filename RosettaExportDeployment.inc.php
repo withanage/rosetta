@@ -146,7 +146,7 @@ class RosettaExportDeployment
 	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
 	{
 		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
+		$sipPath = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory, $ingestPath));
 		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
 		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
 		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
