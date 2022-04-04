@@ -40,7 +40,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		//
 		// Create test data.
 		//
-		$journalId = 1;
+		$journalId = 10000;
 
 
 		// Author

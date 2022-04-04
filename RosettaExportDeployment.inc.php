@@ -110,11 +110,14 @@ class RosettaExportDeployment
 					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
-			if (!$isTest) $this->doDeposit($context, $ingestPath, $sipPath, $submission);
-			unlink($xmlExport);
+			if (!$isTest) {
+				$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+				unlink($xmlExport);
+			}
 
 
 		}
+
 		umask($oldMask);
 	}
 
