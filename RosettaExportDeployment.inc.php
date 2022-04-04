@@ -84,12 +84,12 @@ class RosettaExportDeployment
 
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
-			$sipContentPaths = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
-			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $sipContentPaths;
+			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
-			file_put_contents($sipContentPaths[1] . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
+			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
 
 
@@ -110,9 +110,7 @@ class RosettaExportDeployment
 					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
-
-			if (!$isTest)	$this->doDeposit($context, $ingestPath, $sipPath, $submission);
-
+			$this->doDeposit($context, $ingestPath, $sipPath, $submission);
 			unlink($xmlExport);
 
 
@@ -244,22 +242,28 @@ class RosettaExportDeployment
 		return $xpath;
 	}
 
-
+	/**
+	 * @param Context $context
+	 * @param Submission $submission
+	 * @param Publication $publication
+	 * @param $RosettaSubDirectory
+	 * @return array
+	 */
 	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
 	{
-		$paths = [];
-		$SIPName = PKPString::strtolower($context->getData('acronym',$context->getPrimaryLocale())) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$subDirs = [$SIPName, 'content','streams', MASTER_PATH];
-		$subDirPath = '';
-		foreach ($subDirs as $subDir) {
-			$subDirPath = join(DIRECTORY_SEPARATOR, array($subDirPath,$subDir));
-			$path  = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory,$subDirPath));
-			if (!is_dir($path)) {
-				mkdir($path, 0777);
+		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
+		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
+		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
+
+		if (is_dir($sipPath) == false) {
+			mkdir($sipPath, 0777);
 			}
-			array_push($paths,$path);
-		}
-	return $paths;
+		mkdir($pubContentPath, 0777);
+		mkdir($streamsPath, 0777);
+		mkdir($masterPath, 0777);
+		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
 }
