@@ -88,10 +88,9 @@ class RosettaExportDeployment
 
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
-
-			$DC_XML = $sipPath . $SEP . 'dc.xml';
+			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
 			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-			$IE1_XML = join($SEP, array($pubContentPath, "ie1.xml"));
+			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
 
 
 			$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
@@ -106,9 +105,9 @@ class RosettaExportDeployment
 
 			foreach ($galleyFiles as $file) {
 
-				copy($file["fullFilePath"], join($SEP, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
+				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
 				foreach ($file["dependentFiles"] as $dependentFile) {
-					copy($dependentFile["fullFilePath"], join($SEP, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
+					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
 			if (!$isTest) $this->doDeposit($context, $ingestPath, $sipPath, $submission);
