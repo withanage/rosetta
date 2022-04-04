@@ -89,8 +89,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->method('getSetting') // includes getTitle()
 			->will($this->returnCallback(array($this, 'getJournalSetting')));
 		$journal->setPrimaryLocale('en_US');
-		$journal->setPath('journal-path');
-		$journal->setId($journalId);
+		$journalSettings =  array(
+			'id'=>$journalId,
+			'primaryLocale' => 'en_US',
+			'urlPath' => 'journal-path',
+			'name' =>'Test_Journal'
+		);
+		foreach ($journalSettings as $key=>$value) {
+			$journal->setData($key, $value);
+		}
 
 		// Section
 		import('classes.journal.Section');
@@ -181,7 +188,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
 
 		$deployment = new RosettaExportDeployment($journal, $rosettaExportPlugin, 1);
-		$deployment->getSubmissions();
+		$submissions =$deployment->getSubmissions(true);
+		$x = 1;
 
 
 	}

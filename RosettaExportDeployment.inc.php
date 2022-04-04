@@ -35,7 +35,7 @@ class RosettaExportDeployment
 	}
 
 
-	function getSubmissions()
+	function getSubmissions(bool $isTest =false)
 	{
 		$context = $this->getContext();
 		// Load DOI settings
@@ -45,7 +45,7 @@ class RosettaExportDeployment
 			if (is_a($submission, 'Submission')) {
 				$publications = $submission->getData('publications');
 				foreach ($publications as $publication) {
-					$this->depositSubmission($context, $submission, $publication);
+					$this->depositSubmission($context, $submission, $publication, $isTest);
 				}
 			}
 		}
@@ -75,7 +75,7 @@ class RosettaExportDeployment
 	 * @param Publication $publication
 	 * @return void
 	 */
-	private function depositSubmission(Context $context, Submission $submission, Publication $publication): void
+	private function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
 	{
 		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 		$oldMask = umask(0);
@@ -110,7 +110,9 @@ class RosettaExportDeployment
 					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
-			$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+
+			if (!$isTest)	$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+
 			unlink($xmlExport);
 
 
@@ -251,18 +253,18 @@ class RosettaExportDeployment
 	 */
 	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
 	{
-		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
-		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
-		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
-
-		if (is_dir($sipPath) == false) {
-			mkdir($sipPath, 0777);
+		$sipPath = PKPString::strtolower($context->getData('name')) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$subDirs = [$sipPath , 'content','streams', MASTER_PATH];
+		$subDirPath = '';
+		foreach ($subDirs as $subDir) {
+			$path  = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory,$subDirPath));
+			if (is_dir($path) == false) {
+				mkdir($path, 0777);
+			}
+			$subDirPath += $subDir;
 		}
-		mkdir($pubContentPath, 0777);
-		mkdir($streamsPath, 0777);
-		mkdir($masterPath, 0777);
+
+
 		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
