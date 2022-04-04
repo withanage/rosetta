@@ -4,7 +4,7 @@ import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 import('lib.pkp.classes.xml.XMLCustomWriter');
-const ROSETTA_STATUS_DEPOSITED = 'deposited';
+
 class RosettaExportDeployment
 {
 	/** @var Context The current import/export context */
@@ -35,7 +35,7 @@ class RosettaExportDeployment
 	}
 
 
-	function getSubmissions(bool $isTest =false)
+	function getSubmissions(bool $isTest = false)
 	{
 		$context = $this->getContext();
 		// Load DOI settings
@@ -88,9 +88,10 @@ class RosettaExportDeployment
 
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
-			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
+
+			$DC_XML = $sipPath . $SEP . 'dc.xml';
 			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
+			$IE1_XML = join($SEP, array($pubContentPath, "ie1.xml"));
 
 
 			$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
@@ -105,12 +106,12 @@ class RosettaExportDeployment
 
 			foreach ($galleyFiles as $file) {
 
-				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
+				copy($file["fullFilePath"], join($SEP, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
 				foreach ($file["dependentFiles"] as $dependentFile) {
-					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
+					copy($dependentFile["fullFilePath"], join($SEP, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
-			$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+			if (!$isTest) $this->doDeposit($context, $ingestPath, $sipPath, $submission);
 			unlink($xmlExport);
 
 
@@ -134,6 +135,30 @@ class RosettaExportDeployment
 	function setPlugin($plugin): void
 	{
 		$this->_plugin = $plugin;
+	}
+
+	/**
+	 * @param Context $context
+	 * @param Submission $submission
+	 * @param Publication $publication
+	 * @param $RosettaSubDirectory
+	 * @return array
+	 */
+	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
+	{
+		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
+		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
+		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
+
+		if (is_dir($sipPath) == false) {
+			mkdir($sipPath, 0777);
+		}
+		mkdir($pubContentPath, 0777);
+		mkdir($streamsPath, 0777);
+		mkdir($masterPath, 0777);
+		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
 	/**
@@ -240,30 +265,6 @@ class RosettaExportDeployment
 		$xpath = new DOMXpath($doc);
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
 		return $xpath;
-	}
-
-	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @param $RosettaSubDirectory
-	 * @return array
-	 */
-	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
-	{
-		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$sipPath = $RosettaSubDirectory . '/' . $ingestPath;
-		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
-		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
-
-		if (is_dir($sipPath) == false) {
-			mkdir($sipPath, 0777);
-			}
-		mkdir($pubContentPath, 0777);
-		mkdir($streamsPath, 0777);
-		mkdir($masterPath, 0777);
-		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
 }

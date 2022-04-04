@@ -191,6 +191,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$deployment = new RosettaExportDeployment($journal, $rosettaExportPlugin, 1);
 		$submissions = $deployment->getSubmissions(true);
+
 		$x = 1;
 
 
