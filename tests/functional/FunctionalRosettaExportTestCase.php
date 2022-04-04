@@ -46,9 +46,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		// Author
 		import('classes.article.Author');
 		$author = new Author();
-		$author->setGivenName('author-firstname', 'en_US');
-		$author->setFamilyName('author-lastname', 'en_US');
-		$author->setAffiliation('author-affiliation', 'en_US');
+		$primaryLocale = 'en_US';
+		$author->setGivenName('author-firstname', $primaryLocale);
+		$author->setFamilyName('author-lastname', $primaryLocale);
+		$author->setAffiliation('author-affiliation', $primaryLocale);
 		$author->setEmail('someone@example.com');
 
 		// Article
@@ -63,15 +64,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$article->setJournalId($journalId);
 		$author->setSubmissionId($article->getId());
 		$article->setPages(15);
-		$article->setType('art-type', 'en_US');
-		$article->setTitle('article-title-en', 'en_US');
+		$article->setType('art-type', $primaryLocale);
+		$article->setTitle('article-title-en', $primaryLocale);
 		$article->setTitle('article-title-de', 'de_DE');
-		$article->setDiscipline('article-discipline', 'en_US');
-		$article->setSubject('article-subject', 'en_US');
-		$article->setAbstract('article-abstract', 'en_US');
-		$article->setSponsor('article-sponsor', 'en_US');
+		$article->setDiscipline('article-discipline', $primaryLocale);
+		$article->setSubject('article-subject', $primaryLocale);
+		$article->setAbstract('article-abstract', $primaryLocale);
+		$article->setSponsor('article-sponsor', $primaryLocale);
 		$article->setStoredPubId('doi', 'article-doi');
-		$article->setLanguage('en_US');
+		$article->setLanguage($primaryLocale);
 
 		// Galleys
 		import('classes.article.ArticleGalley');
@@ -88,21 +89,21 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$journal->expects($this->any())
 			->method('getSetting') // includes getTitle()
 			->will($this->returnCallback(array($this, 'getJournalSetting')));
-		$journal->setPrimaryLocale('en_US');
-		$journalSettings =  array(
-			'id'=>$journalId,
-			'primaryLocale' => 'en_US',
+		$journal->setPrimaryLocale($primaryLocale);
+		$journal->setName('Test_Journal',$primaryLocale);
+		$journalSettings = array(
+			'id' => $journalId,
 			'urlPath' => 'journal-path',
-			'name' =>'Test_Journal'
+
 		);
-		foreach ($journalSettings as $key=>$value) {
+		foreach ($journalSettings as $key => $value) {
 			$journal->setData($key, $value);
 		}
 
 		// Section
 		import('classes.journal.Section');
 		$section = new Section();
-		$section->setIdentifyType('section-identify-type', 'en_US');
+		$section->setIdentifyType('section-identify-type', $primaryLocale);
 
 		// Issue
 		import('classes.issue.Issue');
@@ -188,7 +189,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
 
 		$deployment = new RosettaExportDeployment($journal, $rosettaExportPlugin, 1);
-		$submissions =$deployment->getSubmissions(true);
+		$submissions = $deployment->getSubmissions(true);
 		$x = 1;
 
 

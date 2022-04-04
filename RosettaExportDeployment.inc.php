@@ -84,7 +84,8 @@ class RosettaExportDeployment
 
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
-			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+			$sipContentPaths = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $sipContentPaths;
 
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
@@ -244,28 +245,22 @@ class RosettaExportDeployment
 		return $xpath;
 	}
 
-	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @param $RosettaSubDirectory
-	 * @return array
-	 */
+
 	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
 	{
-		$sipPath = PKPString::strtolower($context->getData('name')) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$subDirs = [$sipPath , 'content','streams', MASTER_PATH];
+		$paths = [];
+		$SIPName = PKPString::strtolower($context->getData('name',$context->getPrimaryLocale())) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$subDirs = [$SIPName, 'content','streams', MASTER_PATH];
 		$subDirPath = '';
 		foreach ($subDirs as $subDir) {
 			$path  = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory,$subDirPath));
-			if (is_dir($path) == false) {
+			if (!is_dir($path)) {
 				mkdir($path, 0777);
 			}
-			$subDirPath += $subDir;
+			$subDirPath = join(DIRECTORY_SEPARATOR, array($subDirPath,$subDir));
+			$paths [] =$path;
 		}
-
-
-		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
+	return $paths;
 	}
 
 }
