@@ -89,8 +89,7 @@ class RosettaExportDeployment
 
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
-			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
-			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+			file_put_contents($sipContentPaths[1] . DIRECTORY_SEPARATOR . 'dc.xml', $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
 
 
@@ -249,16 +248,16 @@ class RosettaExportDeployment
 	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
 	{
 		$paths = [];
-		$SIPName = PKPString::strtolower($context->getData('name',$context->getPrimaryLocale())) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+		$SIPName = PKPString::strtolower($context->getData('acronym',$context->getPrimaryLocale())) . '-' . $submission->getId() . '-v' . $publication->getData('version');
 		$subDirs = [$SIPName, 'content','streams', MASTER_PATH];
 		$subDirPath = '';
 		foreach ($subDirs as $subDir) {
+			$subDirPath = join(DIRECTORY_SEPARATOR, array($subDirPath,$subDir));
 			$path  = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory,$subDirPath));
 			if (!is_dir($path)) {
 				mkdir($path, 0777);
 			}
-			$subDirPath = join(DIRECTORY_SEPARATOR, array($subDirPath,$subDir));
-			$paths [] =$path;
+			array_push($paths,$path);
 		}
 	return $paths;
 	}
