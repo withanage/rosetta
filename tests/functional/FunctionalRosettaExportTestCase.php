@@ -90,11 +90,12 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->method('getSetting') // includes getTitle()
 			->will($this->returnCallback(array($this, 'getJournalSetting')));
 		$journal->setPrimaryLocale($primaryLocale);
+		$journal->setData('acronym' , 'Testjournal',$primaryLocale);
 
 		$journalSettings = array(
 			'id' => $journalId,
 			'urlPath' => 'journal-path',
-			'acronym' => 'Testjournal',
+
 			'name' => 'Test Journal'
 		);
 		foreach ($journalSettings as $key => $value) {
