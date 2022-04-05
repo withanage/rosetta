@@ -49,6 +49,7 @@ class RosettaExportDeployment
 				}
 			}
 		}
+		return $notDepositedArticles;
 	}
 
 	/**op
@@ -84,17 +85,16 @@ class RosettaExportDeployment
 
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
-			list($ingestPath, $sipPath, $pubContentPath, $streamsPath) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+			list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
+			$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
+			$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
 
 			$dcDom = new RosettaDCDom($context, $publication, false);
-			$DC_XML = $sipPath . DIRECTORY_SEPARATOR . 'dc.xml';
-			file_put_contents($DC_XML, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-			$IE1_XML = join(DIRECTORY_SEPARATOR, array($pubContentPath, "ie1.xml"));
-
-
 			$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-			file_put_contents($IE1_XML, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+			file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+			file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 
 			list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
 			shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
@@ -105,13 +105,13 @@ class RosettaExportDeployment
 
 			foreach ($galleyFiles as $file) {
 
-				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($file["fullFilePath"]))));
+				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
 				foreach ($file["dependentFiles"] as $dependentFile) {
-					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($streamsPath, $file["path"], basename($dependentFile["fullFilePath"]))));
+					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
 				}
 			}
 			if (!$isTest) {
-				$this->doDeposit($context, $ingestPath, $sipPath, $submission);
+				$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
 				unlink($xmlExport);
 			}
 

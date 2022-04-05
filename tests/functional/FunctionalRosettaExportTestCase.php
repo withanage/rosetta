@@ -3,7 +3,7 @@
 
 require_mock_env('env2');
 
-
+import('plugins.importexport.rosetta.tests.data.JournalTest');
 import('plugins.importexport.rosetta.RosettaExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 import('lib.pkp.tests.plugins.PluginTestCase');
@@ -22,6 +22,13 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
+	private Journal $journal;
+
+	public function __construct($name = null, array $data = [], $dataName = '')
+	{
+		parent::__construct($name, $data, $dataName);
+		$this->journal = new Journal($this);
+	}
 
 
 	/**
@@ -30,7 +37,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function testToXml()
 	{
-		#$this->markTestSkipped('Skipped because of weird class interaction with ControlledVocabDAO.');
 
 		$request = Application::get()->getRequest();
 		if (is_null($request->getRouter())) {
@@ -75,55 +81,13 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$article->setLanguage($primaryLocale);
 
 		// Galleys
-		import('classes.article.ArticleGalley');
-		$galley = new ArticleGalley();
-		$galley->setId(98);
-		$galley->setStoredPubId('doi', 'galley-doi');
-		$galleys = array($galley);
+		$galleys = $this->setGalleys();
 
-		// Journal
-		import('classes.journal.Journal');
-		$journal = $this->getMockBuilder(Journal::class)
-			->setMethods(array('getSetting'))
-			->getMock();
-		$journal->expects($this->any())
-			->method('getSetting') // includes getTitle()
-			->will($this->returnCallback(array($this, 'getJournalSetting')));
-		$journal->setPrimaryLocale($primaryLocale);
-		$journal->setData('acronym' , 'Testjournal',$primaryLocale);
+		$context = $this->createContext($primaryLocale, $journalId);
 
-		$journalSettings = array(
-			'id' => $journalId,
-			'urlPath' => 'journal-path',
+		$section = $this->createSections($primaryLocale);
 
-			'name' => 'Test Journal'
-		);
-		foreach ($journalSettings as $key => $value) {
-			$journal->setData($key, $value);
-		}
-
-		// Section
-		import('classes.journal.Section');
-		$section = new Section();
-		$section->setIdentifyType('section-identify-type', $primaryLocale);
-
-		// Issue
-		import('classes.issue.Issue');
-		$issue = $this->getMockBuilder(Issue::class)
-			->setMethods(array('getIssueIdentification'))
-			->getMock();
-		$issue->expects($this->any())
-			->method('getIssueIdentification')
-			->will($this->returnValue('issue-identification'));
-		$issue->setId(96);
-		$issue->setDatePublished('2010-11-05');
-		$issue->setStoredPubId('doi', 'issue-doi');
-		$issue->setJournalId($journalId);
-
-
-		//
-		// Create infrastructural support objects
-		//
+		$issue = $this->createIssues($journalId);
 
 		// Router
 		import('lib.pkp.classes.core.PKPRouter');
@@ -147,50 +111,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-		//
-		// Create mock DAOs
-		//
 
-		// Create a mocked AuthorDAO that returns our test author.
-		import('classes.article.AuthorDAO');
-		$authorDao = $this->getMockBuilder(AuthorDAO::class)
-			->setMethods(array('getBySubmissionId'))
-			->getMock();
-		$authorDao->expects($this->any())
-			->method('getBySubmissionId')
-			->will($this->returnValue(array($author)));
-		DAORegistry::registerDAO('AuthorDAO', $authorDao);
+		$this->createAuthors($author);
+$this->createOAI($context, $section, $issue);
+		$this->createGalleys($galleys);
 
-		// Create a mocked OAIDAO that returns our test data.
-		import('classes.oai.ojs.OAIDAO');
-		$oaiDao = $this->getMockBuilder(OAIDAO::class)
-			->setMethods(array('getJournal', 'getSection', 'getIssue'))
-			->getMock();
-		$oaiDao->expects($this->any())
-			->method('getJournal')
-			->will($this->returnValue($journal));
-		$oaiDao->expects($this->any())
-			->method('getSection')
-			->will($this->returnValue($section));
-		$oaiDao->expects($this->any())
-			->method('getIssue')
-			->will($this->returnValue($issue));
-		DAORegistry::registerDAO('OAIDAO', $oaiDao);
-
-		// Create a mocked ArticleGalleyDAO that returns our test data.
-		import('classes.article.ArticleGalleyDAO');
-		$articleGalleyDao = $this->getMockBuilder(ArticleGalleyDAO::class)
-			->setMethods(array('getBySubmissionId'))
-			->getMock();
-		$articleGalleyDao->expects($this->any())
-			->method('getBySubmissionId')
-			->will($this->returnValue($galleys));
-		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
-		// FIXME: ArticleGalleyDAO::getBySubmissionId returns iterator; array expected here. Fix expectations.
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
 
-		$deployment = new RosettaExportDeployment($journal, $rosettaExportPlugin, 1);
+		$deployment = new RosettaExportDeployment($context, $rosettaExportPlugin, 1);
 		$submissions = $deployment->getSubmissions(true);
 
 		$x = 1;
@@ -217,6 +146,68 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	protected function getMockedRegistryKeys()
 	{
 		return array('request');
+	}
+
+	/**
+	 * @return ArticleGalley[]
+	 */
+	private function setGalleys(): array
+	{
+		return $this->journal->setGalleys();
+	}
+
+	/**
+	 * @param $context
+	 * @param Section $section
+	 * @param $issue
+	 */
+	private function createOAI($context, Section $section, $issue): void
+	{
+		$this->journal->createOAI($context, $section, $issue);
+	}
+
+	/**
+	 * @param Author $author
+	 */
+	private function createAuthors(Author $author): void
+	{
+		$this->journal->createAuthors($author);
+	}
+
+	/**
+	 * @param array $galleys
+	 */
+	private function createGalleys(array $galleys): void
+	{
+		$this->journal->createGalleys($galleys);
+	}
+
+	/**
+	 * @param int $journalId
+	 * @return Issue|mixed|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private function createIssues(int $journalId)
+	{
+		return $this->journal->createIssues($journalId);
+	}
+
+	/**
+	 * @param string $primaryLocale
+	 * @return Section
+	 */
+	private function createSections(string $primaryLocale): Section
+	{
+		return $this->journal->createSections($primaryLocale);
+	}
+
+	/**
+	 * @param string $primaryLocale
+	 * @param int $journalId
+	 * @return Journal|mixed|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private function createContext(string $primaryLocale, int $journalId)
+	{
+		return $this->journal->createContext($primaryLocale, $journalId);
 	}
 
 
