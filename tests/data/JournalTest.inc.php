@@ -1,5 +1,14 @@
 <?php
 
+import('classes.article.ArticleGalley');
+import('classes.article.ArticleGalleyDAO');
+import('classes.journal.Journal');
+import('classes.submission.Submission');
+import('classes.issue.Issue');
+import('classes.journal.Section');
+
+
+
 class JournalTest
 {
     private FunctionalRosettaExportTest $functionalRosettaExportTest;
@@ -39,7 +48,7 @@ class JournalTest
      */
     public function createSection(Journal $context): Section
     {
-        import('classes.journal.Section');
+
         $section = new Section();
         $section->setIdentifyType('section-identify-type', $context->getPrimaryLocale());
 		return $section;
@@ -48,7 +57,6 @@ class JournalTest
 
     public function createIssue(Journal $context) :Issue
     {
-        import('classes.issue.Issue');
         $issue = $this->functionalRosettaExportTest->getMockBuilder(Issue::class)
             ->setMethods(array('getIssueIdentification'))
             ->getMock();
@@ -68,12 +76,10 @@ class JournalTest
     public function createGalleys(Submission  $submission): array
     {
 		$galleys = [] ;
-		import('classes.article.ArticleGalleyDAO');
 		$articleGalleyDao = $this->functionalRosettaExportTest->getMockBuilder(ArticleGalleyDAO::class)
 			->setMethods(array('getBySubmissionId'))
 			->getMock();
 		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
-		import('classes.article.ArticleGalley');
 		$galley = new ArticleGalley();
 		$galley->setId(98);
 		$galley->setData('publicationId',$submission->getLatestPublication()->getId());
@@ -89,7 +95,6 @@ class JournalTest
      */
     public function createContext(string $primaryLocale, int $journalId)
     {
-        import('classes.journal.Journal');
         $context = $this->functionalRosettaExportTest->getMockBuilder(Journal::class)
             ->setMethods(array('getSetting'))
             ->getMock();
@@ -164,7 +169,7 @@ class JournalTest
 	 */
 	public function createSubmission(Journal $context , Section  $section):  Submission
 	{
-		import('classes.submission.Submission');
+
 		$submission = $this->functionalRosettaExportTest->getMockBuilder(Submission::class)
 			->setMethods(array('getBestId'))
 			->getMock();
