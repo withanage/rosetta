@@ -83,15 +83,19 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-
-
-
-
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
 
-		$deployment = new RosettaExportDeployment($context, $rosettaExportPlugin, 1);
-		$deployment->depositSubmission($context, $submission, $submission->getLatestPublication(), false);
+
+		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
+		//delete modified date to ignore errors
+		$dcDom->documentElement->removeChild($dcDom->getElementsByTagName('dcterms:modified')->item(0));
+
+		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
+		//check dc.xml
+		$exportPath = join(DIRECTORY_SEPARATOR, array( str_replace("/lib/pkp/lib/vendor/phpunit/phpunit/phpunit","",$request->getBasePath()), $rosettaExportPlugin->getPluginPath(), 'tests','data','dc.xml'));
+		$this->assertXmlStringEqualsXmlFile($exportPath,$dcDom->saveXML());
+
 
 		$x = 1;
 
