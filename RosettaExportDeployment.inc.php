@@ -76,7 +76,7 @@ class RosettaExportDeployment
 	 * @param Publication $publication
 	 * @return void
 	 */
-	private function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
+	public function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
 	{
 		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 		$oldMask = umask(0);
@@ -96,11 +96,11 @@ class RosettaExportDeployment
 			file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
 			file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-			list($xmlExport, $exportFile) = $metsDom->appendImportExportFile();
+			list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
 			shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
 
 			if (file_exists($xmlExport)) {
-				array_push($galleyFiles, $exportFile);
+				array_push($galleyFiles, $tmpExportFile);
 			}
 
 			foreach ($galleyFiles as $file) {

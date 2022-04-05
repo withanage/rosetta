@@ -32,7 +32,7 @@ class JournalTest
 
 		$publication->setData('id', 1);
 		$publication->setData('locale', $publicationLocale);
-		$publication->setData('version', 'version');
+		$publication->setData('version', 1);
 		$publication->setData('seq', 'seq');
 		$publication->setData('accessStatus', 'access_status');
 		$publication->setData('status', 'status');
