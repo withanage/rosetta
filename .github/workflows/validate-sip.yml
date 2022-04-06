@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ '7.3', '7.4' ]
+        php-versions: [ '7.4' ]
         dbs: [ 'pgsql', 'mysql' ]
         pkp-application: [ 'ojs' ]
         pkp-branch: [ 'stable-3_2_1' ]
