@@ -1,0 +1,9 @@
+name:  validate-sip
+on : [push]
+jobs:
+  xml-compatibility
+    runs-on: ubuntu-latest
+
+
+
+
