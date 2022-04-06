@@ -1,7 +1,7 @@
 # OJS-Rosetta Plugin
 
 #### Build status
-![example workflow](https://github.com/withanage/rosetta/workflows/run-tests/badge.svg)
+![CI](https://github.com/withanage/rosetta/workflows/validate-sip/badge.svg)
 
 ## Introduction
 
