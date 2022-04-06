@@ -1,7 +1,7 @@
 # OJS-Rosetta Plugin
 
 #### Build status
-![CI](https://github.com/withanage/rosetta/workflows/validate-sip/badge.svg)
+[![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ## Introduction
 
