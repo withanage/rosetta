@@ -89,17 +89,17 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
 		//delete modified date to ignore errors
-		$dcDom->documentElement->removeChild($dcDom->getElementsByTagName('dcterms:modified')->item(0));
-
-		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
 		//check dc.xml
-		$exportPath = join(DIRECTORY_SEPARATOR, array( str_replace("/lib/pkp/lib/vendor/phpunit/phpunit/phpunit","",$request->getBasePath()), $rosettaExportPlugin->getPluginPath(), 'tests','data','dc.xml'));
-		$this->assertXmlStringEqualsXmlFile($exportPath,$dcDom->saveXML());
+		$dcDom->documentElement->removeChild($dcDom->getElementsByTagName('dcterms:modified')->item(0));
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','dc.xml'));
+		$this->assertXmlStringEqualsXmlFile($dcXml,$dcDom->saveXML());
+		//check mets
+		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
+		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','ie1.xml'));
+		$this->assertXmlStringEqualsXmlFile($ie1Xml,$metsDom->saveXML());
 
 
-		$x = 1;
-
-
+		$x= 1;
 	}
 
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
