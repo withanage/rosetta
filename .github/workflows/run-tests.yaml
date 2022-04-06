@@ -3,6 +3,8 @@ on : [push]
 jobs:
   xml-compatibility
     runs-on: ubuntu-latest
+    steps:
+      run: echo "🐧 This job is now running on a ${{ runner.os }} "
 
 
 
