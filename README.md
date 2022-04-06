@@ -1,7 +1,7 @@
 # OJS-Rosetta Plugin
 
 #### Build status
-![run-tests](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=main)
+![example workflow](https://github.com/withanage/rosetta/workflows/run-tests/badge.svg)
 
 ## Introduction
 
