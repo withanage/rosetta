@@ -54,7 +54,7 @@ jobs:
           uses: shivammathur/setup-php@v2
           with:
             php-version: ${{ matrix.php-versions }}
-            extensions: mbstring, pgsql, mysql, mysqli, pdo_mysql, mysqlnd
+            extensions: bcmath, bz2, common, cli, curl, fpm, gd, intl, mbstring, mysql,mysqlnd, mysqli, opcache, pdo_mysql,  pgsql, json,sop, xml, zip
           env:
             update: true
 
@@ -76,12 +76,10 @@ jobs:
             npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
       -   name: Checkout Plugin
           uses: actions/checkout@v2
-
-      # change Plugin Path here!
-      -   name: Link Plugin Folder
+      -   name: Link Rosetta folder
           run: |
             cd ${{ github.workspace }}
-            ln -s ${{ github.workspace }} ~/${{ matrix.pkp-application }}/plugins/generic/citations
+            ln -s ${{ github.workspace }} ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta
       -   name: Run Server
           run: |
             cd ~/${{ matrix.pkp-application }}
