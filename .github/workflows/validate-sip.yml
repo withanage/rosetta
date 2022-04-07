@@ -74,19 +74,28 @@ jobs:
             cd ~/${{ matrix.pkp-application }}
             lib/pkp/tools/travis/install-composer-dependencies.sh
             npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
-      -   name: Checkout Plugin
-          uses: actions/checkout@v2
+      - uses: actions/checkout@main
+              with:
+                repository: withanage/rosetta
+                path: ${{ github.workspace }}/plugins/importexport
+
       -   name: Link Rosetta folder
           run: |
             cd ${{ github.workspace }}
             ln -s ${{ github.workspace }} ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta
+
+      - name: Run Rosetta Tests
+        run: |
+          cd ${{ github.workspace }}
+          php ${{ github.workspace }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration ${{ github.workspace }}/lib/pkp/tests/phpunit-env2.xml --filter FunctionalRosettaExportTest --test-suffix FunctionalRosettaExportTestCase.php ${{ github.workspace }}/plugins/importexport/rosetta/tests/functional
+
       -   name: Run Server
           run: |
             cd ~/${{ matrix.pkp-application }}
             php -S 127.0.0.1:8000 -t . >& access.log &
-      -   name: Create Content (${{ matrix.dbs }})
-          run: |
-            cd ~/${{ matrix.pkp-application }}
-            npx cypress run --spec "cypress/tests/data/10-Installation.spec.js,cypress/tests/data/20-CreateContext.spec.js"
+      #-   name: Create Content (${{ matrix.dbs }})
+      #    run: |
+      #      cd ~/${{ matrix.pkp-application }}
+      #      npx cypress run --spec "cypress/tests/data/10-Installation.spec.js,cypress/tests/data/20-CreateContext.spec.js"
 
 
