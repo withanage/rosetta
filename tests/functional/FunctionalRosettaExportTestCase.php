@@ -118,28 +118,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			$router = new PKPRouter();
 			$request->setRouter($router);
 		}
-
-
-		// Router
-		import('lib.pkp.classes.core.PKPRouter');
-		$router = $this->getMockBuilder(PKPRouter::class)
-			->setMethods(array('url'))
-			->getMock();
-		$application = Application::get();
-		$router->setApplication($application);
-		$router->expects($this->any())
-			->method('url')
-			->will($this->returnCallback(array($this, 'getRouterUrl')));
-
-
-		import('classes.core.Request');
-		$request = $this->getMockBuilder(Request::class)
-			->setMethods(array('getRouter'))
-			->getMock();
-		$request->expects($this->any())
-			->method('getRouter')
-			->will($this->returnValue($router));
-		Registry::set('request', $request);
+		$router = $this->getRouter();
+		$this->getRequest($router);
 
 		$this->testDublinCore();
 		$this->testMets();
@@ -151,7 +131,9 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
+
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+
 		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
 	}
 
@@ -168,13 +150,13 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	public function testMets(): void
 	{
+
 		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
-
 		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
 		$nodeModified->parentNode->removeChild($nodeModified);
 
@@ -185,6 +167,33 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
+
+	public function getRouter()
+	{
+		import('lib.pkp.classes.core.PKPRouter');
+		$router = $this->getMockBuilder(PKPRouter::class)
+			->setMethods(array('url'))
+			->getMock();
+		$application = Application::get();
+		$router->setApplication($application);
+		$router->expects($this->any())
+			->method('url')
+			->will($this->returnCallback(array($this, 'getRouterUrl')));
+		return $router;
+	}
+
+	public function getRequest($router)
+	{
+		import('classes.core.Request');
+		$request = $this->getMockBuilder(Request::class)
+			->setMethods(array('getRouter'))
+			->getMock();
+		$request->expects($this->any())
+			->method('getRouter')
+			->will($this->returnValue($router));
+		Registry::set('request', $request);
+		return $request;
 	}
 
 	/**
