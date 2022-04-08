@@ -142,7 +142,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 		$this->validateDublinCore();
-		$this->validateMets();
+		$this->testMets();
 
 	}
 
@@ -166,7 +166,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
-	public function validateMets(): void
+	public function testMets(): void
 	{
 		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
