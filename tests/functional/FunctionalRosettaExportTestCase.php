@@ -172,13 +172,14 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
-		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 		$doc = new DOMDocument();
-		$doc->loadXML(file_get_contents($ie1Xml));
+		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
 
 		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
 		$nodeModified->parentNode->removeChild($nodeModified);
+
 		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
+
 	}
 
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
