@@ -31,7 +31,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		parent::__construct($name, $data, $dataName);
 
 		$this->journalTest = new JournalTest($this);
-
 		$this->getJournalTest()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
 		$this->getJournalTest()->createAuthors($this->getSubmission());
 		$this->getJournalTest()->setGalleys($this->getSubmission());
@@ -111,7 +110,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 * @covers OAIMetadataFormat_DC
 	 * @covers Dc11SchemaArticleAdapter
 	 */
-	public function testToXml()
+	public function testSipContent()
 	{
 
 		$request = Application::get()->getRequest();
@@ -130,7 +129,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$router->setApplication($application);
 		$router->expects($this->any())
 			->method('url')
-			->will($this->returnCallback(array($this, 'routerUrl')));
+			->will($this->returnCallback(array($this, 'getRouterUrl')));
 
 
 		import('classes.core.Request');
@@ -176,12 +175,13 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents($ie1Xml));
+
 		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
 		$nodeModified->parentNode->removeChild($nodeModified);
 		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
 	}
 
-	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
