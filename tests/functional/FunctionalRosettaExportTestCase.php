@@ -3,7 +3,7 @@
 
 require_mock_env('env2');
 
-import('plugins.importexport.rosetta.tests.data.JournalTest');
+import('plugins.importexport.rosetta.tests.functional.JournalTest');
 import('plugins.importexport.rosetta.RosettaExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 import('lib.pkp.tests.plugins.PluginTestCase');
@@ -35,49 +35,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getJournalTest()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
 		$this->getJournalTest()->createAuthors($this->getSubmission());
 		$this->getJournalTest()->createGalleys($this->getSubmission());
-
-
-	}
-
-
-	/**
-	 * @covers OAIMetadataFormat_DC
-	 * @covers Dc11SchemaArticleAdapter
-	 */
-	public function testToXml()
-	{
-
-		$request = Application::get()->getRequest();
-		if (is_null($request->getRouter())) {
-			$router = new PKPRouter();
-			$request->setRouter($router);
-		}
-
-
-
-		// Router
-		import('lib.pkp.classes.core.PKPRouter');
-		$router = $this->getMockBuilder(PKPRouter::class)
-			->setMethods(array('url'))
-			->getMock();
-		$application = Application::get();
-		$router->setApplication($application);
-		$router->expects($this->any())
-			->method('url')
-			->will($this->returnCallback(array($this, 'routerUrl')));
-
-
-		import('classes.core.Request');
-		$request = $this->getMockBuilder(Request::class)
-			->setMethods(array('getRouter'))
-			->getMock();
-		$request->expects($this->any())
-			->method('getRouter')
-			->will($this->returnValue($router));
-		Registry::set('request', $request);
-
-
-		$this->testMets();
 
 
 	}
@@ -150,6 +107,55 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $this->getJournalTest()->createSubmission($this->getContext(), $this->getSection());
 	}
 
+	/**
+	 * @covers OAIMetadataFormat_DC
+	 * @covers Dc11SchemaArticleAdapter
+	 */
+	public function testToXml()
+	{
+
+		$request = Application::get()->getRequest();
+		if (is_null($request->getRouter())) {
+			$router = new PKPRouter();
+			$request->setRouter($router);
+		}
+
+
+		// Router
+		import('lib.pkp.classes.core.PKPRouter');
+		$router = $this->getMockBuilder(PKPRouter::class)
+			->setMethods(array('url'))
+			->getMock();
+		$application = Application::get();
+		$router->setApplication($application);
+		$router->expects($this->any())
+			->method('url')
+			->will($this->returnCallback(array($this, 'routerUrl')));
+
+
+		import('classes.core.Request');
+		$request = $this->getMockBuilder(Request::class)
+			->setMethods(array('getRouter'))
+			->getMock();
+		$request->expects($this->any())
+			->method('getRouter')
+			->will($this->returnValue($router));
+		Registry::set('request', $request);
+
+		$this->validateDublinCore();
+		$this->validateMets();
+
+	}
+
+	public function validateDublinCore(): void
+	{
+		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
+	}
+
 	public function getLatestPublication(): ?Publication
 	{
 		return $this->getSubmission()->getLatestPublication();
@@ -161,21 +167,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
-	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
-	{
-		return $handler . '-' . $op . '-' . implode('-', $path);
-	}
-
-	public function testDublinCore(): void
-	{
-		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
-		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
-		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
-		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
-	}
-
-	public function testMets(): void
+	public function validateMets(): void
 	{
 		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
@@ -187,6 +179,11 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
 		$nodeModified->parentNode->removeChild($nodeModified);
 		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
+	}
+
+	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	{
+		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
 	/**
