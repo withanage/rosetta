@@ -83,28 +83,21 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-		$importExportPlugins = PluginRegistry::loadCategory('importexport');
-		$rosettaExportPlugin = $importExportPlugins['RosettaExportPlugin'];
-
 
 		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
-
-		//check dc.xml
-
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','dc.xml'));
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests','data','dc.xml'));
 		$this->assertXmlStringEqualsXmlFile($dcXml,$dcDom->saveXML());
 
 		//check mets
-		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
+		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $this->getPlugin());
 		$nodeModified1 = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified1->parentNode->removeChild($nodeModified1);
 
 		$saveXML = $metsDom->saveXML();
 		$c2 = preg_split('/\r\n|\r|\n/', $saveXML);
-		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','ie1.xml'));
+		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests','data','ie1.xml'));
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents($ie1Xml));
 
@@ -123,6 +116,12 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
+
+	public function getPlugin()
+	{
+		$importExportPlugins = PluginRegistry::loadCategory('importexport');
+		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
 	/**
