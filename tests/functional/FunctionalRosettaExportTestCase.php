@@ -141,12 +141,12 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->will($this->returnValue($router));
 		Registry::set('request', $request);
 
-		$this->validateDublinCore();
+		$this->testDublinCore();
 		$this->testMets();
 
 	}
 
-	public function validateDublinCore(): void
+	public function testDublinCore(): void
 	{
 		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
