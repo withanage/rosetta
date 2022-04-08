@@ -99,20 +99,21 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		//check mets
 		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
-		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
+		$nodeModified1 = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified1->parentNode->removeChild($nodeModified1);
 
 		$saveXML = $metsDom->saveXML();
 		$c2 = preg_split('/\r\n|\r|\n/', $saveXML);
 		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','ie1.xml'));
 		$doc = new DOMDocument();
-		$doc->loadXML(file_get_contents($ie1Xml), XML_PARSE_PEDANTIC);
-		$parentNode = $doc->parentNode;
-		$nodeModified = $parentNode->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
+		$doc->loadXML(file_get_contents($ie1Xml));
+
+		$nodeModified2=$doc->getElementsByTagNameNS('http://purl.org/dc/terms/','modified')->item(0);//all namespaces, all local names
+
+		$nodeModified2->parentNode->removeChild($nodeModified2);
 		#$this->assertEquals(preg_split('/\r\n|\r|\n/', $metsDom->saveXML()), preg_split('/\r\n|\r|\n/', ));
-		$c1 = preg_split('/\r\n|\r|\n/', );
-		$this->assertEquals($c2, $c1);
+		$c1 = preg_split('/\r\n|\r|\n/', $doc->saveXML());
+		$this->assertEquals(array_filter($c2), array_filter($c1));
 
 
 
