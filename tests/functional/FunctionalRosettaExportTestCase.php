@@ -88,15 +88,31 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 
 		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
-		//delete modified date to ignore errors
+
 		//check dc.xml
-		$dcDom->documentElement->removeChild($dcDom->getElementsByTagName('dcterms:modified')->item(0));
+
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','dc.xml'));
 		$this->assertXmlStringEqualsXmlFile($dcXml,$dcDom->saveXML());
+
 		//check mets
 		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $rosettaExportPlugin);
+		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
 		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','ie1.xml'));
-		$this->assertXmlStringEqualsXmlFile($ie1Xml,$metsDom->saveXML());
+		$doc = new DOMDocument();
+		$doc->loadXML(file_get_contents($ie1Xml), XML_PARSE_PEDANTIC);
+		$parentNode = $doc->parentNode;
+		$nodeModified = $parentNode->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+		#$this->assertEquals(preg_split('/\r\n|\r|\n/', $metsDom->saveXML()), preg_split('/\r\n|\r|\n/', ));
+		$c1 = preg_split('/\r\n|\r|\n/', );
+		$c2 = preg_split('/\r\n|\r|\n/', $metsDom->saveXML());
+		$this->assertEquals($c2, $c1);
+
 
 
 		$x= 1;

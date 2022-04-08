@@ -4,6 +4,7 @@
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ## Introduction
+Check fixity
 
 ## Configuration
 
