@@ -29,7 +29,13 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function __construct($name = null, array $data = [], $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
+
 		$this->journalTest = new JournalTest($this);
+
+		$this->getJournalTest()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
+		$this->getJournalTest()->createAuthors($this->getSubmission());
+		$this->getJournalTest()->createGalleys($this->getSubmission());
+
 
 	}
 
@@ -47,17 +53,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			$request->setRouter($router);
 		}
 
-		$context = $this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
-
-		$issue = $this->getJournalTest()->createIssue($context);
-
-		$section = $this->getJournalTest()->createSection($context);
-		$this->getJournalTest()->createOAI($context, $section, $issue);
-
-		$submission = $this->getJournalTest()->createSubmission($context, $section);
-		$this->getJournalTest()->createAuthors($submission);
-		$this->getJournalTest()->createGalleys($submission);
-		// Article
 
 
 		// Router
@@ -71,7 +66,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->method('url')
 			->will($this->returnCallback(array($this, 'routerUrl')));
 
-		// Request
+
 		import('classes.core.Request');
 		$request = $this->getMockBuilder(Request::class)
 			->setMethods(array('getRouter'))
@@ -82,32 +77,19 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
-		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
+		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
-		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
-		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
 
-		//check mets
-		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $this->getPlugin());
-		$nodeModified1 = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified1->parentNode->removeChild($nodeModified1);
-
-		$saveXML = $metsDom->saveXML();
-		$c2 = preg_split('/\r\n|\r|\n/', $saveXML);
 		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents($ie1Xml));
+		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
+		$nodeModified->parentNode->removeChild($nodeModified);
 
-		$nodeModified2 = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
-
-		$nodeModified2->parentNode->removeChild($nodeModified2);
-		#$this->assertEquals(preg_split('/\r\n|\r|\n/', $metsDom->saveXML()), preg_split('/\r\n|\r|\n/', ));
-		$c1 = preg_split('/\r\n|\r|\n/', $doc->saveXML());
-		$this->assertEquals(array_filter($c2), array_filter($c1));
+		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
 
 
-		$x = 1;
 	}
 
 	/**
@@ -124,6 +106,11 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function setJournalTest(JournalTest $journalTest): void
 	{
 		$this->journalTest = $journalTest;
+	}
+
+	public function getContext()
+	{
+		return $this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
 	}
 
 	/**
@@ -158,6 +145,26 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->journalId = $journalId;
 	}
 
+	public function getSection(): Section
+	{
+		return $this->getJournalTest()->createSection($this->getContext());
+	}
+
+	public function getIssue(): Issue
+	{
+		return $this->getJournalTest()->createIssue($this->getContext());
+	}
+
+	public function getSubmission(): Submission
+	{
+		return $this->getJournalTest()->createSubmission($this->getContext(), $this->getSection());
+	}
+
+	public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
 	public function getPlugin()
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
@@ -167,6 +174,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
+
+	public function testDublinCore(): void
+	{
+		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
 	}
 
 	/**
