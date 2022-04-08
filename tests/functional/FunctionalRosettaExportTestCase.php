@@ -77,17 +77,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
-		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
-		$doc = new DOMDocument();
-		$doc->loadXML(file_get_contents($ie1Xml));
-		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
+		$this->testMets();
 
 
 	}
@@ -183,6 +173,20 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified->parentNode->removeChild($nodeModified);
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
+	}
+
+	public function testMets(): void
+	{
+		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
+		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
+		$doc = new DOMDocument();
+		$doc->loadXML(file_get_contents($ie1Xml));
+		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
+		$nodeModified->parentNode->removeChild($nodeModified);
+		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
 	}
 
 	/**
