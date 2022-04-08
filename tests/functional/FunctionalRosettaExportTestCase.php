@@ -23,13 +23,14 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 class FunctionalRosettaExportTest extends PluginTestCase
 {
 	protected JournalTest $journalTest;
-	private int $journalId = 10000;
 	protected string $primaryLocale = 'en_US';
+	private int $journalId = 10000;
 
 	public function __construct($name = null, array $data = [], $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
 		$this->journalTest = new JournalTest($this);
+
 	}
 
 
@@ -45,12 +46,11 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			$router = new PKPRouter();
 			$request->setRouter($router);
 		}
-		//
-		// Create test data.
-		//
 
-		$context =$this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
+		$context = $this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
+
 		$issue = $this->getJournalTest()->createIssue($context);
+
 		$section = $this->getJournalTest()->createSection($context);
 		$this->getJournalTest()->createOAI($context, $section, $issue);
 
@@ -82,12 +82,11 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		Registry::set('request', $request);
 
 
-
 		$dcDom = new RosettaDCDom($context, $submission->getLatestPublication(), false);
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
-		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests','data','dc.xml'));
-		$this->assertXmlStringEqualsXmlFile($dcXml,$dcDom->saveXML());
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
 
 		//check mets
 		$metsDom = new RosettaMETSDom($context, $submission, $submission->getLatestPublication(), $this->getPlugin());
@@ -96,11 +95,11 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$saveXML = $metsDom->saveXML();
 		$c2 = preg_split('/\r\n|\r|\n/', $saveXML);
-		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests','data','ie1.xml'));
+		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents($ie1Xml));
 
-		$nodeModified2=$doc->getElementsByTagNameNS('http://purl.org/dc/terms/','modified')->item(0);//all namespaces, all local names
+		$nodeModified2 = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
 
 		$nodeModified2->parentNode->removeChild($nodeModified2);
 		#$this->assertEquals(preg_split('/\r\n|\r|\n/', $metsDom->saveXML()), preg_split('/\r\n|\r|\n/', ));
@@ -108,8 +107,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->assertEquals(array_filter($c2), array_filter($c1));
 
 
-
-		$x= 1;
+		$x = 1;
 	}
 
 	/**
@@ -117,7 +115,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function getJournalTest(): JournalTest
 	{
-		return $this->getJournalTest();
+		return $this->journalTest;
 	}
 
 	/**
@@ -125,23 +123,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function setJournalTest(JournalTest $journalTest): void
 	{
-		$this->getJournalTest = $journalTest;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getJournalId(): int
-	{
-		return $this->journalId;
-	}
-
-	/**
-	 * @param int $journalId
-	 */
-	public function setJournalId(int $journalId): void
-	{
-		$this->journalId = $journalId;
+		$this->journalTest = $journalTest;
 	}
 
 	/**
@@ -160,15 +142,31 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->primaryLocale = $primaryLocale;
 	}
 
-	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	/**
+	 * @return int
+	 */
+	public function getJournalId(): int
 	{
-		return $handler . '-' . $op . '-' . implode('-', $path);
+		return $this->journalId;
+	}
+
+	/**
+	 * @param int $journalId
+	 */
+	public function setJournalId(int $journalId): void
+	{
+		$this->journalId = $journalId;
 	}
 
 	public function getPlugin()
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		return $importExportPlugins['RosettaExportPlugin'];
+	}
+
+	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	{
+		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
 	/**
@@ -186,8 +184,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	{
 		return array('request');
 	}
-
-
 
 
 }
