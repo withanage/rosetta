@@ -102,6 +102,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
+		$saveXML = $metsDom->saveXML();
+		$c2 = preg_split('/\r\n|\r|\n/', $saveXML);
 		$ie1Xml = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaExportPlugin->getPluginPath(), 'tests','data','ie1.xml'));
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents($ie1Xml), XML_PARSE_PEDANTIC);
@@ -110,7 +112,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified->parentNode->removeChild($nodeModified);
 		#$this->assertEquals(preg_split('/\r\n|\r|\n/', $metsDom->saveXML()), preg_split('/\r\n|\r|\n/', ));
 		$c1 = preg_split('/\r\n|\r|\n/', );
-		$c2 = preg_split('/\r\n|\r|\n/', $metsDom->saveXML());
 		$this->assertEquals($c2, $c1);
 
 
