@@ -34,7 +34,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$this->getJournalTest()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
 		$this->getJournalTest()->createAuthors($this->getSubmission());
-		$this->getJournalTest()->createGalleys($this->getSubmission());
+		$this->getJournalTest()->setGalleys($this->getSubmission());
 
 
 	}
@@ -57,7 +57,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	public function getContext()
 	{
-		return $this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
+		return $this->getJournalTest()->setContext($this->getPrimaryLocale(), $this->getJournalId());
 	}
 
 	/**
@@ -99,7 +99,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	public function getIssue(): Issue
 	{
-		return $this->getJournalTest()->createIssue($this->getContext());
+		return $this->getJournalTest()->setIssue($this->getContext());
 	}
 
 	public function getSubmission(): Submission
