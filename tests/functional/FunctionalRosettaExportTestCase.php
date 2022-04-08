@@ -22,7 +22,9 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
-	private JournalTest $journalTest;
+	protected JournalTest $journalTest;
+	private int $journalId = 10000;
+	protected string $primaryLocale = 'en_US';
 
 	public function __construct($name = null, array $data = [], $dataName = '')
 	{
@@ -46,18 +48,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		//
 		// Create test data.
 		//
-		$journalId = 10000;
 
+		$context =$this->getJournalTest()->createContext($this->getPrimaryLocale(), $this->getJournalId());
+		$issue = $this->getJournalTest()->createIssue($context);
+		$section = $this->getJournalTest()->createSection($context);
+		$this->getJournalTest()->createOAI($context, $section, $issue);
 
-		$primaryLocale = 'en_US';
-		$context =$this->journalTest->createContext($primaryLocale, $journalId);
-		$issue = $this->journalTest->createIssue($context);
-		$section = $this->journalTest->createSection($context);
-		$this->journalTest->createOAI($context, $section, $issue);
-
-		$submission = $this->journalTest->createSubmission($context, $section);
-		$this->journalTest->createAuthors($submission);
-		$this->journalTest->createGalleys($submission);
+		$submission = $this->getJournalTest()->createSubmission($context, $section);
+		$this->getJournalTest()->createAuthors($submission);
+		$this->getJournalTest()->createGalleys($submission);
 		// Article
 
 
@@ -111,6 +110,54 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 
 		$x= 1;
+	}
+
+	/**
+	 * @return JournalTest
+	 */
+	public function getJournalTest(): JournalTest
+	{
+		return $this->getJournalTest();
+	}
+
+	/**
+	 * @param JournalTest $journalTest
+	 */
+	public function setJournalTest(JournalTest $journalTest): void
+	{
+		$this->getJournalTest = $journalTest;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJournalId(): int
+	{
+		return $this->journalId;
+	}
+
+	/**
+	 * @param int $journalId
+	 */
+	public function setJournalId(int $journalId): void
+	{
+		$this->journalId = $journalId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPrimaryLocale(): string
+	{
+		return $this->primaryLocale;
+	}
+
+	/**
+	 * @param string $primaryLocale
+	 */
+	public function setPrimaryLocale(string $primaryLocale): void
+	{
+		$this->primaryLocale = $primaryLocale;
 	}
 
 	function routerUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
