@@ -90,7 +90,7 @@ jobs:
           php ${{ github.workspace }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit\
           --configuration ${{ github.workspace }}/lib/pkp/tests/phpunit-env2.xml\
           --filter FunctionalRosettaExportTest\
-          --test-suffix FunctionalRosettaExportTestCase.php \
+          --test-suffix FunctionalRosettaExportTestCase.php\
           ${{ github.workspace }}/plugins/importexport/rosetta/tests/functional
 
       - name: Run Server
