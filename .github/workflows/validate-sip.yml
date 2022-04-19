@@ -78,7 +78,7 @@ jobs:
            npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
 
       - name: Checkout Plugin
-          uses: actions/checkout@main
+        uses: actions/checkout@main
 
       - name: Link Plugin Folder
         run: |
