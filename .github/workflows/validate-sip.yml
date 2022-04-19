@@ -54,7 +54,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: bcmath, bz2, common, cli, curl, fpm, gd, intl, mbstring, mysql,mysqlnd, mysqli, opcache, pdo_mysql,  pgsql, json,sop, xml, zip
+          extensions: bcmath, bz2, common, cli, curl, fpm, gd, intl, mbstring, mysql,mysqlnd, mysqli, opcache, pdo_mysql,  pgsql, json,soap, xml, zip
         env:
           update: true
 
@@ -86,7 +86,7 @@ jobs:
       - name: Create Content (${{ matrix.dbs }})
         run: |
           cd ~/${{ matrix.pkp-application }}
-          npx cypress run --spec "cypress/tests/data/10-Installation.spec.js,cypress/tests/data/20-CreateContext.spec.js"
+          npx cypress run --spec "cypress/tests/data/10-Installation.spec.js"
           # change path to cypress tests files here!
 
 
