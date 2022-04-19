@@ -21,28 +21,27 @@ Open Journal Systems plug-in for importing metadata and data objects into the lo
 
 
 ```
-$OJS_INS<<<<
-
-cd $<
-git clone https://github.com/withanage/rosetta/
-
-
+$OJS=mypath
+git clone $OJS/plugins/importexport/rosetta
+git clone --branch main https://github.com/withanage/rosetta/
 ```
 
-## Configuration
 
-- die Institution in Rosetta, in die du ingesten willst (TIB),
-- der Username in Rosetta für deine Submission Application (tibojsautodep) und
-- das Passwort für deinen User in Rosetta (das Passwort für den User habe ich dir mal zugeschickt).
-- materialFlowId - of the material flow used: 76780103
-- subDirectoryName - of the load directory: /exchange/lza/lza-tib/ojs-test
-- producerId - of the Producer: 76780038
+##  Configuration
 
-DEPOSIT_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl
-PRODUCER_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/ProducerWebServices?wsdl
-SIP_STATUS_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/repository/SipWebServices?wsdl
+Add the following config variables to your $OJS/config.inc.php
+Your service provider may provide you this information.
 
-
+``
+[rosetta]
+institution_code=$INSTITUTE_NAME
+username=$ROSETTA_USER
+password=$ROSETTA_PASSWORD
+host = $ROSETTA_DEPOSIT_SOAP_INTERFACE_URL e.g. https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebServices?wsdl
+subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE (The Server user running the OJS Rosetta script must have write permissions there.)
+producerId = $PRDUCER_ID_FOR_OJS_ROSETTA
+materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
+```
 
 
 
