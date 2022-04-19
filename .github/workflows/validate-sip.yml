@@ -82,6 +82,10 @@ jobs:
           repository: withanage/rosetta
           path: ~/${{ matrix.pkp-application }}/plugins/importexport
 
+      - name: Check plugin existence
+        run: |
+          run: '(test -f ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/ && echo rosetta exists) || echo rosetta does not exist,
+
       - name: Run Rosetta Tests
         run: |
           cd  ~/${{  matrix.pkp-application }}
@@ -89,7 +93,7 @@ jobs:
           --configuration ~/${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml \
           --filter FunctionalRosettaExportTest \
           --test-suffix FunctionalRosettaExportTestCase.php \
-          -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase
+          -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
 
       - name: Run Server
         run: |
