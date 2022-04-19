@@ -82,10 +82,10 @@ jobs:
       - name: Run Rosetta Tests
         run: |
           cd ${{  matrix.pkp-application }}
-          php ${{  matrix.pkp-application }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit\
-          --configuration ${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml\
-          --filter FunctionalRosettaExportTest\
-          --test-suffix FunctionalRosettaExportTestCase.php\
+          php ${{  matrix.pkp-application }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
+          --configuration ${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml \
+          --filter FunctionalRosettaExportTest \
+          --test-suffix FunctionalRosettaExportTestCase.php \
           ${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional
 
       - name: Run Server

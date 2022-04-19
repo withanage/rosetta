@@ -19,6 +19,17 @@ Open Journal Systems plug-in for importing metadata and data objects into the lo
 
 ## Installation
 
+
+```
+similar to medra websewrvice
+cd /tmp
+rm -rf /tmp/jpkjpk-2.zip
+rm -rf /var/www/html/ojs/cache
+wget http://localhost/ojs
+php /var/www/html/ojs/tools/importExport.php RosettaExportPlugin publicknowledge;
+unzip -o /tmp/jpkjpk-2-v3.zip
+```
+
 ## Configuration
 
 - die Institution in Rosetta, in die du ingesten willst (TIB),
@@ -33,17 +44,8 @@ PRODUCER_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/ProducerWe
 SIP_STATUS_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/repository/SipWebServices?wsdl
 
 
-# Remove later
 
-```
-similar to medra websewrvice
-cd /tmp
-rm -rf /tmp/jpkjpk-2.zip
-rm -rf /var/www/html/ojs/cache
-wget http://localhost/ojs
-php /var/www/html/ojs/tools/importExport.php RosettaExportPlugin publicknowledge;
-unzip -o /tmp/jpkjpk-2-v3.zip
-```
+
 
 ### Allgemein
 
