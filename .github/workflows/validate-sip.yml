@@ -77,10 +77,13 @@ jobs:
            lib/pkp/tools/travis/install-composer-dependencies.sh
            npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
 
-      - uses: actions/checkout@main
-        with:
-          repository: withanage/rosetta
-          path: ${{ matrix.pkp-application }}/plugins/importexport
+      - name: Checkout Plugin
+          uses: actions/checkout@main
+
+      - name: Link Plugin Folder
+        run: |
+          cd ${{ github.workspace }}
+          ln -s ${{ github.workspace }} ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta
 
       - name: Check file existence
         id: check_files
