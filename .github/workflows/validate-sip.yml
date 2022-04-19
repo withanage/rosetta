@@ -84,10 +84,10 @@ jobs:
           php -S 127.0.0.1:8000 -t . >& access.log &
 
       - name: Create Content (${{ matrix.dbs }})
-          run: |
-            cd ~/${{ matrix.pkp-application }}
-            npx cypress run --spec "cypress/tests/data/10-Installation.spec.js,cypress/tests/data/20-CreateContext.spec.js"
-            # change path to cypress tests files here!
+        run: |
+          cd ~/${{ matrix.pkp-application }}
+          npx cypress run --spec "cypress/tests/data/10-Installation.spec.js,cypress/tests/data/20-CreateContext.spec.js"
+          # change path to cypress tests files here!
 
 
       - name: Checkout Plugin
