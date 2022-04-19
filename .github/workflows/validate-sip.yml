@@ -77,7 +77,7 @@ jobs:
       - uses: actions/checkout@main
         with:
           repository: withanage/rosetta
-          path: ${{ github.workspace }}/plugins/importexport
+          path: ${{ matrix.pkp-application }}/plugins/importexport
 
       - name: Run Rosetta Tests
         run: |

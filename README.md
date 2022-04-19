@@ -17,7 +17,7 @@ Open Journal Systems plug-in for importing metadata and data objects into the lo
 - Validation support (PHPUnit, Github actions)
 
 
-
+## Installation
 
 ## Configuration
 
@@ -32,7 +32,6 @@ DEPOSIT_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/DepositWebS
 PRODUCER_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/deposit/ProducerWebServices?wsdl
 SIP_STATUS_WSDL_URL => https://rosetta.develop.lza.tib.eu/dpsws/repository/SipWebServices?wsdl
 
-## Installation
 
 # Remove later
 
