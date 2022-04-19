@@ -21,13 +21,12 @@ Open Journal Systems plug-in for importing metadata and data objects into the lo
 
 
 ```
-similar to medra websewrvice
-cd /tmp
-rm -rf /tmp/jpkjpk-2.zip
-rm -rf /var/www/html/ojs/cache
-wget http://localhost/ojs
-php /var/www/html/ojs/tools/importExport.php RosettaExportPlugin publicknowledge;
-unzip -o /tmp/jpkjpk-2-v3.zip
+$OJS_INS<<<<
+
+cd $<
+git clone https://github.com/withanage/rosetta/
+
+
 ```
 
 ## Configuration
@@ -159,4 +158,4 @@ Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die
 ### Testing
 
 php lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration lib/pkp/tests/phpunit-env1.xml
-plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
+plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.

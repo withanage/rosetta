@@ -77,16 +77,16 @@ jobs:
       - uses: actions/checkout@main
         with:
           repository: withanage/rosetta
-          path: ${{ matrix.pkp-application }}/plugins/importexport
+          path: ~/${{ matrix.pkp-application }}/plugins/importexport
 
       - name: Run Rosetta Tests
         run: |
-          cd ${{  matrix.pkp-application }}
-          php ${{  matrix.pkp-application }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
-          --configuration ${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml \
+          cd  ~/${{  matrix.pkp-application }}
+          php ~/${{  matrix.pkp-application }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
+          --configuration ~/${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml \
           --filter FunctionalRosettaExportTest \
           --test-suffix FunctionalRosettaExportTestCase.php \
-          ${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional
+          ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional
 
       - name: Run Server
         run: |
