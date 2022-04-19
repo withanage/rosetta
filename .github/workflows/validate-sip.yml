@@ -82,10 +82,16 @@ jobs:
           repository: withanage/rosetta
           path: ~/${{ matrix.pkp-application }}/plugins/importexport
 
-      - name: Check plugin existence
-        run: |
-          run: '(test -f ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/ && echo rosetta exists) || echo rosetta does not exist,
+      - name: Check file existence
+          id: check_files
+          uses: andstor/file-existence-action@v1
+          with:
+            files: "README.md"
 
+            - name: File exists
+              if: steps.check_files.outputs.files_exists == 'true'
+              # Only runs if all of the files exists
+              run: echo All files exists!
       - name: Run Rosetta Tests
         run: |
           cd  ~/${{  matrix.pkp-application }}
