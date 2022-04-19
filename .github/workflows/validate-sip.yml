@@ -80,7 +80,7 @@ jobs:
       - uses: actions/checkout@main
         with:
           repository: withanage/rosetta
-          path: ~/${{ matrix.pkp-application }}/plugins/importexport
+          path: ${{ matrix.pkp-application }}/plugins/importexport
 
       - name: Check file existence
         id: check_files
