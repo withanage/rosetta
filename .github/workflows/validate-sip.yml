@@ -89,7 +89,7 @@ jobs:
           --configuration ~/${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml \
           --filter FunctionalRosettaExportTest \
           --test-suffix FunctionalRosettaExportTestCase.php \
-          -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional
+          -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase
 
       - name: Run Server
         run: |
