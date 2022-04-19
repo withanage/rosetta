@@ -63,17 +63,20 @@ jobs:
           git clone -b ${{ matrix.pkp-branch }} https://github.com/pkp/${{ matrix.pkp-application }} ~/${{ matrix.pkp-application }}
           cd ~/${{ matrix.pkp-application }}
           git submodule update --init --recursive
+
       -  name: Prepare Tests
          run: |
            cd ~/${{ matrix.pkp-application }}
            cp config.TEMPLATE.inc.php config.inc.php
            sed -i -e "s/enable_cdn = On/enable_cdn = Off/" config.inc.php
            mkdir --parents files
+
       -  name: Install Composer Dependencies
          run: |
            cd ~/${{ matrix.pkp-application }}
            lib/pkp/tools/travis/install-composer-dependencies.sh
            npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
+
       - uses: actions/checkout@main
         with:
           repository: withanage/rosetta
