@@ -81,12 +81,12 @@ jobs:
 
       - name: Run Rosetta Tests
         run: |
-          cd ${{ github.workspace }}
-          php ${{ github.workspace }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit\
-          --configuration ${{ github.workspace }}/lib/pkp/tests/phpunit-env2.xml\
+          cd ${{  matrix.pkp-application }}
+          php ${{  matrix.pkp-application }}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit\
+          --configuration ${{  matrix.pkp-application  }}/lib/pkp/tests/phpunit-env2.xml\
           --filter FunctionalRosettaExportTest\
           --test-suffix FunctionalRosettaExportTestCase.php\
-          ${{ github.workspace }}/plugins/importexport/rosetta/tests/functional
+          ${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional
 
       - name: Run Server
         run: |

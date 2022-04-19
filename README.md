@@ -4,7 +4,20 @@
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ## Introduction
-Check fixity
+
+Open Journal Systems plug-in for importing metadata and data objects into the long-term archiving system (OJS) Plug-in for exporting metadata and data objects into the long-term archiving system (ExLibris Rosetta)
+
+### Features
+
+- Individual journal selection for deposit
+- Automated interval based deposit
+- SOAP-based communication
+- PDS  handle best identification
+- Included XML formats (TEI, METS, MODS)
+- Validation support (PHPUnit, Github actions)
+
+
+
 
 ## Configuration
 
