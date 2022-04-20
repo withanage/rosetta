@@ -84,11 +84,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function getDublinCore(): void
 	{
 		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
-		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
 
-		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
-		$nodePartOf->parentNode->removeChild($nodePartOf);
+		$this->removeCustomNodes($dcDom);
 
 
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
@@ -127,11 +124,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	{
 
 		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
-		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
 
-		$nodePartOf = $metsDom->getElementsByTagName('dcterms:isPartOf')->item(0);
-		$nodePartOf->parentNode->removeChild($nodePartOf);
+		$this->removeCustomNodes($metsDom);
 
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
@@ -143,6 +137,15 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
+
+	public function removeCustomNodes(RosettaDCDom $dcDom): void
+	{
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
+		$nodePartOf->parentNode->removeChild($nodePartOf);
 	}
 
 	/**
