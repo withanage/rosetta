@@ -109,15 +109,19 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->testJournal = $TestJournal;
 	}
 
+	public function removeCustomNodes($dcDom): void
+	{
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		if ($nodeModified) $nodeModified->parentNode->removeChild($nodeModified);
+
+		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
+		if ($nodePartOf) $nodePartOf->parentNode->removeChild($nodePartOf);
+	}
+
 	public function getPlugin()
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		return $importExportPlugins['RosettaExportPlugin'];
-	}
-
-	public function getLatestPublication(): ?Publication
-	{
-		return $this->getSubmission()->getLatestPublication();
 	}
 
 	public function getMets(): void
@@ -134,18 +138,14 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	}
 
+	public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
-	}
-
-	public function removeCustomNodes($dcDom): void
-	{
-		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
-		$nodePartOf->parentNode->removeChild($nodePartOf);
 	}
 
 	/**
