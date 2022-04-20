@@ -139,7 +139,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
-	public function removeCustomNodes(RosettaDCDom $dcDom): void
+	public function removeCustomNodes($dcDom): void
 	{
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
