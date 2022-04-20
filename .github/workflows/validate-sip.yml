@@ -111,8 +111,3 @@ jobs:
           --test-suffix FunctionalRosettaExportTestCase.php \
           -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
 
-      - name: Show log
-        if: ${{ failure() }}
-        run: |
-          cd ~/${{ matrix.pkp-application }}
-          cat access.log
