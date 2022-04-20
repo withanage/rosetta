@@ -79,12 +79,7 @@ class TestJournal extends Journal
 		$this->journalId = $journalId;
 	}
 
-	/**
-	 * @param $context
-	 * @param Section $section
-	 * @param $issue
-	 */
-	public function createOAI(Section $section, $issue): void
+	public function createOAI( ): void
 	{
 		import('classes.oai.ojs.OAIDAO');
 		$oaiDao = $this->functionalRosettaExportTest->getMockBuilder(OAIDAO::class)
@@ -95,10 +90,10 @@ class TestJournal extends Journal
 			->will($this->functionalRosettaExportTest->returnValue($this));
 		$oaiDao->expects($this->functionalRosettaExportTest->any())
 			->method('getSection')
-			->will($this->functionalRosettaExportTest->returnValue($section));
+			->will($this->functionalRosettaExportTest->returnValue($this->getSection()));
 		$oaiDao->expects($this->functionalRosettaExportTest->any())
 			->method('getIssue')
-			->will($this->functionalRosettaExportTest->returnValue($issue));
+			->will($this->functionalRosettaExportTest->returnValue($this->getIssue()));
 		DAORegistry::registerDAO('OAIDAO', $oaiDao);
 	}
 
@@ -141,7 +136,7 @@ class TestJournal extends Journal
 	/**
 	 * @param Author $author
 	 */
-	public function createAuthors(Submission $submission): array
+	public function createAuthors(): array
 	{
 		$authors = [];
 		import('classes.article.AuthorDAO');
@@ -156,14 +151,14 @@ class TestJournal extends Journal
 		$author->setFamilyName('author-lastname', $primaryLocale);
 		$author->setAffiliation('author-affiliation', $primaryLocale);
 		$author->setEmail('someone@example.com');
-		$author->setSubmissionId($submission->getId());
+		$author->setSubmissionId($this->getSubmission()->getId());
 		$authors[] = $author;
 		return $authors;
 	}
 
 
 
-	public function createSubmission( Section $section): Submission
+	public function createSubmission(): Submission
 	{
 
 		$submission = $this->functionalRosettaExportTest->getMockBuilder(Submission::class)
@@ -175,18 +170,24 @@ class TestJournal extends Journal
 		$submission->setId(9);
 		$submission->setJournalId($this->getId());
 		$submission->setPages(15);
-		$submission->setType('art-type', $this->getPrimaryLocale());
-		$submission->setTitle('article-title-en', $this->getPrimaryLocale());
-		$submission->setTitle('article-title-de', 'de_DE');
-		$submission->setDiscipline('article-discipline', $this->getPrimaryLocale());
-		$submission->setSubject('article-subject', $this->getPrimaryLocale());
-		$submission->setAbstract('article-abstract', $this->getPrimaryLocale());
-		$submission->setSponsor('article-sponsor', $this->getPrimaryLocale());
-		$submission->setStoredPubId('doi', 'article-doi');
+		$submission->setData('type','art-type', $this->getPrimaryLocale());
+		$submission->setData('title','article-title-en', $this->getPrimaryLocale());
+		$submission->setData('title','article-title-de', 'de_DE');
+		$submission->setData('discipline','article-discipline', $this->getPrimaryLocale());
+		$submission->setData('abstract','article-abstract', $this->getPrimaryLocale());
+		$submission->setData('sponsor','article-sponsor', $this->getPrimaryLocale());
+		$submission->setData('pub-id::doi', 'article-doi');
+		$submission->setSectionId($this->getSection()->getId());
+		$submission->setData('issueId',$this->getIssue()->getData('id'));
 		$submission->setLanguage($this->getPrimaryLocale());
-		$submission->setSectionId($section->getId());
+		$submission->setSubject('article-subject', $this->getPrimaryLocale());
+
+
+
 		$publication = $this->createPublication($submission);
+		$publication->setData('languages', $this->getPrimaryLocale());
 		$submission->setData('publications', [$publication]);
+
 		$this->setSubmission($submission);
 		return $submission;
 	}

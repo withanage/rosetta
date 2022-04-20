@@ -35,16 +35,16 @@ class RosettaDCDom extends DOMDocument
 		$this->createRootElement();
 		// title
 		if ($isMultilingual) {
-			$titles = $this->publication->getData("title");
+			$titles = $this->getPublication()->getData("title");
 			foreach ($titles as $language => $title) {
 				$this->createQualifiedElement("dc:title", $title, $language);
 			}
 		} else {
-			$node = $this->createElement("dc:title", $this->publication->getLocalizedTitle());
+			$node = $this->createElement("dc:title", $this->getPublication()->getLocalizedTitle());
 			$this->record->appendChild($node);
 		}
 		// authors
-		$authors = $this->publication->getData("authors");
+		$authors = $this->getPublication()->getData("authors");
 		foreach ($authors as $author) {
 			if ($author->getPrimaryContact()) {
 				$this->createElementDCTerms("dc:creator", $author->getFullName());
@@ -54,24 +54,28 @@ class RosettaDCDom extends DOMDocument
 			}
 		}
 		// date published
-		$copyrightYear = $this->publication->getData("datePublished");
+		$copyrightYear = $this->getPublication()->getData("datePublished");
 		$this->createElementDCTerms("dc:date", $copyrightYear);
 		// context
 		$acronym = $this->getContext()->getData("acronym", "en_US");
+
+		// Issue
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		/** @var $issueDao IssueDAO */
 		$issue = $issueDao->getById($this->publication, $this->getContext());
-		$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' . $issue->getData('volume') . '/' . $issue->getData('id') . '/';
+		if($issue) {
+			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' . $issue->getData('volume') . '/' . $issue->getData('id') . '/';
+		}
 		$this->createElementDCTerms("dcterms:isPartOf", $rosettaIssue);
 		// abstract
-		$abstracts = $this->publication->getData("abstract");
+		$abstracts = $this->getPublication()->getData("abstract");
 		foreach ($abstracts as $language => $abstract) {
 			$this->createQualifiedElement("dcterms:abstract", str_replace('&nbsp;', ' ', strip_tags($abstract)), $language);
 		}
 
 		//  categories
 		// Copyright year
-		$copyrightYear = $this->publication->getData("copyrightYear");
+		$copyrightYear = $this->getPublication()->getData("copyrightYear");
 		$this->createElementDCTerms("dcterms:issued", $copyrightYear);
 
 		// Issue
@@ -81,7 +85,7 @@ class RosettaDCDom extends DOMDocument
 		$rosettalIssue = $issueDao->getById($issueId, $this->context->getId());
 		//TODO add eindeutige id, doi usw,
 		// identifiers
-		$doi = $this->publication->getData("pub-id::doi");
+		$doi = $this->getPublication()->getData("pub-id::doi");
 		if ($doi !== null) {
 			$node = $this->createElement("dc:identifier", htmlspecialchars('DOI:' . $doi, ENT_COMPAT, 'UTF-8'));
 			$xsiType = $this->createAttribute("xsi:type");
@@ -90,7 +94,7 @@ class RosettaDCDom extends DOMDocument
 			$this->record->appendChild($node);
 		}
 		// last modified
-		$dateModified = $this->publication->getData("lastModified");
+		$dateModified = $this->getPublication()->getData("lastModified");
 		$this->createElementDCTerms("dcterms:modified", $dateModified);
 
 		// publisher
@@ -102,7 +106,7 @@ class RosettaDCDom extends DOMDocument
 		$this->createQualifiedElement("dc:type", "doc-type:article");
 		$this->createElementDCTerms("dcterms:license", "TIB_OJS_Lizenzvereinbarung");
 		//language
-		$this->createQualifiedElement("dc:language", str_replace('_', '-', $this->publication->getData('locale')));
+		$this->createQualifiedElement("dc:language", str_replace('_', '-', $this->getPublication()->getData('locale')));
 		//license URL
 		if ($this->context->getData('licenseUrl')) {
 			$this->createQualifiedElement("dc:rights", $this->context->getData('licenseUrl'));
@@ -205,6 +209,6 @@ class RosettaDCDom extends DOMDocument
 	private
 	function getPublicationTitle(): string
 	{
-		return $this->publication->getLocalizedTitle();
+		return $this->getPublication()->getLocalizedTitle();
 	}
 }

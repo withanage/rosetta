@@ -63,7 +63,6 @@ Schedule a recurring task in your operating system.  For example *nix based cron
   The name of the SIP package consists of 3 parts.
   - Journal Acronym _ Article Id _ Version number. e.g. `testjournal_1_v2`
 
-
 ```
    Rosetta Local mount
     |
@@ -74,16 +73,18 @@ Schedule a recurring task in your operating system.  For example *nix based cron
              |
              |_streams
              |   |
-             |   |_file1.txt
+             |   |_file1.pdf
              |   |
-             |   |_file2.txt
+             |   |_file2.xml
              |
-             |_mets.xml
+             |ie1.xml
              |
-             |_dc.xml
-
+             |dc.xml
 ```
+- Submission Information Packages are exported to the Rosetta system via the Rosetta SOAP interface for submission.  Upon successful submission, Rosetta returns the stored package ID, and it is written to the OJS database table `submission_settings`. Failures are logged to $OJS_FILES/rosetta.log
 -
+
+
 
 
 ### Publication
