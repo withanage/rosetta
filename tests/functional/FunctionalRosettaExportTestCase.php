@@ -49,8 +49,8 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$router = $this->getRouter();
 		$this->getRequest($router);
 
-		$this->testDublinCore();
-		$this->testMets();
+		$this->getDublinCore();
+		$this->getMets();
 
 	}
 
@@ -81,7 +81,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $request;
 	}
 
-	public function testDublinCore(): void
+	public function getDublinCore(): void
 	{
 		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
@@ -119,7 +119,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $this->getSubmission()->getLatestPublication();
 	}
 
-	public function testMets(): void
+	public function getMets(): void
 	{
 
 		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
@@ -128,7 +128,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
-		
+
 		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
 
 	}
