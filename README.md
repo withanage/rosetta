@@ -50,8 +50,13 @@ In the Import-Export Plugin section, enable "SRosetta Export/Registration Plugin
 
 ### Automated deposits
 
+Schedule a recurring task in your operating system.  For example *nix based cronjob running daily at 8pm
 
 
+```bash
+
+0 20 * * * php $OJS/tools/importExport.php RosettaExportPlugin
+```
 
 =======
 
@@ -151,12 +156,9 @@ In the Import-Export Plugin section, enable "SRosetta Export/Registration Plugin
 |Report|Report|
 |Website|Website|
 
-php tools/runScheduledTasks.php plugins/generic/usageStats/scheduledTasks.xml
 
-### Clean
 
-pdsHandle erzeugt: https://knowledge.exlibrisgroup.com/Rosetta/Knowledge_Articles/How_to_create_a_PDS_handle
-Angaben, die du wahrscheinlich zum Erzeugen des pdsHandle oder generell für die Authentifizierung brauchst:
+
 
 ### Testing
 
