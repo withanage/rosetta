@@ -29,10 +29,11 @@ git clone --branch main https://github.com/withanage/rosetta/
 
 ##  Configuration
 
-Add the following config variables to your $OJS/config.inc.php
-Your service provider may provide you this information.
+### Global variables
+Add the following variables to your OJS global configuration file in $OJS/config.inc.php.
+Rosetta Service provider provides you this information.
 
-``
+```
 [rosetta]
 institution_code=$INSTITUTE_NAME
 username=$ROSETTA_USER
@@ -43,11 +44,14 @@ producerId = $PRDUCER_ID_FOR_OJS_ROSETTA
 materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
 ```
 
+### Individual Journals
+
+In the Import-Export Plugin section, enable "SRosetta Export/Registration Plugin" for individual magazines available under Settings-> Website -> Plugins -> Installed Plugins.
+
+### Automated deposits
 
 
-### Allgemein
 
-in OJS sind meiste Felder multilingual
 
 =======
 
