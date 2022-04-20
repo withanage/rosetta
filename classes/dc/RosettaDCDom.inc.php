@@ -62,7 +62,7 @@ class RosettaDCDom extends DOMDocument
 		/** @var $issueDao IssueDAO */
 		$issue = $issueDao->getById($this->publication, $this->getContext());
 		$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' . $issue->getData('volume') . '/' . $issue->getData('id') . '/';
-		#$this->createElementDCTerms("dcterms:isPartOf", $rosettaIssue);
+		$this->createElementDCTerms("dcterms:isPartOf", $rosettaIssue);
 		// abstract
 		$abstracts = $this->publication->getData("abstract");
 		foreach ($abstracts as $language => $abstract) {

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"  >
+<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<dc:title/>
 	<dcterms:isPartOf>Open Access E-Journals/TIB OP/Testjournal/2014/1/1/</dcterms:isPartOf>
 	<dc:type>status-type:publishedVersion</dc:type>

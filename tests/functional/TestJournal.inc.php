@@ -13,17 +13,19 @@ import('classes.journal.Section');
 class TestJournal extends Journal
 {
 	protected string $primaryLocale = 'en_US';
-	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 	private int $journalId = 10000;
+	private FunctionalRosettaExportTest $functionalRosettaExportTest;
+
 	private Submission $submission ;
 	private Section $section;
+	private Issue  $issue;
 
 
 	public function __construct(FunctionalRosettaExportTest $functionalRosettaExportTest)
 	{
 		$this->functionalRosettaExportTest = $functionalRosettaExportTest;
 		$this->setContext($this->getPrimaryLocale(), $this->getJournalId());
-		$this->setIssue();
+		$this->createIssue();
 		$this->createSection();
 		$this->createSubmission($this->getSection());
 		$this->createAuthors($this->getSubmission());
@@ -119,12 +121,8 @@ class TestJournal extends Journal
 		return $this->setContext($this->getPrimaryLocale(), $this->getJournalId());
 	}
 
-	public function getIssue(): Issue
-	{
-		return $this->setIssue($this->getContext());
-	}
 
-	public function setIssue(): Issue
+	public function createIssue(): Issue
 	{
 		$issue = $this->functionalRosettaExportTest->getMockBuilder(Issue::class)
 			->setMethods(array('getIssueIdentification'))
@@ -136,6 +134,7 @@ class TestJournal extends Journal
 		$issue->setDatePublished('2010-11-05');
 		$issue->setStoredPubId('doi', 'issue-doi');
 		$issue->setJournalId($this->getData('id'));
+		$this->issue = $issue;
 		return $issue;
 	}
 
@@ -266,5 +265,19 @@ class TestJournal extends Journal
 	{
 		$this->section = $section;
 	}
+
+	/**
+	 * @return Issue
+	 */
+	public function getIssue(): Issue
+	{
+		return $this->issue;
+	}
+
+	public function setIssue(Issue  $issue): void
+	{
+		$this->issue = $issue;
+	}
+
 
 }
