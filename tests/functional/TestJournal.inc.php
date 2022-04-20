@@ -15,16 +15,20 @@ class TestJournal extends Journal
 	protected string $primaryLocale = 'en_US';
 	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 	private int $journalId = 10000;
+	private Submission $submission ;
+	private Section $section;
 
 
 	public function __construct(FunctionalRosettaExportTest $functionalRosettaExportTest)
 	{
 		$this->functionalRosettaExportTest = $functionalRosettaExportTest;
 		$this->setContext($this->getPrimaryLocale(), $this->getJournalId());
-		$this->createOAI($this->getSection(), $this->getIssue());
+		$this->setIssue();
+		$this->createSection();
+		$this->createSubmission($this->getSection());
 		$this->createAuthors($this->getSubmission());
 		$this->setGalleys($this->getSubmission());
-		$this->setIssue();
+		$this->createOAI($this->getSection(), $this->getIssue());
 	}
 
 	/**
@@ -96,20 +100,17 @@ class TestJournal extends Journal
 		DAORegistry::registerDAO('OAIDAO', $oaiDao);
 	}
 
-	public function getSection(): Section
-	{
-		return $this->createSection($this->getContext());
-	}
 
 	/**
 	 * @param string $primaryLocale
 	 * @return Section
 	 */
-	public function createSection(Journal $context): Section
+	public function createSection(): Section
 	{
 
 		$section = new Section();
-		$section->setIdentifyType('section-identify-type', $context->getPrimaryLocale());
+		$section->setIdentifyType('section-identify-type', $this->getPrimaryLocale());
+		$this->setSection($section);
 		return $section;
 	}
 
@@ -161,16 +162,9 @@ class TestJournal extends Journal
 		return $authors;
 	}
 
-	public function getSubmission(): Submission
-	{
-		return $this->createSubmission($this->getContext(), $this->getSection());
-	}
 
-	/**
-	 * @param int $journalId
-	 * @param string $context- >getPrimaryLocale()
-	 */
-	public function createSubmission(Journal $context, Section $section): Submission
+
+	public function createSubmission( Section $section): Submission
 	{
 
 		$submission = $this->functionalRosettaExportTest->getMockBuilder(Submission::class)
@@ -180,24 +174,25 @@ class TestJournal extends Journal
 			->method('getBestId')
 			->will($this->functionalRosettaExportTest->returnValue(9));
 		$submission->setId(9);
-		$submission->setJournalId($context->getId());
+		$submission->setJournalId($this->getId());
 		$submission->setPages(15);
-		$submission->setType('art-type', $context->getPrimaryLocale());
-		$submission->setTitle('article-title-en', $context->getPrimaryLocale());
+		$submission->setType('art-type', $this->getPrimaryLocale());
+		$submission->setTitle('article-title-en', $this->getPrimaryLocale());
 		$submission->setTitle('article-title-de', 'de_DE');
-		$submission->setDiscipline('article-discipline', $context->getPrimaryLocale());
-		$submission->setSubject('article-subject', $context->getPrimaryLocale());
-		$submission->setAbstract('article-abstract', $context->getPrimaryLocale());
-		$submission->setSponsor('article-sponsor', $context->getPrimaryLocale());
+		$submission->setDiscipline('article-discipline', $this->getPrimaryLocale());
+		$submission->setSubject('article-subject', $this->getPrimaryLocale());
+		$submission->setAbstract('article-abstract', $this->getPrimaryLocale());
+		$submission->setSponsor('article-sponsor', $this->getPrimaryLocale());
 		$submission->setStoredPubId('doi', 'article-doi');
-		$submission->setLanguage($context->getPrimaryLocale());
+		$submission->setLanguage($this->getPrimaryLocale());
 		$submission->setSectionId($section->getId());
-		$publication = $this->createPublication($context, $submission);
+		$publication = $this->createPublication($submission);
 		$submission->setData('publications', [$publication]);
+		$this->setSubmission($submission);
 		return $submission;
 	}
 
-	public function createPublication(Journal $context, Submission $submission)
+	public function createPublication(Submission $submission)
 	{
 		$publicationDao = DAORegistry::getDAO('PublicationDAO');
 		$publication = $publicationDao->newDataObject();
@@ -208,7 +203,7 @@ class TestJournal extends Journal
 		$publication->stampModified();
 
 		if (empty($publicationLocale))
-			$publicationLocale = $context->getPrimaryLocale();
+			$publicationLocale = $this->getPrimaryLocale();
 
 		$publication->setData('id', 1);
 		$publication->setData('locale', $publicationLocale);
@@ -238,6 +233,38 @@ class TestJournal extends Journal
 		$galley->setStoredPubId('doi', 'galley-doi');
 		$galleys[] = $galley;
 		return $galleys;
+	}
+
+	/**
+	 * @return Submission
+	 */
+	public function getSubmission(): Submission
+	{
+		return $this->submission;
+	}
+
+	/**
+	 * @param Submission $submission
+	 */
+	public function setSubmission(Submission $submission): void
+	{
+		$this->submission = $submission;
+	}
+
+	/**
+	 * @return Section
+	 */
+	public function getSection(): Section
+	{
+		return $this->section;
+	}
+
+	/**
+	 * @param Section $section
+	 */
+	public function setSection(Section $section): void
+	{
+		$this->section = $section;
 	}
 
 }
