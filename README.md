@@ -81,10 +81,20 @@ Schedule a recurring task in your operating system.  For example *nix based cron
              |
              |dc.xml
 ```
-- Submission Information Packages are exported to the Rosetta system via the Rosetta SOAP interface for submission.  Upon successful submission, Rosetta returns the stored package ID, and it is written to the OJS database table `submission_settings`. Failures are logged to $OJS_FILES/rosetta.log
--
+- Submission Information Packages (SIP)s are exported to the Rosetta system via the Rosetta SOAP interface for submission.  Upon successful submission, Rosetta returns the stored package ID, and it is written to the OJS database table `submission_settings`. Failures are logged to $OJS_FILES/rosetta.log
+-  Automated github CI/CD pipe-line validates the created files.
+
+## Automated Tests
+
+### Local
+php $OJS/lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration  $OJS/lib/pkp/tests/phpunit-env2.xml --filter FunctionalRosettaExportTest  --test-suffix FunctionalRosettaExportTestCase.php -v $OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
+
+### Github actions
+
+Continuous Integration / Continuous Delivery (CI/CD) Pipeline is  already configured for github repositories upon push commits.
 
 
+## Mapped metadata fields
 
 
 ### Publication
@@ -186,8 +196,3 @@ Schedule a recurring task in your operating system.  For example *nix based cron
 
 
 
-
-### Testing
-
-php lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration lib/pkp/tests/phpunit-env1.xml
-plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.
