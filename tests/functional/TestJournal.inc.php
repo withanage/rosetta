@@ -14,9 +14,66 @@ class TestJournal extends Journal
 {
 	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 
+	protected string $primaryLocale = 'en_US';
+	private int $journalId = 10000;
+
+
 	public function __construct(FunctionalRosettaExportTest $functionalRosettaExportTest)
 	{
 		$this->functionalRosettaExportTest = $functionalRosettaExportTest;
+		$this->setContext($this->getPrimaryLocale(), $this->getJournalId());
+		$this->createOAI($this->getSection(), $this->getIssue());
+		$this->createAuthors($this->getSubmission());
+		$this->setGalleys($this->getSubmission());
+		$this->setIssue();
+	}
+
+	public function getContext()
+	{
+		return $this->setContext($this->getPrimaryLocale(), $this->getJournalId());
+	}
+
+
+
+	public function getSection(): Section
+	{
+		return $this->createSection($this->getContext());
+	}
+
+	public function getIssue(): Issue
+	{
+		return $this->setIssue($this->getContext());
+	}
+
+	public function getSubmission(): Submission
+	{
+		return $this->createSubmission($this->getContext(), $this->getSection());
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getPrimaryLocale(): string
+	{
+		return $this->primaryLocale;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getJournalId(): int
+	{
+		return $this->journalId;
+	}
+
+	/**
+	 * @param int $journalId
+	 */
+	public function setJournalId(int $journalId): void
+	{
+		$this->journalId = $journalId;
 	}
 
 	/**
@@ -31,7 +88,7 @@ class TestJournal extends Journal
 		return $section;
 	}
 
-	public function setIssue(Journal $context): Issue
+	public function setIssue(): Issue
 	{
 		$issue = $this->functionalRosettaExportTest->getMockBuilder(Issue::class)
 			->setMethods(array('getIssueIdentification'))
@@ -42,7 +99,7 @@ class TestJournal extends Journal
 		$issue->setId(96);
 		$issue->setDatePublished('2010-11-05');
 		$issue->setStoredPubId('doi', 'issue-doi');
-		$issue->setJournalId($context->getData('id'));
+		$issue->setJournalId($this->getData('id'));
 		return $issue;
 	}
 
@@ -71,14 +128,8 @@ class TestJournal extends Journal
 	 */
 	public function setContext(string $primaryLocale, int $journalId)
 	{
-		$context = $this->functionalRosettaExportTest->getMockBuilder(Journal::class)
-			->setMethods(array('getSetting'))
-			->getMock();
-		$context->expects($this->functionalRosettaExportTest->any())
-			->method('getSetting') // includes getTitle()
-			->will($this->functionalRosettaExportTest->returnCallback(array($this, 'getJournalSetting')));
-		$context->setPrimaryLocale($primaryLocale);
-		$context->setData('acronym', 'Testjournal', $primaryLocale);
+		$this->setPrimaryLocale($primaryLocale);
+		$this->setData('acronym', 'Testjournal', $primaryLocale);
 
 		$journalSettings = array(
 			'id' => $journalId,
@@ -87,9 +138,9 @@ class TestJournal extends Journal
 			'name' => 'Test Journal'
 		);
 		foreach ($journalSettings as $key => $value) {
-			$context->setData($key, $value);
+			$this->setData($key, $value);
 		}
-		return $context;
+		return $this;
 	}
 
 	/**
@@ -120,7 +171,7 @@ class TestJournal extends Journal
 	 * @param Section $section
 	 * @param $issue
 	 */
-	public function createOAI($context, Section $section, $issue): void
+	public function createOAI(Section $section, $issue): void
 	{
 		import('classes.oai.ojs.OAIDAO');
 		$oaiDao = $this->functionalRosettaExportTest->getMockBuilder(OAIDAO::class)
@@ -128,7 +179,7 @@ class TestJournal extends Journal
 			->getMock();
 		$oaiDao->expects($this->functionalRosettaExportTest->any())
 			->method('getJournal')
-			->will($this->functionalRosettaExportTest->returnValue($context));
+			->will($this->functionalRosettaExportTest->returnValue($this));
 		$oaiDao->expects($this->functionalRosettaExportTest->any())
 			->method('getSection')
 			->will($this->functionalRosettaExportTest->returnValue($section));

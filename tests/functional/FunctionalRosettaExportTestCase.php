@@ -22,19 +22,15 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
-	protected TestJournal $TestJournal;
-	protected string $primaryLocale = 'en_US';
-	private int $journalId = 10000;
+	protected TestJournal $testJournal;
+
 
 	public function __construct($name = null, array $data = [], $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
 
-		$this->TestJournal = new TestJournal($this);
-		$this->getTestJournal()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
-		$this->getTestJournal()->createAuthors($this->getSubmission());
-		$this->getTestJournal()->setGalleys($this->getSubmission());
-		$this->getTestJournal()->setIssue($this->getTestJournal());
+		$this->testJournal = new TestJournal($this);
+
 
 	}
 
@@ -43,7 +39,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function getTestJournal(): TestJournal
 	{
-		return $this->TestJournal;
+		return $this->testJournal;
 	}
 
 	/**
@@ -51,60 +47,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function setTestJournal(TestJournal $TestJournal): void
 	{
-		$this->TestJournal = $TestJournal;
+		$this->testJournal = $TestJournal;
 	}
 
-	public function getContext()
-	{
-		return $this->getTestJournal()->setContext($this->getPrimaryLocale(), $this->getJournalId());
-	}
 
-	/**
-	 * @return string
-	 */
-	public function getPrimaryLocale(): string
-	{
-		return $this->primaryLocale;
-	}
-
-	/**
-	 * @param string $primaryLocale
-	 */
-	public function setPrimaryLocale(string $primaryLocale): void
-	{
-		$this->primaryLocale = $primaryLocale;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getJournalId(): int
-	{
-		return $this->journalId;
-	}
-
-	/**
-	 * @param int $journalId
-	 */
-	public function setJournalId(int $journalId): void
-	{
-		$this->journalId = $journalId;
-	}
-
-	public function getSection(): Section
-	{
-		return $this->getTestJournal()->createSection($this->getContext());
-	}
-
-	public function getIssue(): Issue
-	{
-		return $this->getTestJournal()->setIssue($this->getContext());
-	}
-
-	public function getSubmission(): Submission
-	{
-		return $this->getTestJournal()->createSubmission($this->getContext(), $this->getSection());
-	}
 
 	/**
 	 * @covers OAIMetadataFormat_DC
@@ -122,13 +68,13 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getRequest($router);
 
 		$this->testDublinCore();
-		$this->testMets();
+		#$this->testMets();
 
 	}
 
 	public function testDublinCore(): void
 	{
-		$dcDom = new RosettaDCDom($this->getContext(), $this->getLatestPublication(), false);
+		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
@@ -151,7 +97,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function testMets(): void
 	{
 
-		$metsDom = new RosettaMETSDom($this->getContext(), $this->getSubmission(), $this->getLatestPublication(), $this->getPlugin());
+		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
