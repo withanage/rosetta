@@ -58,7 +58,33 @@ Schedule a recurring task in your operating system.  For example *nix based cron
 0 20 * * * php $OJS/tools/importExport.php RosettaExportPlugin
 ```
 
-=======
+## Technical Information
+- This application creates a Submission Information Package ([SIP](http://exl-edu.com/12_Rosetta/Rosetta%20Essentials/SIP%20Processing/SIP%20Processing%20Configuration/story_html5.html)) specified by the Open Archival Information System ([OAIS](https://public.ccsds.org/pubs/650x0m2.pdf)). For each article version  a unique SIP package is created.
+  The name of the SIP package consists of 3 parts.
+  - Journal Acronym _ Article Id _ Version number. e.g. `testjournal_1_v2`
+
+
+```
+   Rosetta Local mount
+    |
+    |_sip_folder e.g.1
+        |
+        |_content
+             |
+             |
+             |_streams
+             |   |
+             |   |_file1.txt
+             |   |
+             |   |_file2.txt
+             |
+             |_mets.xml
+             |
+             |_dc.xml
+
+```
+-
+
 
 ### Publication
 
