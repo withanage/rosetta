@@ -34,7 +34,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getTestJournal()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
 		$this->getTestJournal()->createAuthors($this->getSubmission());
 		$this->getTestJournal()->setGalleys($this->getSubmission());
-
+		$this->getTestJournal()->setIssue($this->getTestJournal());
 
 	}
 

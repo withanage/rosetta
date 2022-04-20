@@ -10,7 +10,7 @@ import('classes.issue.Issue');
 import('classes.journal.Section');
 
 
-class TestJournal
+class TestJournal extends Journal
 {
 	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 
@@ -42,7 +42,7 @@ class TestJournal
 		$issue->setId(96);
 		$issue->setDatePublished('2010-11-05');
 		$issue->setStoredPubId('doi', 'issue-doi');
-		$issue->setJournalId($context->getId());
+		$issue->setJournalId($context->getData('id'));
 		return $issue;
 	}
 
