@@ -87,6 +87,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
 
+		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
+		$nodePartOf->parentNode->removeChild($nodePartOf);
+
+
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 
 		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
@@ -125,6 +129,9 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
 		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
 		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$nodePartOf = $metsDom->getElementsByTagName('dcterms:isPartOf')->item(0);
+		$nodePartOf->parentNode->removeChild($nodePartOf);
 
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
