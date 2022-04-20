@@ -61,7 +61,7 @@ class RosettaDCDom extends DOMDocument
 
 		// Issue
 		$issueDao = DAORegistry::getDAO('IssueDAO');
-		/** @var $issueDao IssueDAO */
+
 		$issue = $issueDao->getById($this->publication, $this->getContext());
 		if($issue) {
 			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' . $issue->getData('volume') . '/' . $issue->getData('id') . '/';
@@ -78,11 +78,7 @@ class RosettaDCDom extends DOMDocument
 		$copyrightYear = $this->getPublication()->getData("copyrightYear");
 		$this->createElementDCTerms("dcterms:issued", $copyrightYear);
 
-		// Issue
-		$issueId = $this->publication->getData('issueId');
-		$issueDao = DAORegistry::getDAO('IssueDAO');
-		/* @var $issueDao IssueDAO */
-		$rosettalIssue = $issueDao->getById($issueId, $this->context->getId());
+
 		//TODO add eindeutige id, doi usw,
 		// identifiers
 		$doi = $this->getPublication()->getData("pub-id::doi");
