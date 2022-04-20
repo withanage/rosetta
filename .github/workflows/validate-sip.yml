@@ -78,6 +78,11 @@ jobs:
            npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
 
 
+      - name: Run Server
+        run: |
+          cd ~/${{ matrix.pkp-application }}
+          php -S 127.0.0.1:8000 -t . >& access.log &
+
       - name: Create Content (${{ matrix.dbs }})
         run: |
           cd ~/${{ matrix.pkp-application }}
@@ -106,15 +111,8 @@ jobs:
           --test-suffix FunctionalRosettaExportTestCase.php \
           -v ~/${{ matrix.pkp-application }}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
 
-      - name: Run Server
-        run: |
-          cd ~/${{ matrix.pkp-application }}
-          php -S 127.0.0.1:8000 -t . >& access.log &
-
       - name: Show log
         if: ${{ failure() }}
         run: |
           cd ~/${{ matrix.pkp-application }}
           cat access.log
-
-
