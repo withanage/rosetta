@@ -77,7 +77,6 @@ jobs:
            lib/pkp/tools/travis/install-composer-dependencies.sh
            npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
 
-
       - name: Run Server
         run: |
           cd ~/${{ matrix.pkp-application }}
@@ -88,7 +87,6 @@ jobs:
           cd ~/${{ matrix.pkp-application }}
           npx cypress run --spec "cypress/tests/data/10-Installation.spec.js"
           # change path to cypress tests files here!
-
 
       - name: Checkout Plugin
         uses: actions/checkout@main

@@ -3,7 +3,7 @@
 
 require_mock_env('env2');
 
-import('plugins.importexport.rosetta.tests.functional.JournalTest');
+import('plugins.importexport.rosetta.tests.functional.TestJournal');
 import('plugins.importexport.rosetta.RosettaExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 import('lib.pkp.tests.plugins.PluginTestCase');
@@ -22,7 +22,7 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
-	protected JournalTest $journalTest;
+	protected TestJournal $TestJournal;
 	protected string $primaryLocale = 'en_US';
 	private int $journalId = 10000;
 
@@ -30,33 +30,33 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	{
 		parent::__construct($name, $data, $dataName);
 
-		$this->journalTest = new JournalTest($this);
-		$this->getJournalTest()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
-		$this->getJournalTest()->createAuthors($this->getSubmission());
-		$this->getJournalTest()->setGalleys($this->getSubmission());
+		$this->TestJournal = new TestJournal($this);
+		$this->getTestJournal()->createOAI($this->getContext(), $this->getSection(), $this->getIssue());
+		$this->getTestJournal()->createAuthors($this->getSubmission());
+		$this->getTestJournal()->setGalleys($this->getSubmission());
 
 
 	}
 
 	/**
-	 * @return JournalTest
+	 * @return TestJournal
 	 */
-	public function getJournalTest(): JournalTest
+	public function getTestJournal(): TestJournal
 	{
-		return $this->journalTest;
+		return $this->TestJournal;
 	}
 
 	/**
-	 * @param JournalTest $journalTest
+	 * @param TestJournal $TestJournal
 	 */
-	public function setJournalTest(JournalTest $journalTest): void
+	public function setTestJournal(TestJournal $TestJournal): void
 	{
-		$this->journalTest = $journalTest;
+		$this->TestJournal = $TestJournal;
 	}
 
 	public function getContext()
 	{
-		return $this->getJournalTest()->setContext($this->getPrimaryLocale(), $this->getJournalId());
+		return $this->getTestJournal()->setContext($this->getPrimaryLocale(), $this->getJournalId());
 	}
 
 	/**
@@ -93,17 +93,17 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	public function getSection(): Section
 	{
-		return $this->getJournalTest()->createSection($this->getContext());
+		return $this->getTestJournal()->createSection($this->getContext());
 	}
 
 	public function getIssue(): Issue
 	{
-		return $this->getJournalTest()->setIssue($this->getContext());
+		return $this->getTestJournal()->setIssue($this->getContext());
 	}
 
 	public function getSubmission(): Submission
 	{
-		return $this->getJournalTest()->createSubmission($this->getContext(), $this->getSection());
+		return $this->getTestJournal()->createSubmission($this->getContext(), $this->getSection());
 	}
 
 	/**

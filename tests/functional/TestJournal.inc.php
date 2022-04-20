@@ -10,7 +10,7 @@ import('classes.issue.Issue');
 import('classes.journal.Section');
 
 
-class JournalTest
+class TestJournal
 {
 	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 
