@@ -12,9 +12,8 @@ import('classes.journal.Section');
 
 class TestJournal extends Journal
 {
-	private FunctionalRosettaExportTest $functionalRosettaExportTest;
-
 	protected string $primaryLocale = 'en_US';
+	private FunctionalRosettaExportTest $functionalRosettaExportTest;
 	private int $journalId = 10000;
 
 
@@ -26,99 +25,6 @@ class TestJournal extends Journal
 		$this->createAuthors($this->getSubmission());
 		$this->setGalleys($this->getSubmission());
 		$this->setIssue();
-	}
-
-	public function getContext()
-	{
-		return $this->setContext($this->getPrimaryLocale(), $this->getJournalId());
-	}
-
-
-
-	public function getSection(): Section
-	{
-		return $this->createSection($this->getContext());
-	}
-
-	public function getIssue(): Issue
-	{
-		return $this->setIssue($this->getContext());
-	}
-
-	public function getSubmission(): Submission
-	{
-		return $this->createSubmission($this->getContext(), $this->getSection());
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getPrimaryLocale(): string
-	{
-		return $this->primaryLocale;
-	}
-
-
-	/**
-	 * @return int
-	 */
-	public function getJournalId(): int
-	{
-		return $this->journalId;
-	}
-
-	/**
-	 * @param int $journalId
-	 */
-	public function setJournalId(int $journalId): void
-	{
-		$this->journalId = $journalId;
-	}
-
-	/**
-	 * @param string $primaryLocale
-	 * @return Section
-	 */
-	public function createSection(Journal $context): Section
-	{
-
-		$section = new Section();
-		$section->setIdentifyType('section-identify-type', $context->getPrimaryLocale());
-		return $section;
-	}
-
-	public function setIssue(): Issue
-	{
-		$issue = $this->functionalRosettaExportTest->getMockBuilder(Issue::class)
-			->setMethods(array('getIssueIdentification'))
-			->getMock();
-		$issue->expects($this->functionalRosettaExportTest->any())
-			->method('getIssueIdentification')
-			->will($this->functionalRosettaExportTest->returnValue('issue-identification'));
-		$issue->setId(96);
-		$issue->setDatePublished('2010-11-05');
-		$issue->setStoredPubId('doi', 'issue-doi');
-		$issue->setJournalId($this->getData('id'));
-		return $issue;
-	}
-
-	/**
-	 * @return ArticleGalley[]
-	 */
-	public function setGalleys(Submission $submission): array
-	{
-		$galleys = [];
-		$articleGalleyDao = $this->functionalRosettaExportTest->getMockBuilder(ArticleGalleyDAO::class)
-			->setMethods(array('getBySubmissionId'))
-			->getMock();
-		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
-		$galley = new ArticleGalley();
-		$galley->setId(98);
-		$galley->setData('publicationId', $submission->getLatestPublication()->getId());
-		$galley->setStoredPubId('doi', 'galley-doi');
-		$galleys[] = $galley;
-		return $galleys;
 	}
 
 	/**
@@ -144,26 +50,27 @@ class TestJournal extends Journal
 	}
 
 	/**
-	 * @param Author $author
+	 * @return string
 	 */
-	public function createAuthors(Submission $submission): array
+	public function getPrimaryLocale(): string
 	{
-		$authors = [];
-		import('classes.article.AuthorDAO');
-		$authorDao = $this->functionalRosettaExportTest->getMockBuilder(AuthorDAO::class)
-			->setMethods(array('getBySubmissionId'))
-			->getMock();
-		DAORegistry::registerDAO('AuthorDAO', $authorDao);
-		import('classes.article.Author');
-		$author = new Author();
-		$primaryLocale = 'en_US';
-		$author->setGivenName('author-firstname', $primaryLocale);
-		$author->setFamilyName('author-lastname', $primaryLocale);
-		$author->setAffiliation('author-affiliation', $primaryLocale);
-		$author->setEmail('someone@example.com');
-		$author->setSubmissionId($submission->getId());
-		$authors[] = $author;
-		return $authors;
+		return $this->primaryLocale;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJournalId(): int
+	{
+		return $this->journalId;
+	}
+
+	/**
+	 * @param int $journalId
+	 */
+	public function setJournalId(int $journalId): void
+	{
+		$this->journalId = $journalId;
 	}
 
 	/**
@@ -187,6 +94,76 @@ class TestJournal extends Journal
 			->method('getIssue')
 			->will($this->functionalRosettaExportTest->returnValue($issue));
 		DAORegistry::registerDAO('OAIDAO', $oaiDao);
+	}
+
+	public function getSection(): Section
+	{
+		return $this->createSection($this->getContext());
+	}
+
+	/**
+	 * @param string $primaryLocale
+	 * @return Section
+	 */
+	public function createSection(Journal $context): Section
+	{
+
+		$section = new Section();
+		$section->setIdentifyType('section-identify-type', $context->getPrimaryLocale());
+		return $section;
+	}
+
+	public function getContext()
+	{
+		return $this->setContext($this->getPrimaryLocale(), $this->getJournalId());
+	}
+
+	public function getIssue(): Issue
+	{
+		return $this->setIssue($this->getContext());
+	}
+
+	public function setIssue(): Issue
+	{
+		$issue = $this->functionalRosettaExportTest->getMockBuilder(Issue::class)
+			->setMethods(array('getIssueIdentification'))
+			->getMock();
+		$issue->expects($this->functionalRosettaExportTest->any())
+			->method('getIssueIdentification')
+			->will($this->functionalRosettaExportTest->returnValue('issue-identification'));
+		$issue->setId(96);
+		$issue->setDatePublished('2010-11-05');
+		$issue->setStoredPubId('doi', 'issue-doi');
+		$issue->setJournalId($this->getData('id'));
+		return $issue;
+	}
+
+	/**
+	 * @param Author $author
+	 */
+	public function createAuthors(Submission $submission): array
+	{
+		$authors = [];
+		import('classes.article.AuthorDAO');
+		$authorDao = $this->functionalRosettaExportTest->getMockBuilder(AuthorDAO::class)
+			->setMethods(array('getBySubmissionId'))
+			->getMock();
+		DAORegistry::registerDAO('AuthorDAO', $authorDao);
+		import('classes.article.Author');
+		$author = new Author();
+		$primaryLocale = 'en_US';
+		$author->setGivenName('author-firstname', $primaryLocale);
+		$author->setFamilyName('author-lastname', $primaryLocale);
+		$author->setAffiliation('author-affiliation', $primaryLocale);
+		$author->setEmail('someone@example.com');
+		$author->setSubmissionId($submission->getId());
+		$authors[] = $author;
+		return $authors;
+	}
+
+	public function getSubmission(): Submission
+	{
+		return $this->createSubmission($this->getContext(), $this->getSection());
 	}
 
 	/**
@@ -243,6 +220,24 @@ class TestJournal extends Journal
 		$publication->setData('urlPath', 'url_path');
 		return $publication;
 
+	}
+
+	/**
+	 * @return ArticleGalley[]
+	 */
+	public function setGalleys(Submission $submission): array
+	{
+		$galleys = [];
+		$articleGalleyDao = $this->functionalRosettaExportTest->getMockBuilder(ArticleGalleyDAO::class)
+			->setMethods(array('getBySubmissionId'))
+			->getMock();
+		DAORegistry::registerDAO('ArticleGalleyDAO', $articleGalleyDao);
+		$galley = new ArticleGalley();
+		$galley->setId(98);
+		$galley->setData('publicationId', $submission->getLatestPublication()->getId());
+		$galley->setStoredPubId('doi', 'galley-doi');
+		$galleys[] = $galley;
+		return $galleys;
 	}
 
 }

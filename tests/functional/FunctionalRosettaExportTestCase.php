@@ -35,24 +35,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	}
 
 	/**
-	 * @return TestJournal
-	 */
-	public function getTestJournal(): TestJournal
-	{
-		return $this->testJournal;
-	}
-
-	/**
-	 * @param TestJournal $TestJournal
-	 */
-	public function setTestJournal(TestJournal $TestJournal): void
-	{
-		$this->testJournal = $TestJournal;
-	}
-
-
-
-	/**
 	 * @covers OAIMetadataFormat_DC
 	 * @covers Dc11SchemaArticleAdapter
 	 */
@@ -70,49 +52,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->testDublinCore();
 		#$this->testMets();
 
-	}
-
-	public function testDublinCore(): void
-	{
-		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
-		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
-
-		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
-	}
-
-	public function getLatestPublication(): ?Publication
-	{
-		return $this->getSubmission()->getLatestPublication();
-	}
-
-	public function getPlugin()
-	{
-		$importExportPlugins = PluginRegistry::loadCategory('importexport');
-		return $importExportPlugins['RosettaExportPlugin'];
-	}
-
-	public function testMets(): void
-	{
-
-		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
-		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$doc = new DOMDocument();
-		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
-		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
-		$nodeModified->parentNode->removeChild($nodeModified);
-
-		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
-
-	}
-
-	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
-	{
-		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
 	public function getRouter()
@@ -140,6 +79,65 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->will($this->returnValue($router));
 		Registry::set('request', $request);
 		return $request;
+	}
+
+	public function testDublinCore(): void
+	{
+		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+
+		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
+	}
+
+	/**
+	 * @return TestJournal
+	 */
+	public function getTestJournal(): TestJournal
+	{
+		return $this->testJournal;
+	}
+
+	/**
+	 * @param TestJournal $TestJournal
+	 */
+	public function setTestJournal(TestJournal $TestJournal): void
+	{
+		$this->testJournal = $TestJournal;
+	}
+
+	public function getPlugin()
+	{
+		$importExportPlugins = PluginRegistry::loadCategory('importexport');
+		return $importExportPlugins['RosettaExportPlugin'];
+	}
+
+	public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
+	public function testMets(): void
+	{
+
+		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
+		$nodeModified = $metsDom->getElementsByTagName('dcterms:modified')->item(0);
+		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$doc = new DOMDocument();
+		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
+		$nodeModified = $doc->getElementsByTagNameNS('http://purl.org/dc/terms/', 'modified')->item(0);//all namespaces, all local names
+		$nodeModified->parentNode->removeChild($nodeModified);
+
+		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
+
+	}
+
+	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	{
+		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
 	/**
