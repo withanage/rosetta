@@ -174,18 +174,17 @@ class TestJournal extends Journal
 		$submission->setData('title','article-title-en', $this->getPrimaryLocale());
 		$submission->setData('title','article-title-de', 'de_DE');
 		$submission->setData('discipline','article-discipline', $this->getPrimaryLocale());
+		$submission->setSubject('article-subject', $this->getPrimaryLocale());
 		$submission->setData('abstract','article-abstract', $this->getPrimaryLocale());
 		$submission->setData('sponsor','article-sponsor', $this->getPrimaryLocale());
 		$submission->setData('pub-id::doi', 'article-doi');
+		$submission->setLanguage($this->getPrimaryLocale());
 		$submission->setSectionId($this->getSection()->getId());
 		$submission->setData('issueId',$this->getIssue()->getData('id'));
-		$submission->setLanguage($this->getPrimaryLocale());
-		$submission->setSubject('article-subject', $this->getPrimaryLocale());
 
 
 
 		$publication = $this->createPublication($submission);
-		$publication->setData('languages', $this->getPrimaryLocale());
 		$submission->setData('publications', [$publication]);
 
 		$this->setSubmission($submission);
