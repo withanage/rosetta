@@ -62,7 +62,7 @@ information.
     institution_code=$INSTITUTE_NAME
     username=$ROSETTA_USER
     password=$ROSETTA_PASSWORD
-    host = $ROSETTA_DEPOSIT_SOAP_INTERFACE_URL e.g. https://rosetta..tib.eu/deposit/DepositWebServices?wsdl
+    host = $ROSETTA_DEPOSIT_URL e.g. https://rosetta..tib.eu/deposit/DepositWebServices?wsdl
     subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE
     materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
 
