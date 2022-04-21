@@ -21,7 +21,7 @@
         -   [Authors](#authors)
         -   [Galleys / Publication
             Formats](#galleys--publication-formats)
-- [Entity Types](#entity-types)
+    - [Entity Types](#entity-types)
 
 
 
@@ -210,8 +210,8 @@ configured for github repositories upon push commits.
   seq         string
   urlRemote   string
 
-Entity Types
-============
+### Entity Types
+
 
   Code             Description
   ---------------- -----------------
