@@ -181,8 +181,8 @@ configured for github repositories upon push commits.
 
 ### Submission
 
-| Metadata | Type | Implemented |
-| ---- | ---- | ---- |
+| Metadata | Type |
+| ---- | ---- |
 | id | integer| | |
 |context | string| | |
 |dateLastActivity | string | |
@@ -191,16 +191,16 @@ configured for github repositories upon push commits.
 
 ### Authors
 
-| Metadata | Type | Implemented
-| ---- | ---- | ---- |
-| authors |string |dc:contributor" |
+| Metadata | Type |
+| ---- | ---- |
+| authors |string | |
 | ROR ID| | |
 | Orcid Id ID| | |
 
 ### Galleys / Publication Formats
 
-| Metadata | Type | Implemented | Remarks|
-| ---- | ---- | ---- | ---- |
+| Metadata | Type | Remarks|
+| ---- | ---- | ---- |
 | Label | string | | |
 | Locale |string | | |
 | fileId |string | | |
