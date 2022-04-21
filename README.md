@@ -126,7 +126,7 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is  already config
 | title |string | dc:title|
 | version | integer | |
 | urlPath |string | |
-| citationsRaw |string |  | Zitationen getrennt durch  Line-breaks|
+| citationsRaw |string |  | |
 | pages |string | |
 | coverage |string | |
 | coverImage |string | |
