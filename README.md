@@ -4,24 +4,23 @@
 ### Table of Contents
 
 - [OJS-Rosetta Plugin](#ojs-rosetta-plugin)
-    -   [Introduction](#introduction)
+    - [Introduction](#introduction)
         -   [Features](#features)
-    -   [Installation](#installation)
-    -   [Configuration](#configuration)
+    - [Installation](#installation)
+    - [Configuration](#configuration)
         -   [Global variables](#global-variables)
         -   [Individual Journals](#individual-journals)
         -   [Automated deposits](#automated-deposits)
-    -   [Technical Information](#technical-information)
-    -   [Automated Tests](#automated-tests)
+    - [Technical Information](#technical-information)
+    - [Automated Tests](#automated-tests)
         -   [Local](#local)
         -   [Github actions](#github-actions)
-    -   [Mapped metadata fields](#mapped-metadata-fields)
-        -   [Publication](#publication)
-        -   [Submission](#submission)
-        -   [Authors](#authors)
-        -   [Galleys / Publication
-            Formats](#galleys--publication-formats)
-    - [Entity Types](#entity-types)
+    - [Mapped metadata fields](#mapped-metadata-fields)
+        - [Publication](#publication)
+        - [Submission](#submission)
+        - [Authors](#authors)
+        - [Galleys / Publication Formats](#galleys--publication-formats)
+        - [Entity Types](#entity-types)
 
 
 
