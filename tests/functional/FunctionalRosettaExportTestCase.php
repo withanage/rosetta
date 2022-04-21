@@ -129,12 +129,12 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
 		$metsDom->preserveWhiteSpace = false;
-		$metsDom->formatOutput = false;
+		$metsDom->formatOutput = true;
 		$this->removeCustomNodes($metsDom);
 
 		$expectedDom = new DOMDocument();
 		$expectedDom->preserveWhiteSpace = false;
-		$expectedDom->formatOutput = false;
+		$expectedDom->formatOutput = true;
 		$expectedDom->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
 
 		$regExLineBreaks = '/\r\n|\r|\n|\t/';
