@@ -96,12 +96,7 @@ jobs:
           cd ${{github.workspace}}
           ln -s ${{github.workspace}} ~/${{matrix.pkp-application}}/plugins/importexport/rosetta
 
-      - name: File exists
-        if: steps.check_files.outputs.files_exists == 'true'
-        run: |
-          echo All files exists!
-
-      - name: Run Rosetta Tests
+     - name: Run Rosetta Tests
         run: |
           cd  ~/${{matrix.pkp-application}}
           php ~/${{matrix.pkp-application}}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
