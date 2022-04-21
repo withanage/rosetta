@@ -89,32 +89,33 @@ class RosettaMETSDom extends DOMDocument
 		$divNode->setAttribute("LABEL", "Preservation Master");
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
-
-		$galleyFilesCount = count($galleyFiles) + 1;
-		foreach ($galleyFiles as $index => $file) {
-			$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
-			$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
-			$fileGrpNode->appendChild($fileNode);
-			$structMap = $this->createMetsStructSecElement($repId, strval($index + 1), $file);
-			$structMapDiv->appendChild($structMap);
-			foreach ($file["dependentFiles"] as $dependentFile) {
-				$this->createFileCharacteristics($galleyFilesCount, $repIdSuffix, $recordId, $dependentFile);
-				$fileNode = $this->createMetsFileSecChildElements($repId, strval($galleyFilesCount), $dependentFile);
+		if(false) {
+			$galleyFilesCount = count($galleyFiles) + 1;
+			foreach ($galleyFiles as $index => $file) {
+				$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
+				$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
 				$fileGrpNode->appendChild($fileNode);
-				$structMap = $this->createMetsStructSecElement($repId, strval($galleyFilesCount), $dependentFile);
+				$structMap = $this->createMetsStructSecElement($repId, strval($index + 1), $file);
 				$structMapDiv->appendChild($structMap);
-				$galleyFilesCount += 1;
+				foreach ($file["dependentFiles"] as $dependentFile) {
+					$this->createFileCharacteristics($galleyFilesCount, $repIdSuffix, $recordId, $dependentFile);
+					$fileNode = $this->createMetsFileSecChildElements($repId, strval($galleyFilesCount), $dependentFile);
+					$fileGrpNode->appendChild($fileNode);
+					$structMap = $this->createMetsStructSecElement($repId, strval($galleyFilesCount), $dependentFile);
+					$structMapDiv->appendChild($structMap);
+					$galleyFilesCount += 1;
+				}
+
 			}
-
+			$structMapNode = $this->createElementNS($this->metsNS, "mets:structMap");
+			$structMapNode->setAttribute("ID", "rep" . $repId . "-" . $repIdSuffix);
+			$structMapNode->setAttribute("TYPE", "PHYSICAL");
+			$divNode->appendChild($structMapDiv);
+			$structMapNode->appendChild($divNode);
+			$this->record->appendChild($structMapNode);
+			$this->record->appendChild($fileSec);
 		}
-		$structMapNode = $this->createElementNS($this->metsNS, "mets:structMap");
-		$structMapNode->setAttribute("ID", "rep" . $repId . "-" . $repIdSuffix);
-		$structMapNode->setAttribute("TYPE", "PHYSICAL");
-		$divNode->appendChild($structMapDiv);
-		$structMapNode->appendChild($divNode);
 
-		$this->record->appendChild($fileSec);
-		$this->record->appendChild($structMapNode);
 
 
 	}
