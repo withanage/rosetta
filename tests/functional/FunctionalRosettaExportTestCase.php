@@ -23,6 +23,7 @@ import('lib.pkp.classes.services.PKPSchemaService'); // Constants
 class FunctionalRosettaExportTest extends PluginTestCase
 {
 	protected TestJournal $testJournal;
+	var $isTest = true;
 
 
 	public function __construct($name = null, array $data = [], $dataName = '')
@@ -50,7 +51,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getRequest($router);
 
 		$this->getDublinCore();
-		$this->getMets();
+		$this->getMets($this->getIsTest());
 
 	}
 
@@ -124,10 +125,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
-	public function getMets(): void
+	public function getMets(bool $isTest): void
 	{
 
-		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), true);
+		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), $isTest);
 		$metsDom->preserveWhiteSpace = false;
 		$metsDom->formatOutput = true;
 		$this->removeCustomNodes($metsDom);
@@ -153,6 +154,23 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	{
 		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsTest(): bool
+	{
+		return $this->isTest;
+	}
+
+	/**
+	 * @param bool $isTest
+	 */
+	public function setIsTest(bool $isTest): void
+	{
+		$this->isTest = $isTest;
+	}
+
 
 	/**
 	 * @see PKPTestCase::getMockedDAOs()
