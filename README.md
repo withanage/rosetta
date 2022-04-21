@@ -140,97 +140,100 @@ configured for github repositories upon push commits.
 
 ### Publication
 
-  Metadata                  Type      Implemented                  Remarks
-  ------------------------- --------- ---------------------------- ----------------------------
-  id                        integer
-  abstract                  string    dcterms:abstract
-  accessStatus              integer                                ARTICLE\_ACCESS\_OPEN usw.
-  authors                   string    dc:contributors
-  categories                string
-  copyrightHolder           string    dcterms:rightsHolder
-  copyrightYear             integer   dcterms:issued
-  datePublished             string    dcterms:date
-  disciplines               string    dcterms:audience
-  issue                     integer
-  keywords                  string    dcterms:subject
-  languages                 string    dc:language
-  lastModified              string    dcterms:modified
-  locale                    string    dc:language
-  prefix                    string
-  primaryContact            string    dcterms:creator in auhtors
-  publisherInstitution      string    dc:publisher
-  section                   string
-  seq                       integer
-  subjects                  string
-  subTitle                  string
-  supportingAgencies        string
-  title                     string    dc:title
-  version                   integer
-  urlPath                   string
-  citationsRaw              string
-  pages                     string
-  coverage                  string
-  coverImage                string
-  coverImage:dateUploaded   string
-  coverImage:altText        string
-  pub-id::published-id      string    dc:identifier
-  rights                    string
-  source                    string
-  supportingAgencies        string
-  type                      string
+| Metadata | Type | Implemented | Remarks|
+| ---- | ---- | ---- | ---- |
+|id | integer | |
+| abstract |string | dcterms:abstract|
+| accessStatus | integer |  | ARTICLE_ACCESS_OPEN usw. |
+| authors |string | dc:contributors|
+| categories| string | |
+| copyrightHolder |string |dcterms:rightsHolder |
+| copyrightYear| integer | dcterms:issued |
+| datePublished |string | dcterms:date |
+| disciplines |string | dcterms:audience |
+|issue | integer |  |
+| keywords|string | dcterms:subject|
+| languages |string |dc:language |
+|lastModified |string | dcterms:modified|
+| locale |string | dc:language |
+| prefix |string | |
+| primaryContact|string | dcterms:creator in auhtors |
+| publisherInstitution|string | dc:publisher |
+| section |string | |
+| seq| integer | |
+| subjects |string | |
+| subTitle |string | |
+| supportingAgencies |string | |
+| title |string | dc:title|
+| version | integer | |
+| urlPath |string | |
+| citationsRaw |string |  | Zitationen getrennt durch  Line-breaks|
+| pages |string | |
+| coverage |string | |
+| coverImage |string | |
+| coverImage:dateUploaded |string | |
+| coverImage:altText |string | |
+| pub-id::published-id|string |dc:identifier |
+| rights |string | |
+| source |string | |
+| supportingAgencies |string | |
+| type |string | |
 
 ### Submission
 
-  Metadata           Type      Implemented
-  ------------------ --------- -------------
-  id                 integer
-  context            string
-  dateLastActivity   string
-  dateSubmitted      string
-  lastModified       string
+| Metadata | Type | Implemented |
+| ---- | ---- | ---- |
+| id | integer| | |
+|context | string| | |
+|dateLastActivity | string | |
+| dateSubmitted | string | |
+| lastModified | string | | |
 
 ### Authors
 
-  Metadata      Type     Implemented
-  ------------- -------- ------------------
-  authors       string   dc:contributor\"
-  ROR ID
-  Orcid Id ID
+| Metadata | Type | Implemented
+| ---- | ---- | ---- |
+| authors |string |dc:contributor" |
+| ROR ID| | |
+| Orcid Id ID| | |
 
-### Galleys / Publication Formats {#galleys--publication-formats}
+### Galleys / Publication Formats
 
-  Metadata    Type     Implemented   Remarks
-  ----------- -------- ------------- ---------
-  Label       string
-  Locale      string
-  fileId      string
-  urlPath     string
-  seq         string
-  urlRemote   string
+| Metadata | Type | Implemented | Remarks|
+| ---- | ---- | ---- | ---- |
+| Label | string | | |
+| Locale |string | | |
+| fileId |string | | |
+| urlPath |string | | |
+| seq |string | | |
+| urlRemote |string | | |
 
 ### Entity Types
 
+| Code|Description|
+| --- | --- |
+|Album|Album|
+|Article|Article|
+|AV|Audiovisual|
+|Book|Book|
+|Chapter|Chapter|
+|Conference|Conference|
+|Database|Database|
+|DeviceImage|Device Image|
+|Dissertation|Dissertation|
+|GreyLiterature|Grey Literature|
+|Journal|Journal|
+|JournalIssue|Journal Issue|
+|JournalVolume|Journal Volume|
+|Letter|Letter|
+|Movie|Movie|
+|Music|Music|
+|null|None|
+|Picture|Picture|
+|Proceedings|Proceedings|
+|Report|Report|
+|Website|Website|
 
-  Code             Description
-  ---------------- -----------------
-  Album            Album
-  Article          Article
-  AV               Audiovisual
-  Book             Book
-  Chapter          Chapter
-  Conference       Conference
-  Database         Database
-  DeviceImage      Device Image
-  Dissertation     Dissertation
-  GreyLiterature   Grey Literature
-  Journal          Journal
-  JournalIssue     Journal Issue
-  JournalVolume    Journal Volume
-  Letter           Letter
-  Movie            Movie
-  Music            Music
-  null             None
-  Picture          Picture
-  Proceedings      Proceedings
-  Report           Report
-  Website          Website
+
+
+
