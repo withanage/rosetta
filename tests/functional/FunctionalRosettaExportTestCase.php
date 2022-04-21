@@ -50,7 +50,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getRequest($router);
 
 		$this->getDublinCore();
-		//$this->getMets();
+		$this->getMets();
 
 	}
 
@@ -134,7 +134,9 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$doc = new DOMDocument();
 		$doc->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
 
-		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $metsDom->saveXML())), array_filter(preg_split('/\r\n|\r|\n/', $doc->saveXML())));
+		$domDoc = $metsDom->saveXML();
+		$testDoc = $doc->saveXML();
+		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $domDoc)), array_filter(preg_split('/\r\n|\r|\n/', $testDoc)));
 
 	}
 
