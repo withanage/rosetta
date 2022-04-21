@@ -127,7 +127,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function getMets(): void
 	{
 
-		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin());
+		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), true);
 		$metsDom->preserveWhiteSpace = false;
 		$metsDom->formatOutput = true;
 		$this->removeCustomNodes($metsDom);

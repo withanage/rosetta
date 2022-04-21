@@ -25,7 +25,7 @@ class RosettaMETSDom extends DOMDocument
 	 * @param Publication $publication
 	 * @param Plugin $plugin
 	 */
-	public function __construct(Context $context, Submission $submission, Publication $publication, Plugin $plugin)
+	public function __construct(Context $context, Submission $submission, Publication $publication, Plugin $plugin, bool $isTest = false)
 	{
 		parent::__construct('1.0', 'UTF-8');
 		$settingsDom = new DOMDocument();
@@ -37,10 +37,10 @@ class RosettaMETSDom extends DOMDocument
 		$this->publication = $publication;
 		$this->submission = $submission;
 		$this->xpathSettings = new DOMXPath($settingsDom);
-		$this->createInstance();
+		$this->createInstance($isTest);
 	}
 
-	public function createInstance(): void
+	public function createInstance(bool $isTest): void
 	{
 		$repId = "1";
 		$repIdSuffix = "1";
@@ -89,7 +89,7 @@ class RosettaMETSDom extends DOMDocument
 		$divNode->setAttribute("LABEL", "Preservation Master");
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
-		if(false) {
+		if(!$isTest) {
 			$galleyFilesCount = count($galleyFiles) + 1;
 			foreach ($galleyFiles as $index => $file) {
 				$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
