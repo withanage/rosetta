@@ -1,9 +1,9 @@
 # OJS-Rosetta Plugin
+[![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ### Table of Contents
 
 - [OJS-Rosetta Plugin](#ojs-rosetta-plugin)
-    -   [Build status](#build-status)
     -   [Introduction](#introduction)
         -   [Features](#features)
     -   [Installation](#installation)
@@ -24,9 +24,8 @@
 - [Entity Types](#entity-types)
 
 
-#### Build status
 
-[![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
+
 
 #### Introduction
 
