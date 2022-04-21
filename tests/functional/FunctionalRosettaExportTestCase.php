@@ -136,7 +136,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 		$domDoc = $metsDom->saveXML();
 		$testDoc = $doc->saveXML();
-		$this->assertEquals(array_filter(preg_split('/\r\n|\r|\n/', $domDoc)), array_filter(preg_split('/\r\n|\r|\n/', $testDoc)));
+		$this->assertEqualsCanonicalizing(array_filter(preg_split('/\r\n|\r|\n/', $domDoc)), array_filter(preg_split('/\r\n|\r|\n/', $testDoc)));
 
 	}
 
