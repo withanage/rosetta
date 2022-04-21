@@ -223,25 +223,25 @@ class RosettaMETSDom extends DOMDocument
 	 */
 	private function createFileCharacteristics(int $index, string $repIdSuffix, string $recordId, $file): void
 	{
-		$generalFileChars = $this->createElementNS($this->metsNS, "mets:amdSec");
-		$generalFileChars->setAttribute("ID", "fid" . strval($index) . "-" . $repIdSuffix . "-amd");
-		$md5_file = null;
 		if (file_exists($file["fullFilePath"])) {
+			$generalFileChars = $this->createElementNS($this->metsNS, "mets:amdSec");
+			$generalFileChars->setAttribute("ID", "fid" . strval($index) . "-" . $repIdSuffix . "-amd");
 			$md5_file = md5_file($file["fullFilePath"]);
+			XMLUtils::createIEAmdSections($this, array(
+					array("id" => "generalFileCharacteristics", "records" => array(
+						["id" => "fileOriginalPath", "value" => '/' . $recordId . "/content/streams/" . $file['path'] . "/" . basename($file['fullFilePath'])],
+					)),
+					array("id" => "fileFixity", "records" => array(
+						["id" => "fixityType", "value" => "MD5"],
+						["id" => "fixityValue", "value" => $md5_file],
+					))
+				)
+				, "techMD", "tech", "fid" . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
+			$this->record->appendChild($generalFileChars);
 		} else {
 			var_dump('File ' . $file["fullFilePath"] . ' does not exist');
 		}
-		XMLUtils::createIEAmdSections($this, array(
-				array("id" => "generalFileCharacteristics", "records" => array(
-					["id" => "fileOriginalPath", "value" => '/' . $recordId . "/content/streams/" . $file['path'] . "/" . basename($file['fullFilePath'])],
-				)),
-				array("id" => "fileFixity", "records" => array(
-					["id" => "fixityType", "value" => "MD5"],
-					["id" => "fixityValue", "value" => $md5_file],
-				))
-			)
-			, "techMD", "tech", "fid" . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
-		$this->record->appendChild($generalFileChars);
+
 	}
 
 	/**
