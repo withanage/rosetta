@@ -40,7 +40,7 @@ and data objects into the long-term archiving system (ExLibris Rosetta)
 -   SOAP-based communication
 -   PDS handle best identification
 -   Included XML formats (TEI, METS, MODS)
--   Validation support (PHPUnit, Github actions)
+-   Regression tests support (PHPUnit, Github actions)
 
 ### Installation
 
