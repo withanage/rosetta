@@ -50,7 +50,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getRequest($router);
 
 		$this->getDublinCore();
-		$this->getMets();
+		//$this->getMets();
 
 	}
 
