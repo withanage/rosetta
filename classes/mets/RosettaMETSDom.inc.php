@@ -156,7 +156,7 @@ class RosettaMETSDom extends DOMDocument
 	private function createAmdSecMods(DomElement $adminSec): void
 	{
 		import('plugins.importexport.rosetta.classes.mods.ModsDOM');
-		$mods = new ModsDOM($this->context, $this->submission, $this->publication);
+		$mods = new ModsDOM($this->context, $this->publication);
 		$sourceMD = $this->createElementNS($this->metsNS, "sourceMD");
 		$sourceMD->setAttribute("ID", "ie-amd-source-1");
 		$mdWrap = $this->createElementNS($this->metsNS, "mets:mdWrap");

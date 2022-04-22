@@ -4,7 +4,7 @@
 		<mets:mdWrap MDTYPE="DC">
 			<mets:xmlData>
 				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-					<dc:title/>
+					<dc:title>article-title-en</dc:title>
 					<dc:type>status-type:publishedVersion</dc:type>
 					<dc:type>doc-type:article</dc:type>
 					<dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
@@ -33,6 +33,10 @@
 			<mets:mdWrap xmlns:mets="http://www.loc.gov/METS/" MDTYPE="MODS">
 				<mets:xmlData>
 					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
+						<mods:titleInfo>
+							<mods:title xml:lang="en_US">article-title-en</mods:title>
+							<mods:title xml:lang="de_DE">article-title-de</mods:title>
+						</mods:titleInfo>
 						<mods:subject authority="disciplines"/>
 						<mods:subject authority="keywords"/>
 						<mods:subject authority="languages"/>

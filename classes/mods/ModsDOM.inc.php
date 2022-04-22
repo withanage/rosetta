@@ -6,16 +6,15 @@ class ModsDOM extends DOMDocument
 {
 	var $context;
 	var $locale;
-	var $publication;
 	var $record;
 	var $supportedFormLocales;
+	private Publication  $publication;
 
-	public function __construct($context, $submission, $publication)
+	public function __construct($context, $publication)
 	{
 		parent::__construct('1.0', 'UTF-8');
 		$this->context = $context;
 		$this->publication = $publication;
-		$this->submission = $submission;
 		$this->supportedFormLocales = $context->getSupportedFormLocales();
 		$this->createPublication();
 	}
@@ -24,11 +23,11 @@ class ModsDOM extends DOMDocument
 	{
 		$this->createRootElement();
 		// titleInfo
-		$this->createTitleInfo($this->publication);
+		$this->createTitleInfo();
 		// abstract
-		$this->createAbstract($this->publication);
+		$this->createAbstract();
 		// authors
-		$this->createName($this->publication);
+		$this->createName();
 		//subjects
 		$this->createDataElement("disciplines", $this->publication, $this->record, "subject", array("authority" => "disciplines"));
 		$this->createDataElement("keywords", $this->publication, $this->record, "subject", array("authority" => "keywords"));
@@ -83,7 +82,7 @@ class ModsDOM extends DOMDocument
 		if ($titles) {
 			foreach ($titles as $lang => $title) {
 				$prefix = $this->publication->getData("prefix");
-				if (is_null($prefix) == false and array_key_exists($lang, $prefix)) {
+				if (!is_null($prefix)  and array_key_exists($lang, $prefix)) {
 					$title = $prefix[$lang] . " " . $title;
 				}
 				$titleDom = $this->createLocalizedElement($title, "title", $lang);
@@ -310,9 +309,23 @@ class ModsDOM extends DOMDocument
 
 	public function getRecord(): DOMElement
 	{
-		//$s = $this->saveXML();
-		//file_put_contents("/tmp/".$this->submission->getData('id')."mods.xml", $s);
 		return $this->record;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPublication()
+	{
+		return $this->publication;
+	}
+
+	/**
+	 * @param mixed $publication
+	 */
+	public function setPublication($publication): void
+	{
+		$this->publication = $publication;
 	}
 
 }

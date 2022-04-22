@@ -121,8 +121,6 @@ class TestJournal extends Journal
 		$submission->setJournalId($this->getId());
 		$submission->setPages(15);
 		$submission->setData('type', 'art-type', $this->getPrimaryLocale());
-		$submission->setData('title', 'article-title-en', $this->getPrimaryLocale());
-		$submission->setData('title', 'article-title-de', 'de_DE');
 		$submission->setData('discipline', 'article-discipline', $this->getPrimaryLocale());
 		$submission->setSubject('article-subject', $this->getPrimaryLocale());
 		$submission->setData('abstract', 'article-abstract', $this->getPrimaryLocale());
@@ -134,6 +132,7 @@ class TestJournal extends Journal
 
 
 		$publication = $this->createPublication($submission);
+
 		$submission->setData('publications', [$publication]);
 
 		$this->setSubmission($submission);
@@ -190,6 +189,10 @@ class TestJournal extends Journal
 		$publication->setData('status', 'status');
 		$publication->setData('primaryContactId', 1);
 		$publication->setData('urlPath', 'url_path');
+
+		$publication->setData('title', 'article-title-en', $this->getPrimaryLocale());
+		$publication->setData('title', 'article-title-de', 'de_DE');
+
 		return $publication;
 
 	}

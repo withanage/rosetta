@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<dc:title/>
+	<dc:title>article-title-en</dc:title>
 	<dc:type>status-type:publishedVersion</dc:type>
 	<dc:type>doc-type:article</dc:type>
 	<dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>

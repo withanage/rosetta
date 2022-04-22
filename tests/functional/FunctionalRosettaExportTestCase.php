@@ -17,13 +17,13 @@ import('lib.pkp.classes.oai.OAIUtils');
 import('plugins.oaiMetadataFormats.dc.OAIMetadataFormat_DC');
 import('plugins.oaiMetadataFormats.dc.OAIMetadataFormatPlugin_DC');
 import('lib.pkp.classes.core.PKPRouter');
-import('lib.pkp.classes.services.PKPSchemaService'); // Constants
+import('lib.pkp.classes.services.PKPSchemaService');
 
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
 	protected TestJournal $testJournal;
-	var $isTest = true;
+	var bool $isTest = true;
 
 
 	public function __construct($name = null, array $data = [], $dataName = '')
