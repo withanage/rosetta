@@ -177,6 +177,7 @@ class RosettaExportDeployment
 		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
 		$payload = $this->getSoapPayload($materialFlowId, $ingestPath, $producerId);
 
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $endpoint);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -193,11 +194,15 @@ class RosettaExportDeployment
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
 
-		if ($response_code == 200 && !is_null($sipIdNode)) {
 
+		if ($response_code == 200 && !is_null($sipIdNode)) {
+			$rosetta_status = array(
+				'status' => $sipIdNode->nodeValue,
+				'date' => Core::getCurrentDate()
+			);
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), $sipIdNode->nodeValue);
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), $rosetta_status);
 			$submissionDao->updateObject($submission);
 
 			// Wait for network to finish ingestion
