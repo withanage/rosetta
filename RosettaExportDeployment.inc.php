@@ -221,8 +221,6 @@ class RosettaExportDeployment
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
 		} else {
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode(array('status' => false)));
-			$submissionDao->updateObject($submission);
 			$this->getPlugin()->logError($response);
 		}
 
