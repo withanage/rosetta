@@ -202,7 +202,7 @@ class RosettaExportDeployment
 			);
 			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 			$submission->setData('dateUpdated', Core::getCurrentDate());
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), $rosetta_status);
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
 
 			// Wait for network to finish ingestion
