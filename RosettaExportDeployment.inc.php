@@ -39,9 +39,13 @@ class RosettaExportDeployment
 	{
 		$context = $this->getContext();
 		// Load DOI settings
-		PluginRegistry::loadCategory('pubIds', true, $context->getId());
-		$notDepositedArticles = $this->_plugin->getUnregisteredArticles($context);
-		foreach ($notDepositedArticles as $submission) {
+		$submissions = Services::get('submission')->getMany([
+			'contextId' => $this->_context->getId(),
+			'orderBy' => 'seq',
+			'orderDirection' => 'ASC',
+			'status' => STATUS_PUBLISHED,
+		]);
+		foreach ($submissions as $submission) {
 			if (is_a($submission, 'Submission')) {
 				$publications = $submission->getData('publications');
 				foreach ($publications as $publication) {
@@ -49,7 +53,7 @@ class RosettaExportDeployment
 				}
 			}
 		}
-		return $notDepositedArticles;
+		return $submissions;
 	}
 
 	/**op
@@ -172,6 +176,8 @@ class RosettaExportDeployment
 	function doDeposit(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
 	{
 
+		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
+
 		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
 		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
 		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
@@ -193,15 +199,16 @@ class RosettaExportDeployment
 		$response = curl_exec($ch);
 		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
+		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()),true);
 
-
-		if ($response_code == 200 && !is_null($sipIdNode)) {
+		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
+		if (($response_code == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication)) {
 			$rosetta_status = array(
-				'status' => $sipIdNode->nodeValue,
+				'id' => $sipIdNode->nodeValue,
+				'status' => true,
 				'date' => Core::getCurrentDate()
 			);
-			$submissionDao = DAORegistry::getDAO('SubmissionDAO');
-			$submission->setData('dateUpdated', Core::getCurrentDate());
+			#$submission->setData('dateUpdated', Core::getCurrentDate());
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
 
@@ -211,7 +218,12 @@ class RosettaExportDeployment
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
-		} else $this->getPlugin()->logError($response);
+		} else {
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode(array('status' => false)));
+			$submissionDao->updateObject($submission);
+			$this->getPlugin()->logError($response);
+		}
+
 
 		curl_close($ch);
 	}
