@@ -202,11 +202,13 @@ class RosettaExportDeployment
 		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()),true);
 
 		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
-		if (($response_code == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication)) {
+		$registeredDoi = $submission->getData('crossref::registeredDoi');
+		if (($response_code == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
 			$rosetta_status = array(
 				'id' => $sipIdNode->nodeValue,
 				'status' => true,
-				'date' => Core::getCurrentDate()
+				'date' => Core::getCurrentDate(),
+				'doi' =>$registeredDoi
 			);
 			#$submission->setData('dateUpdated', Core::getCurrentDate());
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
