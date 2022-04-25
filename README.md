@@ -138,7 +138,7 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 
 ### Publication
 
-| Metadata | Type | Implemented | Remarks|
+| Metadata | Type | Mapping | Remarks|
 | ---- | ---- | ---- | ---- |
 |id | integer | |
 | abstract |string | dcterms:abstract|
