@@ -22,10 +22,14 @@ import('lib.pkp.classes.services.PKPSchemaService');
 
 class FunctionalRosettaExportTest extends PluginTestCase
 {
-	protected TestJournal $testJournal;
 	var bool $isTest = true;
+	protected TestJournal $testJournal;
 
-
+	/**
+	 * @param null $name
+	 * @param array $data
+	 * @param string $dataName
+	 */
 	public function __construct($name = null, array $data = [], $dataName = '')
 	{
 		parent::__construct($name, $data, $dataName);
@@ -50,11 +54,14 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$router = $this->getRouter();
 		$this->getRequest($router);
 
-		$this->getDublinCore();
+		$this->validateDublinCore();
 		$this->getMets($this->getIsTest());
 
 	}
 
+	/**
+	 * @return mixed|\PHPUnit\Framework\MockObject\MockObject|PKPRouter
+	 */
 	public function getRouter()
 	{
 		import('lib.pkp.classes.core.PKPRouter');
@@ -69,6 +76,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $router;
 	}
 
+	/**
+	 * @param $router
+	 * @return mixed|\PHPUnit\Framework\MockObject\MockObject|Request
+	 */
 	public function getRequest($router)
 	{
 		import('classes.core.Request');
@@ -82,7 +93,10 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		return $request;
 	}
 
-	public function getDublinCore(): void
+	/**
+	 * validate dublinCore
+	 */
+	public function validateDublinCore(): void
 	{
 		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
 
@@ -110,6 +124,9 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->testJournal = $TestJournal;
 	}
 
+	/**
+	 * @param $dcDom
+	 */
 	public function removeCustomNodes($dcDom): void
 	{
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
@@ -119,12 +136,18 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		if ($nodePartOf) $nodePartOf->parentNode->removeChild($nodePartOf);
 	}
 
-	public function getPlugin()
+	/**
+	 * @return Plugin
+	 */
+	public function getPlugin() : Plugin
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
+	/**
+	 * @param bool $isTest
+	 */
 	public function getMets(bool $isTest): void
 	{
 
@@ -145,16 +168,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 
 	}
 
-	public function getLatestPublication(): ?Publication
-	{
-		return $this->getSubmission()->getLatestPublication();
-	}
-
-	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
-	{
-		return $handler . '-' . $op . '-' . implode('-', $path);
-	}
-
 	/**
 	 * @return bool
 	 */
@@ -171,6 +184,18 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->isTest = $isTest;
 	}
 
+	/**
+	 * @return Publication|null0
+	 */
+	public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
+	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	{
+		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
 
 	/**
 	 * @see PKPTestCase::getMockedDAOs()
