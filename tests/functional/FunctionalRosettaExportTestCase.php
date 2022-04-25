@@ -55,7 +55,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$this->getRequest($router);
 
 		$this->validateDublinCore();
-		$this->getMets($this->getIsTest());
+		$this->validateMets($this->getIsTest());
 
 	}
 
@@ -148,7 +148,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	/**
 	 * @param bool $isTest
 	 */
-	public function getMets(bool $isTest): void
+	public function validateMets(bool $isTest): void
 	{
 
 		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), $isTest);
