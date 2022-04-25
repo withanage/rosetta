@@ -6,8 +6,22 @@ error_reporting(E_ERROR | E_PARSE);
 import('classes.plugins.PubObjectsExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 
+
 class RosettaExportPlugin extends PubObjectsExportPlugin
+
 {
+
+	var $pluginSettings;
+
+
+	function __construct()
+	{
+
+		$this->setPluginSettings(Core::getBaseDir() . '/plugins/importexport/rosetta/settings.json');
+
+
+	}
+
 	/**
 	 * @copydoc Plugin::register()
 	 * @param $category
@@ -152,20 +166,37 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		return parent::manage($args, $request);
 	}
 
+	/**
+	 * @return bool
+	 */
 	function getCanEnable()
 	{
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	function getCanDisable()
 	{
 		return true;
 	}
 
+	/**
+	 * @param $enabled
+	 */
 	function setEnabled($enabled)
 	{
 		$context = Application::get()->getRequest()->getContext();
 		$this->updateSetting($context->getId(), 'enabled', $enabled, 'bool');
+	}
+
+	/**
+	 * @return string
+	 */
+	function getContextSpecificPluginSettingsFile(): string
+	{
+		return $this->getPluginPath() . '/settings.xml';
 	}
 
 	/**
@@ -177,18 +208,22 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 
-		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issues = $issueDao->getIssues($journal->getData('id'));
-
 		$journal = $journalDao->getByPath($journalPath);
 		if ($journal == false) {
 
 			$contextDao = Application::getContextDAO();
 			$journalFactory = $contextDao->getAll();
+
 			while ($journal = $journalFactory->next()) {
-				if ($this->getEnabled($journal)) {
+
+				$key = $journal->getLocalizedAcronym();
+				$array = array_keys($this->getPluginSettings());
+				$key_exists = key_exists($key, $array);
+				if ($key_exists) {
+
 					$deployment = new RosettaExportDeployment($journal, $this);
-				$deployment->getSubmissions();
+					$deployment->getSubmissions();
+
 				}
 			}
 		} else {
@@ -200,6 +235,11 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	}
 
 
+	/**
+	 * @param int $contextId
+	 * @param string $name
+	 * @return false|mixed|null
+	 */
 	function getSetting($contextId, $name)
 	{
 		switch ($name) {
@@ -300,17 +340,10 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		return __CLASS__;
 	}
 
-	/**
-	 * @copydoc Plugin::getContextSpecificPluginSettingsFile()
-	 */
-	function getContextSpecificPluginSettingsFile()
-	{
-		return $this->getPluginPath() . '/settings.xml';
-	}
 
 	function depositXML($objects, $context, $filename)
 	{
-		// TODO: Implement depositXML() method.
+
 	}
 
 	/**
@@ -319,6 +352,23 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	function getExportDeploymentClassName()
 	{
 		// TODO: Implement getExportDeploymentClassName() method.
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPluginSettings() :array
+	{
+		return $this->pluginSettings;
+	}
+
+	/**
+	 * @param string $filePath
+	 */
+	public function setPluginSettings(string $filePath): void
+	{
+		$this->pluginSettings = json_decode(file_get_contents($filePath), true);
+
 	}
 }
 

@@ -10,10 +10,8 @@ define('MASTER_PATH', 'MASTER');
 class RosettaMETSDom extends DOMDocument
 {
 	var $context;
-	var $domSettings;
 	var $metsNS = "http://www.loc.gov/METS/";
 	var $plugin;
-	var $xpathSettings;
 	var $publication;
 	var $record;
 	var $submission;
@@ -28,15 +26,13 @@ class RosettaMETSDom extends DOMDocument
 	public function __construct(Context $context, Submission $submission, Publication $publication, Plugin $plugin, bool $isTest = false)
 	{
 		parent::__construct('1.0', 'UTF-8');
-		$settingsDom = new DOMDocument();
 		$this->preserveWhiteSpace = false;
 		$this->formatOutput = true;
-		$settingsPath = Core::getBaseDir() . DIRECTORY_SEPARATOR . $plugin->getContextSpecificPluginSettingsFile();
 		$this->context = $context;
-		$this->domSettings = $settingsDom->load($settingsPath);
+
+
 		$this->publication = $publication;
 		$this->submission = $submission;
-		$this->xpathSettings = new DOMXPath($settingsDom);
 		$this->createInstance($isTest);
 	}
 
