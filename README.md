@@ -130,7 +130,7 @@ based cronjob running daily at 8pm
 
 
 ### Local
-```
+```bash
 php $OJS/lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration
 $OJS/lib/pkp/tests/phpunit-env2.xml --filter
 FunctionalRosettaExportTest --test-suffix
