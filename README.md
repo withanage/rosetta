@@ -97,19 +97,19 @@ based cronjob running daily at 8pm
        Rosetta Local mount
         |
         |_sip_folder e.g.1
-            |
-            |_content
-                 |
-                 |
-                 |_streams
-                 |   |
-                 |   |_file1.pdf
-                 |   |
-                 |   |_file2.xml
-                 |
-                 |ie1.xml
-                 |
-		   |dc.xml
+        |
+         dc.xml
+	    |_content
+		 |
+		 |
+		 |_streams
+		 |   |
+		 |   |_file1.pdf
+		 |   |
+		 |   |_file2.xml
+		 |
+		 |ie1.xml
+		 |
 ```
 -   Submission Information Packages (SIP)s are exported to the Rosetta
     system via the Rosetta SOAP interface for submission. Upon
