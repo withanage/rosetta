@@ -131,8 +131,7 @@ $OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCa
 ```
 ### Github actions
 
-Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already
-configured for github repositories upon push commits.
+Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configured for main [github repository](https://github.com/withanage/rosetta/actions) upon push commits.
 
 ## Mapped metadata fields
 
