@@ -60,6 +60,7 @@ Add the following variables to your OJS global configuration file in
 information.
 
     [rosetta]
+
     institution_code=$INSTITUTE_NAME
 
     username=$ROSETTA_USER
