@@ -50,10 +50,12 @@ class RosettaExportDeployment
 			if (is_a($submission, 'Submission')) {
 				$publications = $submission->getData('publications');
 				foreach ($publications as $publication) {
-					 	$issue = \Services::get('issue')->get($publication->getData('issueId'));
-						if(($issue->getData('number') == $settings['number'] &&  $issue->getData('volume') == $settings['volume'] && $issue->getData('year') == $settings['year'])  || $issue != null) {
+					$issue = \Services::get('issue')->get($publication->getData('issueId'));
+					foreach ($settings as $setting) {
+						if (($issue->getData('number') == $setting['number'] && $issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) || $issue == null) {
 							$this->depositSubmission($context, $submission, $publication, $isTest);
 						}
+					}
 
 				}
 			}
