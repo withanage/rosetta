@@ -38,6 +38,7 @@ class RosettaExportDeployment
 	function getSubmissions(bool $isTest = false)
 	{
 		$context = $this->getContext();
+		$settings = $this->getPlugin()->getPluginSettings()[$this->getContext()->getLocalizedAcronym()];
 		// Load DOI settings
 		$submissions = Services::get('submission')->getMany([
 			'contextId' => $this->_context->getId(),
@@ -49,7 +50,11 @@ class RosettaExportDeployment
 			if (is_a($submission, 'Submission')) {
 				$publications = $submission->getData('publications');
 				foreach ($publications as $publication) {
-					$this->depositSubmission($context, $submission, $publication, $isTest);
+					 	$issue = \Services::get('issue')->get($publication->getData('issueId'));
+						if(($issue->getData('number') == $settings['number'] &&  $issue->getData('volume') == $settings['volume'] && $issue->getData('year') == $settings['year'])  || $issue != null) {
+							$this->depositSubmission($context, $submission, $publication, $isTest);
+						}
+
 				}
 			}
 		}

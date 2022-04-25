@@ -216,11 +216,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 			while ($journal = $journalFactory->next()) {
 
-				$key = $journal->getLocalizedAcronym();
-				$array = array_keys($this->getPluginSettings());
-				$key_exists = key_exists($key, $array);
-				if ($key_exists) {
-
+				if (key_exists($journal->getLocalizedAcronym(), $this->getPluginSettings())) {
 					$deployment = new RosettaExportDeployment($journal, $this);
 					$deployment->getSubmissions();
 

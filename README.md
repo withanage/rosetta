@@ -25,11 +25,7 @@
         - [Entity Types](#entity-types)
 
 
-
-
-
 #### Introduction
-
 
 Open Journal Systems(OJS) plug-in for importing metadata and data objects
 into the long-term archiving system   (ExLibris Rosetta)
