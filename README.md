@@ -109,7 +109,7 @@ based cronjob running daily at 8pm
                  |
                  |ie1.xml
                  |
-                 |dc.xml
+		   |dc.xml
 ```
 -   Submission Information Packages (SIP)s are exported to the Rosetta
     system via the Rosetta SOAP interface for submission. Upon
