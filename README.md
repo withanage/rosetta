@@ -1,7 +1,7 @@
 # OJS-Rosetta Plugin
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
-...HTTP/1.1" 200 771 "-" "github-camo (a0471fc3)" "-"
+
 
 ### Table of Contents
 
