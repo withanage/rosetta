@@ -8,7 +8,6 @@ import('plugins.importexport.rosetta.RosettaExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 import('lib.pkp.tests.plugins.PluginTestCase');
 
-require_mock_env('env2');
 
 import('lib.pkp.tests.PKPTestCase');
 
@@ -185,7 +184,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	}
 
 	/**
-	 * @return Publication|null0
+	 * @return Publication|null
 	 */
 	public function getLatestPublication(): ?Publication
 	{

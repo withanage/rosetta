@@ -176,16 +176,19 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	{
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
+
+		$issueDao = DAORegistry::getDAO('IssueDAO');
+		$issues = $issueDao->getIssues($journal->getData('id'));
+
 		$journal = $journalDao->getByPath($journalPath);
 		if ($journal == false) {
 
 			$contextDao = Application::getContextDAO();
-			/* @var $contextDao JournalDAO */
-			$journalFactory = $contextDao->getAll(true);
+			$journalFactory = $contextDao->getAll();
 			while ($journal = $journalFactory->next()) {
 				if ($this->getEnabled($journal)) {
 					$deployment = new RosettaExportDeployment($journal, $this);
-					$deployment->getSubmissions();
+				$deployment->getSubmissions();
 				}
 			}
 		} else {
@@ -196,14 +199,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		}
 	}
 
-	/**
-	 * Determine whether or not this plugin is currently enabled.
-	 * @return boolean
-	 */
-	function getEnabled($context = null)
-	{
-		return ($context != null) ? $this->getSetting($context->getId(), 'enabled') : false;
-	}
 
 	function getSetting($contextId, $name)
 	{
