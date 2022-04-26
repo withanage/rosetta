@@ -71,9 +71,26 @@ information.
 
 #### Individual Journals
 
-In the Import-Export Plugin section, enable \"SRosetta
-Export/Registration Plugin\" for individual magazines available under
-Settings-\> Website -\> Plugins -\> Installed Plugins.
+
+To select the individual Journals , add the acronym of the journal in the [Settings.json](settings.json) file in the plugin folder.
+
+```json
+"journal":[]
+```
+
+To select only  specific issues, add the volume, number and year for each issue in the json array.
+
+```json
+ "journal": [
+	{
+	  "volume": 1,
+	  "number": 1,
+	  "year": 2022
+	}
+  ],
+
+```
+
 
 ### Automated deposits
 
