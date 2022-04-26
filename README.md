@@ -72,7 +72,7 @@ information.
 #### Individual Journals
 
 
-To select the individual Journals , add the acronym of the journal in the [Settings.json](settings.json) file in the plugin folder.
+To select the individual Journals , add the acronym of the journal in the [settings.json](settings.json) file in the plugin folder.
 
 ```json
 "journal":[]
@@ -81,7 +81,7 @@ To select the individual Journals , add the acronym of the journal in the [Setti
 To select only  specific issues, add the volume, number and year for each issue in the json array.
 
 ```json
- "journal": [
+ "journal" : [
 	{
 	  "volume": 1,
 	  "number": 1,
