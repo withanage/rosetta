@@ -1,8 +1,6 @@
 # OJS-Rosetta Plugin
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
-
-
 ### Table of Contents
 
 - [OJS-Rosetta Plugin](#ojs-rosetta-plugin)
@@ -37,7 +35,7 @@ into the long-term archiving system   (ExLibris Rosetta)
 -   SOAP-based communication
 -   PDS handle best identification
 -   Included XML formats (TEI, METS, MODS)
--   Regression tests support (PHPUnit, Github actions)
+-   Regression tests support (PHPUnit, GitHub actions)
 
 ### Installation
 
@@ -136,7 +134,7 @@ Rosetta Local mount
     successful submission, Rosetta returns the stored package ID, and it
     is written to the OJS database table `submission_settings`. Failures
     are logged to \$OJS\_FILES/rosetta.log
--   Automated github CI/CD pipe-line validates the created files.
+-   Automated GitHub CI/CD pipe-line validates the created files.
 
 ## Automated Tests
 
@@ -175,7 +173,7 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 |lastModified |string | dcterms:modified|
 | locale |string | dc:language |
 | prefix |string | |
-| primaryContact|string | dcterms:creator in auhtors |
+| primaryContact|string | dcterms:creator in authors |
 | publisherInstitution|string | dc:publisher |
 | section |string | |
 | seq| integer | |
@@ -251,7 +249,5 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 |Proceedings|Proceedings|
 |Report|Report|
 |Website|Website|
-
-
 
 
