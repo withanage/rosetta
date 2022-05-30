@@ -1,4 +1,5 @@
 # OJS-Rosetta Plugin
+
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ### Table of Contents
