@@ -62,7 +62,7 @@ information.
 
     password=$ROSETTA_PASSWORD
 
-    host = $ROSETTA_DEPOSIT_URL e.g. https://rosetta..tib.eu/deposit/DepositWebServices?wsdl
+		host = $ROSETTA_DEPOSIT_URL e.g. https://<deposit-load-balancer-host>:<port>/deposit/DepositWebServices?wsdl
 
     subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE
 
