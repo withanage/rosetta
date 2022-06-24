@@ -209,20 +209,21 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		$response = curl_exec($ch);
-		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
+		$errorMessage = $this->getSoapResponeXpath($ch, $response)->query("//ser:message_code")[0];
 		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()),true);
 
 		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
 		$registeredDoi = $submission->getData('crossref::registeredDoi');
-		if (($response_code == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
+
+		if (($responseCode == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
 			$rosetta_status = array(
 				'id' => $sipIdNode->nodeValue,
 				'status' => true,
 				'date' => Core::getCurrentDate(),
 				'doi' =>$registeredDoi
 			);
-			#$submission->setData('dateUpdated', Core::getCurrentDate());
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
 
@@ -232,7 +233,21 @@ class RosettaExportDeployment
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
-		} else {
+		}
+		else if (($responseCode == 200 ) && !is_null($errorMessage)) {
+			$rosetta_status = array(
+				'id' => $sipIdNode->nodeValue,
+				'status' => false,
+				'date' => Core::getCurrentDate(),
+				'doi' =>$registeredDoi,
+				'message_code' => $errorMessage->nodeValue
+			);
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
+			$submissionDao->updateObject($submission);
+		}
+
+
+		else {
 			$this->getPlugin()->logError($response);
 		}
 
