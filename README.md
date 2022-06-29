@@ -252,3 +252,11 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 |Website|Website|
 
 
+# Miscellaneous
+- Correct Schema for debugging
+```xml
+<mets:mets xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exlibrisgroup.com/xsd/dps/rosettaMets file:/home/withanage/projects/Rosetta.dps-sdk-projects/current/dps-sdk-projects/dps-sdk-deposit/src/xsd/mets_rosetta.xsd">
+
+```
+
