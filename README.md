@@ -39,7 +39,7 @@ into the long-term archiving system   (ExLibris Rosetta)
 -   Regression tests support (PHPUnit, GitHub actions)
 
 ### Installation
-
+	# This plugin requires a JAVA Runtime Environment in your system for SIP validation.
 
     $OJS=mypath
     git clone $OJS/plugins/importexport/rosetta
