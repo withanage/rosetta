@@ -131,11 +131,12 @@ class RosettaExportDeployment
 				$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
 				$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
 
-				$dcDom = new RosettaDCDom($context, $publication, false);
 				$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-
 				file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+				$dcDom = new RosettaDCDom($context, $publication, false);
 				file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+
 
 				list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
 				shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
@@ -151,10 +152,13 @@ class RosettaExportDeployment
 						copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
 					}
 				}
-				if (!$isTest) {
+
+				exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
+				if (!$isTest and $validationStatus == 0) {
 					$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
 					unlink($xmlExport);
 				}
+
 
 			}
 		}
