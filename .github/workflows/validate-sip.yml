@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - stable-3_2_1
   pull_request:
     branches:
       - main

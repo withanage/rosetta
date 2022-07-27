@@ -10,7 +10,7 @@ define('MASTER_PATH', 'MASTER');
 class RosettaMETSDom extends DOMDocument
 {
 	var $context;
-	var $metsNS = "http://www.loc.gov/METS/";
+	var $metsNS = "http://www.exlibrisgroup.com/xsd/dps/rosettaMets";
 	var $plugin;
 	var $publication;
 	var $record;
@@ -108,8 +108,10 @@ class RosettaMETSDom extends DOMDocument
 			$structMapNode->setAttribute("TYPE", "PHYSICAL");
 			$divNode->appendChild($structMapDiv);
 			$structMapNode->appendChild($divNode);
-			$this->record->appendChild($structMapNode);
+
 			$this->record->appendChild($fileSec);
+
+			$this->record->appendChild($structMapNode);
 		}
 
 

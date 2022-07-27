@@ -39,7 +39,7 @@ into the long-term archiving system   (ExLibris Rosetta)
 -   Regression tests support (PHPUnit, GitHub actions)
 
 ### Installation
-
+	# This plugin requires a JAVA Runtime Environment in your system for SIP validation.
 
     $OJS=mypath
     git clone $OJS/plugins/importexport/rosetta
@@ -62,7 +62,7 @@ information.
 
     password=$ROSETTA_PASSWORD
 
-    host = $ROSETTA_DEPOSIT_URL e.g. https://rosetta..tib.eu/deposit/DepositWebServices?wsdl
+		host = $ROSETTA_DEPOSIT_URL e.g. https://<deposit-load-balancer-host>:<port>/deposit/DepositWebServices?wsdl
 
     subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE
 
@@ -251,4 +251,12 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 |Report|Report|
 |Website|Website|
 
+
+# Miscellaneous
+- Correct Schema for debugging
+```xml
+<mets:mets xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exlibrisgroup.com/xsd/dps/rosettaMets file:/home/withanage/projects/Rosetta.dps-sdk-projects/current/dps-sdk-projects/dps-sdk-deposit/src/xsd/mets_rosetta.xsd">
+
+```
 

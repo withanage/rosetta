@@ -50,10 +50,14 @@ class RosettaExportDeployment
 			if (is_a($submission, 'Submission')) {
 				$publications = $submission->getData('publications');
 				foreach ($publications as $publication) {
-					$issue = \Services::get('issue')->get($publication->getData('issueId'));
-					foreach ($settings as $setting) {
-						if (($issue->getData('number') == $setting['number'] && $issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) || $issue == null) {
-							$this->depositSubmission($context, $submission, $publication, $isTest);
+					if ($settings == null) {
+						$this->depositSubmission($context, $submission, $publication, $isTest);
+					} else {
+						$issue = \Services::get('issue')->get($publication->getData('issueId'));
+						foreach ($settings as $setting) {
+							if (($issue->getData('number') == $setting['number'] && $issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) || $issue == null) {
+								$this->depositSubmission($context, $submission, $publication, $isTest);
+							}
 						}
 					}
 
@@ -82,57 +86,6 @@ class RosettaExportDeployment
 	}
 
 	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @return void
-	 */
-	public function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
-	{
-		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
-		$oldMask = umask(0);
-
-		if (is_dir($RosettaSubDirectory)) {
-
-			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
-
-			list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
-
-			$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
-			$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
-
-			$dcDom = new RosettaDCDom($context, $publication, false);
-			$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-
-			file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
-			file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-
-			list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-			shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
-
-			if (file_exists($xmlExport)) {
-				array_push($galleyFiles, $tmpExportFile);
-			}
-
-			foreach ($galleyFiles as $file) {
-
-				copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
-				foreach ($file["dependentFiles"] as $dependentFile) {
-					copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
-				}
-			}
-			if (!$isTest) {
-				$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
-				unlink($xmlExport);
-			}
-
-
-		}
-
-		umask($oldMask);
-	}
-
-	/**
 	 * Get the import/export plugin.
 	 * @return ImportExportPlugin
 	 */
@@ -154,6 +107,70 @@ class RosettaExportDeployment
 	 * @param Context $context
 	 * @param Submission $submission
 	 * @param Publication $publication
+	 * @return void
+	 */
+	public function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
+	{
+		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
+		$oldMask = umask(0);
+
+		if (is_dir($RosettaSubDirectory)) {
+
+			list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
+
+			if (!is_dir($SIP_PATH)) {
+				if (is_dir($SIP_PATH) == false) {
+					mkdir($SIP_PATH, 0777);
+				}
+				mkdir($PUB_CONTENT_PATH, 0777);
+				mkdir($STREAM_PATH, 0777);
+				$masterPath = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
+
+				mkdir($masterPath, 0777);
+				$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
+				$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
+
+				$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
+				file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+				$dcDom = new RosettaDCDom($context, $publication, false);
+				file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+
+				list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
+				shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
+
+				if (file_exists($xmlExport)) {
+					array_push($galleyFiles, $tmpExportFile);
+				}
+
+				foreach ($galleyFiles as $file) {
+
+					copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
+					foreach ($file["dependentFiles"] as $dependentFile) {
+						copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+					}
+				}
+
+				exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
+				if (!$isTest and $validationStatus == 0) {
+					$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
+					unlink($xmlExport);
+				}
+
+
+			}
+		}
+
+
+		umask($oldMask);
+	}
+
+	/**
+	 * @param Context $context
+	 * @param Submission $submission
+	 * @param Publication $publication
 	 * @param $RosettaSubDirectory
 	 * @return array
 	 */
@@ -163,14 +180,8 @@ class RosettaExportDeployment
 		$sipPath = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory, $ingestPath));
 		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
 		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
-		$masterPath = join(DIRECTORY_SEPARATOR, array($streamsPath, MASTER_PATH));
 
-		if (is_dir($sipPath) == false) {
-			mkdir($sipPath, 0777);
-		}
-		mkdir($pubContentPath, 0777);
-		mkdir($streamsPath, 0777);
-		mkdir($masterPath, 0777);
+
 		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
 	}
 
@@ -204,20 +215,21 @@ class RosettaExportDeployment
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		$response = curl_exec($ch);
-		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
-		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()),true);
+		$errorMessage = $this->getSoapResponeXpath($ch, $response)->query("//ser:message_code")[0];
+		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()), true);
 
 		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
 		$registeredDoi = $submission->getData('crossref::registeredDoi');
-		if (($response_code == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
+
+		if (($responseCode == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
 			$rosetta_status = array(
 				'id' => $sipIdNode->nodeValue,
 				'status' => true,
 				'date' => Core::getCurrentDate(),
-				'doi' =>$registeredDoi
+				'doi' => $registeredDoi
 			);
-			#$submission->setData('dateUpdated', Core::getCurrentDate());
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
 
@@ -227,6 +239,16 @@ class RosettaExportDeployment
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
+		} else if (($responseCode == 200) && !is_null($errorMessage)) {
+			$rosetta_status = array(
+				'id' => $sipIdNode->nodeValue,
+				'status' => false,
+				'date' => Core::getCurrentDate(),
+				'doi' => $registeredDoi,
+				'message_code' => $errorMessage->nodeValue
+			);
+			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
+			$submissionDao->updateObject($submission);
 		} else {
 			$this->getPlugin()->logError($response);
 		}
