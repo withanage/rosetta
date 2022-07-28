@@ -129,14 +129,14 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	 */
 	public function display($args, $request)
 	{
-		parent::display($args, $request);
+
 		$templateManager = TemplateManager::getManager();
 		$journal = $request->getContext();
 		switch (array_shift($args)) {
 			case 'index':
 			case 'settings':
-			$templateManager->display($this->getTemplateResource('index.tpl'));
-
+			case '':
+			return $templateManager->display($this->getTemplateResource('index.tpl'));
 		}
 
 
