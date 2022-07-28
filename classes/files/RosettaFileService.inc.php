@@ -15,10 +15,10 @@ class RosettaFileService
 
 		$galleysIterator = Services::get('galley')->getMany(['publicationIds' => $publication->getId()]);
 		foreach ($galleysIterator as $galley) {
-			$fileId = $galley->getData('fileId');
+			$fileId = $galley->getData('submissionFileId');
 			$galleyFile = $galley->getFile();
 			if (is_null($galleyFile) == false) {
-				$galleyFilePath = $galleyFile->getFilePath();
+				$galleyFilePath = $galleyFile->getData('path');
 				$dependentFilePaths = RosettaFileService::getDependentFilePaths($publication->getData('submissionId'), $fileId, MASTER_PATH);
 				$files[] = array(
 					"label" => $galley->getLocalizedName(),
@@ -41,20 +41,22 @@ class RosettaFileService
 	 */
 	public static function getDependentFilePaths(int $submissionId, int $fileId, string $path): array
 	{
-		$submissionFileDao = DAORegistry::getDAO('SubmissionFileDAO');
-		import('lib.pkp.classes.submission.SubmissionFile'); // Constants
-		$dependentFiles = $submissionFileDao->getLatestRevisionsByAssocId(
-			ASSOC_TYPE_SUBMISSION_FILE,
-			$fileId,
-			$submissionId,
-			SUBMISSION_FILE_DEPENDENT
-		);
+		$submissionFile = Services::get('submissionFile')->get($fileId);
+		$dependentFilesIterator = Services::get('submissionFile')->getMany([
+			'includeDependentFiles' => true,
+			'fileStages' => [SUBMISSION_FILE_DEPENDENT],
+			'assocTypes' => [ASSOC_TYPE_SUBMISSION_FILE],
+			'assocIds' => [$submissionFile->getId()],
+		]);
+
+
+
 		$assetsFilePaths = array();
-		foreach ($dependentFiles as $dFile) {
-			$assetsFilePaths[$dFile->getOriginalFileName()] = array(
-				"fullFilePath" => $dFile->getFilePath(),
+		foreach ($dependentFilesIterator as $dependentFile) {
+			$assetsFilePaths[$dependentFile->getOriginalFileName()] = array(
+				"fullFilePath" => $dependentFile->getFilePath(),
 				"path" => $path,
-				"originalFileName" => $dFile->getOriginalFileName()
+				"originalFileName" => $dependentFile->getOriginalFileName()
 			);
 		}
 		return $assetsFilePaths;
