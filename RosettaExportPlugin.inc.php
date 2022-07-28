@@ -132,11 +132,14 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		parent::display($args, $request);
 		$templateManager = TemplateManager::getManager();
 		$journal = $request->getContext();
-		switch ($route = array_shift($args)) {
+		switch (array_shift($args)) {
+			case 'index':
 			case 'settings':
-				return $this->manage($args, $request);
+			$templateManager->display($this->getTemplateResource('index.tpl'));
+
 		}
-		$templateManager->display($this->getTemplateResource('index.tpl'));
+
+
 	}
 
 	/**
@@ -166,30 +169,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		return parent::manage($args, $request);
 	}
 
-	/**
-	 * @return bool
-	 */
-	function getCanEnable()
-	{
-		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	function getCanDisable()
-	{
-		return true;
-	}
-
-	/**
-	 * @param $enabled
-	 */
-	function setEnabled($enabled)
-	{
-		$context = Application::get()->getRequest()->getContext();
-		$this->updateSetting($context->getId(), 'enabled', $enabled, 'bool');
-	}
 
 	/**
 	 * @return string

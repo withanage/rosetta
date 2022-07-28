@@ -3,7 +3,7 @@ import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
-import('lib.pkp.classes.xml.XMLCustomWriter');
+# import('lib.pkp.classes.xml.XMLCustomWriter');
 
 class RosettaExportDeployment
 {
