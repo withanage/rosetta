@@ -85,21 +85,28 @@ class RosettaMETSDom extends DOMDocument
 		$divNode->setAttribute("LABEL", "Preservation Master");
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
-		if(!$isTest) {
+		if (!$isTest) {
 			$galleyFilesCount = count($galleyFiles) + 1;
 			foreach ($galleyFiles as $index => $file) {
-				$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
-				$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
-				$fileGrpNode->appendChild($fileNode);
-				$structMap = $this->createMetsStructSecElement($repId, strval($index + 1), $file);
-				$structMapDiv->appendChild($structMap);
-				foreach ($file["dependentFiles"] as $dependentFile) {
-					$this->createFileCharacteristics($galleyFilesCount, $repIdSuffix, $recordId, $dependentFile);
-					$fileNode = $this->createMetsFileSecChildElements($repId, strval($galleyFilesCount), $dependentFile);
+
+				if (file_exists(Config::getVar('files', 'files_dir') . DIRECTORY_SEPARATOR . $file["fullFilePath"])) {
+
+					$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
+					$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
 					$fileGrpNode->appendChild($fileNode);
-					$structMap = $this->createMetsStructSecElement($repId, strval($galleyFilesCount), $dependentFile);
+					$structMap = $this->createMetsStructSecElement($repId, strval($index + 1), $file);
 					$structMapDiv->appendChild($structMap);
-					$galleyFilesCount += 1;
+					foreach ($file["dependentFiles"] as $dependentFile) {
+						$this->createFileCharacteristics($galleyFilesCount, $repIdSuffix, $recordId, $dependentFile);
+						$fileNode = $this->createMetsFileSecChildElements($repId, strval($galleyFilesCount), $dependentFile);
+						$fileGrpNode->appendChild($fileNode);
+						$structMap = $this->createMetsStructSecElement($repId, strval($galleyFilesCount), $dependentFile);
+						$structMapDiv->appendChild($structMap);
+						$galleyFilesCount += 1;
+					}
+
+				} else {
+					var_dump('File ' . $file["fullFilePath"] . ' does not exist');
 				}
 
 			}
@@ -113,7 +120,6 @@ class RosettaMETSDom extends DOMDocument
 
 			$this->record->appendChild($structMapNode);
 		}
-
 
 
 	}
@@ -223,24 +229,22 @@ class RosettaMETSDom extends DOMDocument
 	 */
 	private function createFileCharacteristics(int $index, string $repIdSuffix, string $recordId, $file): void
 	{
-		if (file_exists($file["fullFilePath"])) {
-			$generalFileChars = $this->createElementNS($this->metsNS, "mets:amdSec");
-			$generalFileChars->setAttribute("ID", "fid" . strval($index) . "-" . $repIdSuffix . "-amd");
-			$md5_file = md5_file($file["fullFilePath"]);
-			XMLUtils::createIEAmdSections($this, array(
-					array("id" => "generalFileCharacteristics", "records" => array(
-						["id" => "fileOriginalPath", "value" => '/' . $recordId . "/content/streams/" . $file['path'] . "/" . basename($file['fullFilePath'])],
-					)),
-					array("id" => "fileFixity", "records" => array(
-						["id" => "fixityType", "value" => "MD5"],
-						["id" => "fixityValue", "value" => $md5_file],
-					))
-				)
-				, "techMD", "tech", "fid" . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
-			$this->record->appendChild($generalFileChars);
-		} else {
-			var_dump('File ' . $file["fullFilePath"] . ' does not exist');
-		}
+
+		$generalFileChars = $this->createElementNS($this->metsNS, "mets:amdSec");
+		$generalFileChars->setAttribute("ID", "fid" . strval($index) . "-" . $repIdSuffix . "-amd");
+		$md5_file = md5_file(Config::getVar('files', 'files_dir') . DIRECTORY_SEPARATOR . $file["fullFilePath"]);
+		XMLUtils::createIEAmdSections($this, array(
+				array("id" => "generalFileCharacteristics", "records" => array(
+					["id" => "fileOriginalPath", "value" => '/' . $recordId . "/content/streams/" . $file['path'] . "/" . basename($file['fullFilePath'])],
+				)),
+				array("id" => "fileFixity", "records" => array(
+					["id" => "fixityType", "value" => "MD5"],
+					["id" => "fixityValue", "value" => $md5_file],
+				))
+			)
+			, "techMD", "tech", "fid" . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
+		$this->record->appendChild($generalFileChars);
+
 
 	}
 
