@@ -346,5 +346,12 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		$this->pluginSettings = json_decode(file_get_contents($filePath), true);
 
 	}
+
+	/**
+	 * @return string
+	 */
+	function getBasePath() {
+		return Config::getVar('files', 'files_dir');
+	}
 }
 

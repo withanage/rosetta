@@ -29,7 +29,7 @@ class RosettaMETSDom extends DOMDocument
 		$this->preserveWhiteSpace = false;
 		$this->formatOutput = true;
 		$this->context = $context;
-
+		$this->plugin = $plugin;
 
 		$this->publication = $publication;
 		$this->submission = $submission;
@@ -232,7 +232,7 @@ class RosettaMETSDom extends DOMDocument
 
 		$generalFileChars = $this->createElementNS($this->metsNS, "mets:amdSec");
 		$generalFileChars->setAttribute("ID", "fid" . strval($index) . "-" . $repIdSuffix . "-amd");
-		$md5_file = md5_file(Config::getVar('files', 'files_dir') . DIRECTORY_SEPARATOR . $file["fullFilePath"]);
+		$md5_file = md5_file( $this->getPlugin()->getBasePath().DIRECTORY_SEPARATOR.$file["fullFilePath"]);
 		XMLUtils::createIEAmdSections($this, array(
 				array("id" => "generalFileCharacteristics", "records" => array(
 					["id" => "fileOriginalPath", "value" => '/' . $recordId . "/content/streams/" . $file['path'] . "/" . basename($file['fullFilePath'])],
