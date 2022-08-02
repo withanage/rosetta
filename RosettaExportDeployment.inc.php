@@ -111,55 +111,61 @@ class RosettaExportDeployment
 	 */
 	public function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
 	{
+
 		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
 		$oldMask = umask(0);
 
 		if (is_dir($RosettaSubDirectory)) {
 
-			list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
+			if(count($galleyFiles) > 0 ) {
 
-			if (!is_dir($SIP_PATH)) {
-				if (is_dir($SIP_PATH) == false) {
-					mkdir($SIP_PATH, 0777);
-				}
-				mkdir($PUB_CONTENT_PATH, 0777);
-				mkdir($STREAM_PATH, 0777);
-				$masterPath = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
+				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
-				mkdir($masterPath, 0777);
-				$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
-				$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
-
-				$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-				file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
-
-				$dcDom = new RosettaDCDom($context, $publication, false);
-				file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
-
-
-				list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-				shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
-
-				if (file_exists($xmlExport)) {
-					array_push($galleyFiles, $tmpExportFile);
-				}
-
-				foreach ($galleyFiles as $file) {
-
-					copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
-					foreach ($file["dependentFiles"] as $dependentFile) {
-						copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+				if (!is_dir($SIP_PATH)) {
+					if (is_dir($SIP_PATH) == false) {
+						mkdir($SIP_PATH, 0777);
 					}
+					mkdir($PUB_CONTENT_PATH, 0777);
+					mkdir($STREAM_PATH, 0777);
+					$masterPath = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
+
+					mkdir($masterPath, 0777);
+					$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
+					$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
+
+					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
+					file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+					$dcDom = new RosettaDCDom($context, $publication, false);
+					file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+
+
+					list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
+					shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
+
+					if (file_exists($xmlExport)) {
+						array_push($galleyFiles, $tmpExportFile);
+					}
+
+					foreach ($galleyFiles as $file) {
+
+						copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
+						foreach ($file["dependentFiles"] as $dependentFile) {
+							copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+						}
+					}
+
+					exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
+					if (!$isTest and $validationStatus == 0) {
+						$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
+						unlink($xmlExport);
+					}
+
+
 				}
-
-				exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
-				if (!$isTest and $validationStatus == 0) {
-					$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
-					unlink($xmlExport);
-				}
-
-
+			} else {
+				var_dump("Submission ".$submission->getId()." publication object ".$publication->getId()." does not contain any galleys");
 			}
 		}
 

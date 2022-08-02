@@ -89,7 +89,7 @@ class RosettaMETSDom extends DOMDocument
 			$galleyFilesCount = count($galleyFiles) + 1;
 			foreach ($galleyFiles as $index => $file) {
 
-				if (file_exists(Config::getVar('files', 'files_dir') . DIRECTORY_SEPARATOR . $file["fullFilePath"])) {
+				if (file_exists($this->getPlugin()->getBasePath(). DIRECTORY_SEPARATOR . $file["fullFilePath"])) {
 
 					$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
 					$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
