@@ -3,6 +3,7 @@ import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
+
 # import('lib.pkp.classes.xml.XMLCustomWriter');
 
 class RosettaExportDeployment
@@ -118,11 +119,14 @@ class RosettaExportDeployment
 		if (is_dir($RosettaSubDirectory)) {
 
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
-			if(count($galleyFiles) > 0 ) {
+
+			if (count($galleyFiles) > 0) {
+
 
 				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
 				if (!is_dir($SIP_PATH)) {
+
 					if (is_dir($SIP_PATH) == false) {
 						mkdir($SIP_PATH, 0777);
 					}
@@ -147,27 +151,32 @@ class RosettaExportDeployment
 					if (file_exists($xmlExport)) {
 						array_push($galleyFiles, $tmpExportFile);
 					}
-
+					$failedFiles  = [];
 					foreach ($galleyFiles as $file) {
 
-						$from = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
-						$to = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"])));
-						copy($from, $to);
+						$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
+						if (!$copySuccess)  $failedFiles [] =  $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
 						foreach ($file["dependentFiles"] as $dependentFile) {
-							copy($this->getPlugin()->getBasePath().DIRECTORY_SEPARATOR.$dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+							$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+							if (!$copySuccess)  $failedFiles [] =  $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];
 						}
 					}
 
 					exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
-					if (!$isTest and $validationStatus == 0) {
+					if (!$isTest and $validationStatus == 0  && count($failedFiles) ==0) {
 						$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
 						unlink($xmlExport);
+					}
+					else {
+						foreach ($failedFiles as $failedFile) {
+							var_dump("Copy failed: ".$failedFile);
+						}
 					}
 
 
 				}
 			} else {
-				var_dump("Submission ".$submission->getId()." publication object ".$publication->getId()." does not contain any galleys");
+				var_dump("Submission " . $submission->getId() . " publication object " . $publication->getId() . " does not contain any galleys");
 			}
 		}
 
