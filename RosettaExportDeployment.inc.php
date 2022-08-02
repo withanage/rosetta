@@ -150,9 +150,11 @@ class RosettaExportDeployment
 
 					foreach ($galleyFiles as $file) {
 
-						copy($file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
+						$from = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
+						$to = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"])));
+						copy($from, $to);
 						foreach ($file["dependentFiles"] as $dependentFile) {
-							copy($dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
+							copy($this->getPlugin()->getBasePath().DIRECTORY_SEPARATOR.$dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
 						}
 					}
 
