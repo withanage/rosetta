@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink">
+<mets:mets xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<mets:dmdSec xmlns:dc="http://purl.org/dc/elements/1.1/" ID="ie-dmd">
 		<mets:mdWrap MDTYPE="DC">
 			<mets:xmlData>
@@ -30,7 +30,7 @@
 			</mets:mdWrap>
 		</mets:techMD>
 		<mets:sourceMD xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="ie-amd-source-1">
-			<mets:mdWrap xmlns:mets="http://www.loc.gov/METS/" MDTYPE="MODS">
+			<mets:mdWrap xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets" MDTYPE="MODS">
 				<mets:xmlData>
 					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
 						<mods:titleInfo>

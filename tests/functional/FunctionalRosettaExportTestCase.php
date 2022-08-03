@@ -161,8 +161,9 @@ class FunctionalRosettaExportTest extends PluginTestCase
 		$expectedDom->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
 
 		$regExLineBreaks = '/\r\n|\r|\n|\t/';
-		$saveXML = $metsDom->saveXML();
-		$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $saveXML)), array_filter(preg_split($regExLineBreaks, $expectedDom->saveXML())));
+		$generatedXML = $metsDom->saveXML();
+		$expectedXML = $expectedDom->saveXML();
+		$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $generatedXML)), array_filter(preg_split($regExLineBreaks, $expectedXML)));
 
 
 	}
