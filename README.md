@@ -29,6 +29,8 @@
 Open Journal Systems(OJS) plug-in for importing metadata and data objects
 into the long-term archiving system   (ExLibris Rosetta)
 
+
+
 ### Features
 
 -   Individual journal selection for deposit
@@ -43,6 +45,8 @@ into the long-term archiving system   (ExLibris Rosetta)
 
     $OJS=mypath
     git clone $OJS/plugins/importexport/rosetta
+    git checkout stable-3_2_1 # for OJS 3.2.1
+    git checkout stable-3_3_0 # for OJS 3.3.0
     git clone --branch main https://github.com/withanage/rosetta/
 
 ### Configuration
