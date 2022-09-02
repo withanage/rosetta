@@ -354,7 +354,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	/**
 	 * @return array
 	 */
-	public function getPluginSettings() :array
+	public function getPluginSettings(): array
 	{
 		return $this->pluginSettings;
 	}
@@ -366,9 +366,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	{
 		$this->pluginSettings = json_decode(file_get_contents($filePath), true);
 
-	}
-	function getBasePath() {
-		return Config::getVar('files', 'files_dir');
 	}
 }
 
