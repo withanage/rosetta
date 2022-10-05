@@ -125,7 +125,8 @@ class RosettaExportDeployment
 
 				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
-				if (!is_dir($SIP_PATH)) {
+				$previousDeposit = $submission->getData($this->_plugin->getDepositStatusSettingName());
+				if (!is_dir($SIP_PATH) and !$previousDeposit) {
 
 					if (is_dir($SIP_PATH) == false) {
 						mkdir($SIP_PATH, 0777);
@@ -257,6 +258,7 @@ class RosettaExportDeployment
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
 		} else if (($responseCode == 200) && !is_null($errorMessage)) {
+			/**
 			$rosetta_status = array(
 				'id' => $sipIdNode->nodeValue,
 				'status' => false,
@@ -266,6 +268,8 @@ class RosettaExportDeployment
 			);
 			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
+			 */
+			$this->getPlugin()->logError($response);
 		} else {
 			$this->getPlugin()->logError($response);
 		}
