@@ -54,7 +54,7 @@ class RosettaExportDeployment
 					if ($settings == null) {
 						$this->depositSubmission($context, $submission, $publication, $isTest);
 					} else {
-						$issue = \Services::get('issue')->get($publication->getData('issueId'));
+						$issue = Services::get('issue')->get($publication->getData('issueId'));
 						foreach ($settings as $setting) {
 							if (($issue->getData('number') == $setting['number'] && $issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) || $issue == null) {
 								$this->depositSubmission($context, $submission, $publication, $isTest);
@@ -152,29 +152,26 @@ class RosettaExportDeployment
 					if (file_exists($xmlExport)) {
 						array_push($galleyFiles, $tmpExportFile);
 					}
-					$failedFiles  = [];
+					$failedFiles = [];
 					foreach ($galleyFiles as $file) {
 
 						$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
-						if (!$copySuccess)  $failedFiles [] =  $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
+						if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
 						foreach ($file["dependentFiles"] as $dependentFile) {
 							$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
-							if (!$copySuccess)  $failedFiles [] =  $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];
+							if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];
 						}
 					}
 
 					exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
-					if (!$isTest and $validationStatus == 0  && count($failedFiles) ==0) {
+					if (!$isTest and $validationStatus == 0 && count($failedFiles) == 0) {
 						$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
 						unlink($xmlExport);
-					}
-					else {
+					} else {
 						foreach ($failedFiles as $failedFile) {
-							var_dump("Copy failed: ".$failedFile);
+							var_dump("Copy failed: " . $failedFile);
 						}
 					}
-
-
 				}
 			} else {
 				var_dump("Submission " . $submission->getId() . " publication object " . $publication->getId() . " does not contain any galleys");
@@ -257,19 +254,6 @@ class RosettaExportDeployment
 			$this->getPlugin()->rrmdir($sipPath);
 			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
 
-		} else if (($responseCode == 200) && !is_null($errorMessage)) {
-			/**
-			$rosetta_status = array(
-				'id' => $sipIdNode->nodeValue,
-				'status' => false,
-				'date' => Core::getCurrentDate(),
-				'doi' => $registeredDoi,
-				'message_code' => $errorMessage->nodeValue
-			);
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
-			$submissionDao->updateObject($submission);
-			 */
-			$this->getPlugin()->logError($response);
 		} else {
 			$this->getPlugin()->logError($response);
 		}

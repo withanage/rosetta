@@ -107,7 +107,6 @@ based cronjob running daily at 8pm
 
 ### Technical Information
 
-
 -   This application creates a Submission Information Package
     ([SIP](http://exl-edu.com/12_Rosetta/Rosetta%20Essentials/SIP%20Processing/SIP%20Processing%20Configuration/story_html5.html))
     specified by the Open Archival Information System
@@ -157,7 +156,6 @@ $OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.p
 Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configured for main [github repository](https://github.com/withanage/rosetta/actions) upon push commits.
 
 ## Mapped metadata fields
-
 
 ### Publication
 
