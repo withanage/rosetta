@@ -18,10 +18,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.4']
+        php-versions: ['8.0']
         dbs: ['pgsql', 'mysql']
         pkp-application: ['ojs']
-        pkp-branch: ['stable-3_2_1','stable-3_3_0']
+        pkp-branch: ['stable-3_3_0']
     services:
       mysql:
         image: bitnami/mysql:latest
