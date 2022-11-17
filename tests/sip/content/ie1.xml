@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <mets:dmdSec xmlns:dc="http://purl.org/dc/elements/1.1/" ID="ie-dmd">
+    <mets:mdWrap MDTYPE="DC">
+      <mets:xmlData>
+        <dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <dc:title>High fidelity modelling of traffic light control with XML logic representation</dc:title>
+          <dc:creator>Maik Halbach</dc:creator>
+          <dc:creator>Jakob Erdmann</dc:creator>
+          <dc:date>2022-09-29</dc:date>
+          <dcterms:isPartOf>Open Access E-Journals/TIB OP/SCP/2021/1/1/</dcterms:isPartOf>
+          <dcterms:abstract xml:lang="en_US">The paper describes a novel approach to modelling traffic light control in SUMO with control logic configured in xml inputs. It shows also, that this approach allows for high fidelity replication of a real-world traffic controller by comparing original and simulated switching behavior when confronted with the same traffic situations. The approach could process from a traffic engineer with limited programming knowledge.</dcterms:abstract>
+          <dcterms:issued>2022</dcterms:issued>
+          <dcterms:modified>2022-09-29 07:37:15</dcterms:modified>
+          <dc:publisher>TIB Open Publishing (Technische Informationsbibliothek (TIB))</dc:publisher>
+          <dc:type>status-type:publishedVersion</dc:type>
+          <dc:type>doc-type:article</dc:type>
+          <dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
+          <dc:language>en-US</dc:language>
+          <dc:rights>https://creativecommons.org/licenses/by/3.0/de/deed.en</dc:rights>
+        </dc:record>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:amdSec xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="ie-amd">
+    <mets:techMD ID="ie-amd-tech">
+      <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+        <mets:xmlData>
+          <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+            <section id="generalIECharacteristics">
+              <record>
+                <key id="status">ACTIVE</key>
+                <key id="IEEntityType">Article</key>
+                <key id="UserDefinedA">OJS_born-digital</key>
+              </record>
+            </section>
+          </dnx>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:sourceMD xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="ie-amd-source-1">
+      <mets:mdWrap xmlns:mets="http://www.exlibrisgroup.com/xsd/dps/rosettaMets" MDTYPE="MODS">
+        <mets:xmlData>
+          <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
+            <mods:titleInfo>
+              <mods:title xml:lang="en_US">High fidelity modelling of traffic light control with XML logic representation</mods:title>
+            </mods:titleInfo>
+            <mods:abstract xml:lang="en_US">&lt;p&gt;&lt;span class="fontstyle0"&gt;The paper describes a novel approach to modelling traffic light control in SUMO with control logic configured in xml inputs. It shows also, that this approach allows for high fidelity replication of a real-world traffic controller by comparing original and simulated switching behavior when confronted with the same traffic situations. The approach could process from a traffic engineer with limited programming knowledge.&lt;/span&gt;&lt;/p&gt;</mods:abstract>
+            <mods:name type="personal">
+              <mods:namePart xml:lang="en_US" type="family">Halbach</mods:namePart>
+              <mods:namePart xml:lang="en_US" type="given">Maik</mods:namePart>
+              <mods:affiliation xml:lang="en_US">German Aerospace Center </mods:affiliation>
+              <mods:description xml:lang="en_US"/>
+              <mods:displayForm xml:lang="en_US"/>
+              <mods:role>
+                <mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+                <mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+              </mods:role>
+              <mods:affiliation script="country">DE</mods:affiliation>
+            </mods:name>
+            <mods:name type="personal">
+              <mods:namePart xml:lang="en_US" type="family">Erdmann</mods:namePart>
+              <mods:namePart xml:lang="en_US" type="given">Jakob</mods:namePart>
+              <mods:affiliation xml:lang="en_US">German Aerospace Center </mods:affiliation>
+              <mods:description xml:lang="en_US"/>
+              <mods:displayForm xml:lang="en_US"/>
+              <mods:role>
+                <mods:roleTerm xml:lang="en_US" type="text">Author</mods:roleTerm>
+                <mods:roleTerm xml:lang="en_US" type="code">AU</mods:roleTerm>
+              </mods:role>
+              <mods:affiliation script="country">DE</mods:affiliation>
+            </mods:name>
+            <mods:subject xml:lang="en_US" authority="keywords">Simulation</mods:subject>
+            <mods:subject xml:lang="en_US" authority="keywords">traffic lights</mods:subject>
+            <mods:subject xml:lang="en_US" authority="keywords">adaptive control </mods:subject>
+            <mods:location displayLabel="coverage"/>
+            <mods:accessCondition displayLabel="rights"/>
+            <mods:identifier type="doi"/>
+            <mods:recordInfo>
+              <mods:recordContentSource/>
+            </mods:recordInfo>
+            <mods:originInfo>
+              <mods:publisher xml:lang="en_US">Maik Halbach, Jakob Erdmann</mods:publisher>
+            </mods:originInfo>
+            <mods:genre/>
+            <mods:relatedItem type="host" displayLabel="SCP">
+              <extension>
+                <abbreviation xml:lang="en_US">SUMO Conf Proc</abbreviation>
+                <acronym xml:lang="en_US">SCP</acronym>
+                <authorInformation xml:lang="de_DE">Haben Sie Interesse, einen Beitrag bei dieser Zeitschrift einzureichen? Wir möchten Sie auf &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about"&gt;Über uns&lt;/a&gt;, wo Sie die Richtlinien der Zeitschrift einsehen können, und auf &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about/submissions#authorGuidelines"&gt;Richtlinien für Autor/innen&lt;/a&gt; verweisen. Autor/innen müssen sich &lt;a href="https://www.tib-op.org/ojs/index.php/scp/user/register"&gt;registrieren&lt;/a&gt;, bevor Sie einen Beitrag bei der Zeitschrift einreichen können. Falls Sie bereits angemeldet sind, einfach &lt;a href="https://www.tib-op.org/ojs/index.php/scp/login"&gt;einloggen&lt;/a&gt; und die "Fünf Schritte zur Einreichung" abarbeiten.</authorInformation>
+                <authorInformation xml:lang="en_US">Interested in submitting to this journal? We recommend that you review the &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about"&gt;About the Journal&lt;/a&gt; page for the journal's section policies, as well as the &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about/submissions#authorGuidelines"&gt;Author Guidelines&lt;/a&gt;. Authors need to &lt;a href="https://www.tib-op.org/ojs/index.php/scp/user/register"&gt;register&lt;/a&gt; with the journal prior to submitting or, if already registered, can simply &lt;a href="https://www.tib-op.org/ojs/index.php/index/login"&gt;log in&lt;/a&gt; and begin the five-step process.</authorInformation>
+                <librarianInformation xml:lang="de_DE">Wir ermutigen Forschungsbibliotheken, diese Zeitschrift in die Liste ihrer elektronischen Zeitschriften aufzunehmen. Darüber hinaus bietet das Open Source Veröffentlichungssystem dieser Zeitschrift Bibliotheken die Möglichkeit, Zeitschriften, an denen Mitglieder ihrer Fakultät mitarbeiten, online bereitzustellen. Siehe &lt;a href="http://pkp.sfu.ca"&gt;Public Knowledge Project&lt;/a&gt;.</librarianInformation>
+                <librarianInformation xml:lang="en_US">We encourage research librarians to list this journal among their library's electronic journal holdings. As well, it may be worth noting that this journal's open source publishing system is suitable for libraries to host for their faculty members to use with journals they are involved in editing (see &lt;a href="http://pkp.sfu.ca/ojs"&gt;Open Journal Systems&lt;/a&gt;).</librarianInformation>
+                <lockssLicense xml:lang="de_DE">Diese Zeitschrift verwendet das LOCKSS-System, um mit Hilfe der teilnehmenden Bibliotheken ein dezentralen Achivierungssystem zu schaffen, bei dem diese Bibliotheken die Zeitschrift zu Aufbewahrungs- und Wiederherstellungszwecken permanent archivieren. &lt;a href="http://www.lockss.org/"&gt;Mehr...&lt;/a&gt;</lockssLicense>
+                <lockssLicense xml:lang="en_US">This journal utilizes the LOCKSS system to create a distributed archiving system among participating libraries and permits those libraries to create permanent archives of the journal for purposes of preservation and restoration. &lt;a href="http://www.lockss.org/"&gt;More...&lt;/a&gt;</lockssLicense>
+                <openAccessPolicy xml:lang="de_DE">Diese Zeitschrift bietet freien Zugang (Open Access) zu ihren Inhalten, entsprechend der Grundannahme, dass die freie öffentliche Verfügbarkeit von Forschung einem weltweiten Wissensaustausch zugute kommt.</openAccessPolicy>
+                <openAccessPolicy xml:lang="en_US">This journal provides immediate open access to its content on the principle that making research freely available to the public supports a greater global exchange of knowledge.</openAccessPolicy>
+                <privacyStatement xml:lang="de_DE">&lt;p&gt;Namen und E-Mail-Adressen, die auf den Webseiten der Zeitschrift eingegeben werden, werden ausschließlich zu den angegebenen Zwecken verwendet und nicht an Dritte weitergegeben.&lt;/p&gt;</privacyStatement>
+                <privacyStatement xml:lang="en_US">&lt;p&gt;The user (author, editor, or reviewer) agrees to the processing of his/her personal data provided to Technische Informationsbibliothek (TIB) in accordance with the &lt;a href="https://www.tib-op.org/ojs/index.php/index/tibop/privacystatement"&gt;data protection declaration&lt;/a&gt; and the &lt;a href="https://www.tib-op.org/ojs/plugins/themes/tibTheme/assets/files/20210222_TIBOpenPublishing_infosheetdataprotection_OJS_final_v2.pdf"&gt;infosheet data protection&lt;/a&gt;. The data is processed exclusively by TIB in order to provide the service of TIB Open Publishing.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Confidentiality Agreement [1]&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;During the publishing process you will have access to personal data such as name, contact data, institutional affiliation, possibly preffered public name, email signature, telephone number, postal address, profile picture, short biography, URL of homepage, ORCID and publication-related information.&lt;/p&gt;
+&lt;p&gt;The principles of Article 5 (1) GDPR must be observed:&lt;/p&gt;
+&lt;p&gt;Personal data&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;may only be processed if the &lt;strong&gt;data subject has given consent or if a statutory provision so permits. &lt;/strong&gt;The processing must be comprehensible for the data subject ("transparency").&lt;/li&gt;
+&lt;li&gt;may only be collected for &lt;strong&gt;specified, explicit and legitimate purposes. &lt;/strong&gt;They may not be further processed for any other purpose unless this is explicitly permitted ("purpose limitation").&lt;/li&gt;
+&lt;li&gt;may only be processed in the &lt;strong&gt;amount and &lt;/strong&gt;to&lt;strong&gt; the extent appropriate and necessary &lt;/strong&gt;for &lt;strong&gt;the purpose &lt;/strong&gt;("data minimisation").&lt;/li&gt;
+&lt;li&gt;must be &lt;strong&gt;accurate and, as far as possible, kept up to date&lt;/strong&gt;; every reasonable step must be taken to ensure that data that are inaccurate are erased or rectified without delay ('accuracy').&lt;/li&gt;
+&lt;li&gt;may &lt;strong&gt;only &lt;/strong&gt;be &lt;strong&gt;stored for the amount of time &lt;/strong&gt;necessary to achieve the purpose of storage and must then be anonymised or erased ("storage limitation").&lt;/li&gt;
+&lt;li&gt;must be protected by &lt;strong&gt;technical and organisational measures in &lt;/strong&gt;such a way as to ensure &lt;strong&gt;appropriate security &lt;/strong&gt;against unauthorised or unlawful processing or loss/destruction/damage ("integrity and confidentiality").  &lt;/li&gt;
+&lt;li&gt;may &lt;strong&gt;only &lt;/strong&gt;be processed in &lt;strong&gt;accordance with the instructions of the Controller &lt;/strong&gt;(TIB or external client). In addition to individual instructions from superiors, these may also be includeded in process descriptions, flow charts, works agreements, general service instructions as well as company documentation and manuals.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This Agreement shall continue to apply after the termination of the activity.&lt;/p&gt;
+&lt;p&gt;I confirm to be bound by this Agreement.&lt;/p&gt;
+&lt;p&gt;[1] Art. 5 GDPR, Lower Saxony Data Protection Act (NDSG) of 16 May 2018 as amended from time to time.&lt;/p&gt;</privacyStatement>
+                <readerInformation xml:lang="de_DE">Wir empfehlen unseren Leser/innen, sich für die Benachrichtigung bei neuen Veröffentlichungen dieser Zeitschrift einzutragen. Verwenden Sie den &lt;a href="https://www.tib-op.org/ojs/index.php/scp/user/register"&gt;Registrieren&lt;/a&gt;-Link oben auf der Startseite der Zeitschrift. Angemeldete Leser/innen erhalten zu jeder neuen Ausgabe der Zeitschrift die Inhaltsangabe per E-Mail zugeschickt. Die Anmeldung ermöglicht es gleichzeitig der Zeitschrift, einen gewissen Grad an Unterstützung oder eine gewisse Leser/innenschaft zu belegen. Siehe die Regelungen zum &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about/submissions#privacyStatement"&gt;Schutz personenbezogener Daten&lt;/a&gt; der Zeitschrift, die sicherstellen, dass weder Namen noch E-Mail-Adressen registrierter Benutzer/innen zu anderen Zwecken verwendet werden.</readerInformation>
+                <readerInformation xml:lang="en_US">We encourage readers to sign up for the publishing notification service for this journal. Use the &lt;a href="https://www.tib-op.org/ojs/index.php/scp/user/register"&gt;Register&lt;/a&gt; link at the top of the home page for the journal. This registration will result in the reader receiving the Table of Contents by email for each new issue of the journal. This list also allows the journal to claim a certain level of support or readership. See the journal's &lt;a href="https://www.tib-op.org/ojs/index.php/scp/about/submissions#privacyStatement"&gt;Privacy Statement&lt;/a&gt;, which assures readers that their name and email address will not be used for other purposes.</readerInformation>
+                <searchDescription xml:lang="en_US">SUMO Conference Proceedings publishes the proceedings of the SUMO user conference.</searchDescription>
+                <supportedLocales xml:lang="1">en_US</supportedLocales>
+                <supportedSubmissionLocales xml:lang="0">en_US</supportedSubmissionLocales>
+              </extension>
+            </mods:relatedItem>
+          </mods:mods>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:sourceMD>
+  </mets:amdSec>
+  <mets:amdSec ID="rep1-amd">
+    <mets:techMD ID="rep1-amd-tech">
+      <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+        <mets:xmlData>
+          <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+            <section id="generalRepCharacteristics">
+              <record>
+                <key id="preservationType">PRESERVATION_MASTER</key>
+                <key id="usageType">VIEW</key>
+                <key id="RevisionNumber">0</key>
+              </record>
+            </section>
+          </dnx>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+  </mets:amdSec>
+  <mets:amdSec ID="fid1-1-amd">
+    <mets:techMD ID="fid1-1-amd-tech">
+      <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+        <mets:xmlData>
+          <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+            <section id="generalFileCharacteristics">
+              <record>
+                <key id="fileOriginalPath">/scp-114-v1/content/streams/MASTER/114-53-3063-1-10-20220929.pdf</key>
+              </record>
+            </section>
+            <section id="fileFixity">
+              <record>
+                <key id="fixityType">MD5</key>
+                <key id="fixityValue">8e2dbe4ce4d5ab6e1bb451d0b4bee3c5</key>
+              </record>
+            </section>
+          </dnx>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+  </mets:amdSec>
+  <mets:fileSec>
+    <mets:fileGrp ID="rep1" ADMID="rep1-amd">
+      <mets:file ID="fid1-1" ADMID="fid1-1-amd">
+        <mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" xlink:href="file://MASTER/114-53-3063-1-10-20220929.pdf"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+  <mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+    <mets:div LABEL="Preservation Master">
+      <mets:div LABEL="rep1">
+        <mets:div LABEL="" TYPE="FILE">
+          <mets:fptr FILEID="fid1-1"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+</mets:mets>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dc:title>High fidelity modelling of traffic light control with XML logic representation</dc:title>
+  <dc:creator>Maik Halbach</dc:creator>
+  <dc:creator>Jakob Erdmann</dc:creator>
+  <dc:date>2022-09-29</dc:date>
+  <dcterms:isPartOf>Open Access E-Journals/TIB OP/SCP/2021/1/1/</dcterms:isPartOf>
+  <dcterms:abstract xml:lang="en_US">The paper describes a novel approach to modelling traffic light control in SUMO with control logic configured in xml inputs. It shows also, that this approach allows for high fidelity replication of a real-world traffic controller by comparing original and simulated switching behavior when confronted with the same traffic situations. The approach could process from a traffic engineer with limited programming knowledge.</dcterms:abstract>
+  <dcterms:issued>2022</dcterms:issued>
+  <dcterms:modified>2022-09-29 07:37:15</dcterms:modified>
+  <dc:publisher>TIB Open Publishing (Technische Informationsbibliothek (TIB))</dc:publisher>
+  <dc:type>status-type:publishedVersion</dc:type>
+  <dc:type>doc-type:article</dc:type>
+  <dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
+  <dc:language>en-US</dc:language>
+  <dc:rights>https://creativecommons.org/licenses/by/3.0/de/deed.en</dc:rights>
+</dc:record>
