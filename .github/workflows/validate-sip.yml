@@ -104,5 +104,5 @@ jobs:
           php ~/${{matrix.pkp-application}}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
           --configuration ~/${{matrix.pkp-application}}/lib/pkp/tests/phpunit-env2.xml \
           --filter FunctionalRosettaExportTest \
-          --test-suffix FunctionalRosettaExportTestCase.php \
-          -v ~/${{matrix.pkp-application}}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
+          --test-suffix FunctionalRosettaExportTest.php \
+          -v ~/${{matrix.pkp-application}}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.php
