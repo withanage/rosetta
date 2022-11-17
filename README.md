@@ -149,8 +149,8 @@ Rosetta Local mount
 php $OJS/lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration
 $OJS/lib/pkp/tests/phpunit-env2.xml --filter
 FunctionalRosettaExportTest --test-suffix
-FunctionalRosettaExportTestCase.php -v
-$OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTestCase.php
+FunctionalRosettaExportTest.php -v
+$OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.php
 ```
 ### Github actions
 
