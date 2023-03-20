@@ -13,10 +13,8 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 	var $pluginSettings;
 
-
 	function __construct()
 	{
-
 		$this->setPluginSettings(Core::getBaseDir() . '/plugins/importexport/rosetta/settings.json');
 
 

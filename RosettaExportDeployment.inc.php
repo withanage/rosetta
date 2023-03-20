@@ -142,7 +142,7 @@ class RosettaExportDeployment
 					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
 					file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-					$dcDom = new RosettaDCDom($context, $publication, false);
+					$dcDom = new RosettaDCDom($context, $publication, $submission, false);
 					file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 
 

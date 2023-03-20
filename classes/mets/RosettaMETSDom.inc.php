@@ -33,6 +33,7 @@ class RosettaMETSDom extends DOMDocument
 
 		$this->publication = $publication;
 		$this->submission = $submission;
+
 		$this->createInstance($isTest);
 	}
 
@@ -42,7 +43,7 @@ class RosettaMETSDom extends DOMDocument
 		$repIdSuffix = "1";
 		$this->createRootElement();
 		// create dmdSec
-		$dcDom = new RosettaDCDom($this->context, $this->publication, false);
+		$dcDom = new RosettaDCDom($this->context, $this->publication, $this->submission, false);
 		$dc = $this->importNode($dcDom->getRecord(), true);
 		// Dublin core Metadata
 		$dmdSec = $this->createMetsDCElement("ie-dmd", "mets:dmdSec", "DC", $dc);

@@ -13,12 +13,23 @@ class RosettaDCDom extends DOMDocument
 	var $locale;
 	var $supportedFormLocales;
 
+	var Submission $submission;
+
+	/**
+	 * @return Submission
+	 */
+	public function getSubmission(): Submission
+	{
+		return $this->submission;
+	}
+
 	/**
 	 * RosettaDCDom constructor.
 	 * @param $context Context
 	 * @param Publication $publication
+	 * @param Submission $submission
 	 */
-	public function __construct(Context $context, Publication $publication, $isMultilingual = true)
+	public function __construct(Context $context, Publication $publication, Submission $submission, $isMultilingual = true)
 	{
 		$this->context = $context;
 		$this->publication = $publication;
@@ -27,6 +38,8 @@ class RosettaDCDom extends DOMDocument
 		$this->formatOutput = true;
 		$this->locale = $publication->getData("locale");
 		$this->supportedFormLocales = $context->getSupportedFormLocales();
+		$this->submission = $submission;
+
 		$this->createInstance($isMultilingual);
 	}
 
@@ -79,8 +92,9 @@ class RosettaDCDom extends DOMDocument
 		$this->createElementDCTerms("dcterms:issued", $copyrightYear);
 
 
-		//TODO add eindeutige id, doi usw,
+
 		// identifiers
+		PluginRegistry::loadCategory('pubIds', true, $this->getContext()->getId()); // DO not remove
 		$doi = $this->getPublication()->getData("pub-id::doi");
 		if ($doi !== null) {
 			$node = $this->createElement("dc:identifier", htmlspecialchars('DOI:' . $doi, ENT_COMPAT, 'UTF-8'));
