@@ -120,7 +120,7 @@ class RosettaExportDeployment
 
 			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
-			if (count($galleyFiles) > 0) {
+			if ( $publication->getStoredPubId('doi') !== null and count($galleyFiles) > 0) {
 
 
 				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
@@ -156,7 +156,7 @@ class RosettaExportDeployment
 					foreach ($galleyFiles as $file) {
 
 						$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
-						if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"];
+						if (!$copySuccess) $failedFiles [] = $file["fullFilePath"];
 						foreach ($file["dependentFiles"] as $dependentFile) {
 							$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
 							if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];

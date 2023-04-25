@@ -134,7 +134,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			case 'index':
 			case 'settings':
 			case '':
-			return $templateManager->display($this->getTemplateResource('index.tpl'));
+				return $templateManager->display($this->getTemplateResource('index.tpl'));
 		}
 
 
@@ -185,6 +185,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		$journalPath = array_shift($args);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 
+
 		$journal = $journalDao->getByPath($journalPath);
 		if ($journal == false) {
 
@@ -192,7 +193,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			$journalFactory = $contextDao->getAll();
 
 			while ($journal = $journalFactory->next()) {
-
+				PluginRegistry::loadCategory('pubIds', true, $journal->getId()); // DO not remove
 				$pluginSettings = $this->getPluginSettings();
 				if (key_exists(strtoupper($journal->getLocalizedAcronym()), array_change_key_case($pluginSettings, CASE_UPPER))) {
 					$deployment = new RosettaExportDeployment($journal, $this);
@@ -202,12 +203,29 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			}
 		} else {
 			// Deploy submissions
+			PluginRegistry::loadCategory('pubIds', true, $journal->getId());
 			$deployment = new RosettaExportDeployment($journal, $this);
 			$deployment->getSubmissions();
 
 		}
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getPluginSettings(): array
+	{
+		return $this->pluginSettings;
+	}
+
+	/**
+	 * @param string $filePath
+	 */
+	public function setPluginSettings(string $filePath): void
+	{
+		$this->pluginSettings = json_decode(file_get_contents($filePath), true);
+
+	}
 
 	/**
 	 * @param int $contextId
@@ -314,7 +332,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		return __CLASS__;
 	}
 
-
 	function depositXML($objects, $context, $filename)
 	{
 
@@ -329,26 +346,10 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getPluginSettings() :array
-	{
-		return $this->pluginSettings;
-	}
-
-	/**
-	 * @param string $filePath
-	 */
-	public function setPluginSettings(string $filePath): void
-	{
-		$this->pluginSettings = json_decode(file_get_contents($filePath), true);
-
-	}
-
-	/**
 	 * @return string
 	 */
-	function getBasePath() {
+	function getBasePath()
+	{
 		return Config::getVar('files', 'files_dir');
 	}
 }

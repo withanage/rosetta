@@ -92,17 +92,14 @@ class RosettaDCDom extends DOMDocument
 		$this->createElementDCTerms("dcterms:issued", $copyrightYear);
 
 
-
 		// identifiers
-		PluginRegistry::loadCategory('pubIds', true, $this->getContext()->getId()); // DO not remove
-		$doi = $this->getPublication()->getData("pub-id::doi");
-		if ($doi !== null) {
-			$node = $this->createElement("dc:identifier", htmlspecialchars('DOI:' . $doi, ENT_COMPAT, 'UTF-8'));
-			$xsiType = $this->createAttribute("xsi:type");
-			$xsiType->value = "dcterms:URI";
-			$node->appendChild($xsiType);
-			$this->record->appendChild($node);
-		}
+
+		$node = $this->createElement("dc:identifier", htmlspecialchars('DOI:' . $this->getPublication()->getStoredPubId('doi'), ENT_COMPAT, 'UTF-8'));
+		$xsiType = $this->createAttribute("xsi:type");
+		$xsiType->value = "dcterms:URI";
+		$node->appendChild($xsiType);
+		$this->record->appendChild($node);
+
 		// last modified
 		$dateModified = $this->getPublication()->getData("lastModified");
 		$this->createElementDCTerms("dcterms:modified", $dateModified);

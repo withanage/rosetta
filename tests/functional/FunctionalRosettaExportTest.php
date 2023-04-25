@@ -97,7 +97,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function validateDublinCore(): void
 	{
-		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false);
+		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false, false);
 
 		$this->removeCustomNodes($dcDom);
 
