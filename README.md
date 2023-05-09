@@ -1,5 +1,8 @@
 # OJS-Rosetta Plugin
 
+[![TIB-LOGO](LOGO.png)](https://tib.eu)
+
+
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
 
 ### Table of Contents
@@ -257,4 +260,3 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 ```
 #  Development
 - [Dulip Withanage](https://orcid.org/0000-0002-4996-7007)
-- [![TIB-LOGO](LOGO.png)](https://tib.eu)
