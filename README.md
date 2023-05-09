@@ -26,13 +26,7 @@
 
 #### Introduction
 
-Open Journal Systems(OJS) plug-in for importing metadata and data objects
-into the long-term archiving system   (ExLibris Rosetta)
-
-
-
-### Information
--  Long time arching of Jounrnal articles deposited in Open Journal System (OJS)  in Rosetta LTS System
+- Open Journal Systems(OJS) plug-in for importing metadata and data objects  into the long-term archiving system   (ExLibris Rosetta)
 -   Creates and Validation of Submission Information Package (SIP) Packages defined by Open Archival Information System (OAIS)
 -   Included XML formats (TEI, METS, MODS)
 -   SOAP-based communication
