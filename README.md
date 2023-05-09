@@ -89,7 +89,7 @@ To select only  specific issues, add the volume, number and year for each issue 
 ```
 
 
-### Automated deposits
+#### Automated deposits
 
 Schedule a recurring task in your operating system. For example \*nix
 based cronjob running daily at 8pm
@@ -257,3 +257,4 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 ```
 #  Development
  -[Dulip Withanage](https://orcid.org/0000-0002-4996-7007)
+ [![TIB-LOGO](LOGO.png)](https://tib.eu)
