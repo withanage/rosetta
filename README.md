@@ -33,12 +33,13 @@ into the long-term archiving system   (ExLibris Rosetta)
 
 ### Features
 
--   Individual journal selection for deposit
--   Automated interval based deposit
+-   Creates and Validation of Submission Information Package (SIP) Packages defined by Open Archival Information System (OAIS)
+-   Included XML formats (TEI, METS, MODS)
 -   SOAP-based communication
 -   PDS handle best identification
--   Included XML formats (TEI, METS, MODS)
 -   Regression tests support (PHPUnit, GitHub actions)
+-   Individual journal selection for deposit
+-   Automated interval based deposit
 
 ### Installation
 	# This plugin requires a JAVA Runtime Environment in your system for SIP validation.
