@@ -6,7 +6,6 @@
 
 - [OJS-Rosetta Plugin](#ojs-rosetta-plugin)
     - [Introduction](#introduction)
-        -   [Features](#features)
     - [Installation](#installation)
     - [Configuration](#configuration)
         -   [Global variables](#global-variables)
