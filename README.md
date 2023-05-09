@@ -256,6 +256,6 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 
 ```
 #  Development
-[![TIB-LOGO](LOGO.png)](https://tib.eu)
 
 [Dulip Withanage](https://orcid.org/0000-0002-4996-7007)
+[![TIB-LOGO](LOGO.png)](https://tib.eu)
