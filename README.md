@@ -261,4 +261,5 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exlibrisgroup.com/xsd/dps/rosettaMets file:/home/withanage/projects/Rosetta.dps-sdk-projects/current/dps-sdk-projects/dps-sdk-deposit/src/xsd/mets_rosetta.xsd">
 
 ```
-
+#  Development
+ -[Dulip Withanage](https://orcid.org/0000-0002-4996-7007)
