@@ -31,8 +31,8 @@ into the long-term archiving system   (ExLibris Rosetta)
 
 
 
-### Features
-
+### Information
+-  Long time arching of Jounrnal articles deposited in Open Journal System (OJS)  in Rosetta LTS System
 -   Creates and Validation of Submission Information Package (SIP) Packages defined by Open Archival Information System (OAIS)
 -   Included XML formats (TEI, METS, MODS)
 -   SOAP-based communication
