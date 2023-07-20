@@ -125,7 +125,8 @@ class RosettaExportDeployment
 
 				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
 
-				$previousDeposit = $submission->getData($this->_plugin->getDepositStatusSettingName());
+				$previousDeposit = $submission->getData($this->getPlugin()->getDepositStatusSettingName());
+
 				if (!is_dir($SIP_PATH) and !$previousDeposit) {
 
 					if (is_dir($SIP_PATH) == false) {
@@ -162,7 +163,7 @@ class RosettaExportDeployment
 							if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];
 						}
 					}
-
+					// Run validation
 					exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
 					if (!$isTest and $validationStatus == 0 && count($failedFiles) == 0) {
 						$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
@@ -172,6 +173,7 @@ class RosettaExportDeployment
 							var_dump("Copy failed: " . $failedFile);
 						}
 					}
+
 				}
 			} else {
 				var_dump("Submission " . $submission->getId() . " publication object " . $publication->getId() . " does not contain any galleys");
@@ -233,7 +235,7 @@ class RosettaExportDeployment
 		$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
 		$errorMessage = $this->getSoapResponeXpath($ch, $response)->query("//ser:message_code")[0];
-		$sipStatus = json_decode($submission->getData($this->_plugin->getDepositStatusSettingName()), true);
+		$sipStatus = json_decode($submission->getData($this->getPlugin()->getDepositStatusSettingName()), true);
 
 		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
 		$registeredDoi = $submission->getData('crossref::registeredDoi');
@@ -245,7 +247,7 @@ class RosettaExportDeployment
 				'date' => Core::getCurrentDate(),
 				'doi' => $registeredDoi
 			);
-			$submission->setData($this->_plugin->getDepositStatusSettingName(), json_encode($rosetta_status));
+			$submission->setData($this->getPlugin()->getDepositStatusSettingName(), json_encode($rosetta_status));
 			$submissionDao->updateObject($submission);
 
 			// Wait for network to finish ingestion

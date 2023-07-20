@@ -50,15 +50,24 @@ class RosettaInfoSender extends ScheduledTask
 	 */
 	protected function executeActions()
 	{
-		if ($this->_plugin == false) return false;
-		$plugin = $this->_plugin;
+		if ($this->getPlugin() == false) return false;
+
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journals = $journalDao->getAll();
 		foreach ($journals as $journal) {
-			$unregisteredArticles = $plugin->getUnregisteredArticles($journal);
+			$unregisteredArticles = $this->getPlugin()->getUnregisteredArticles($journal);
 			if (count($unregisteredArticles)) {
 				$this->_registerObjects($unregisteredArticles, 'article=>rosetta-xml', $journal, 'articles');
 			}
 		}
 	}
+	/**
+	 * Get the import/export plugin.
+	 * @return ImportExportPlugin
+	 */
+	function getPlugin(): ImportExportPlugin
+	{
+		return $this->_plugin;
+	}
+
 }
