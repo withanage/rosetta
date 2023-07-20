@@ -48,12 +48,9 @@ This plugin requires a JAVA Runtime Environment in your system for SIP validatio
 
 ### Download the plugin
 ```bash
-#
 =path # OJS installation path
 git clone  https://github.com/withanage/rosetta/ $OJS/plugins/importexport/rosetta
 git checkout stable-3_3_0 # e.g. for OJS 3.3.0
-
-
 ```
 
 ### Confguration
@@ -74,19 +71,14 @@ materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
 ```
 
 #### 2. Add  Journals or specific issues to be deposited
-
 To select the individual Journals , add the acronym of the journal in the [settings.json](settings.json) file in the plugin folder.
-
 e.g. `$OJS/plugins/importexport/rosetta`
 
 ```json
-
 {
 "businessjournal": [],
 "JPKJPK": [],
 }
-
-
 ```
 
 To select only  specific issues, add the volume, number and year for each issue in the json array.
@@ -100,7 +92,7 @@ To select only  specific issues, add the volume, number and year for each issue 
 	  "number": 1,
 	  "year": 2022
 	}
-  ],
+  ]
 }
 ```
 
@@ -109,7 +101,6 @@ To select only  specific issues, add the volume, number and year for each issue 
 ```bash!
 php $OJS/tools/importExport.php     RosettaExportPlugin $journal_acronym
 #e.g. php /var/www/html/ojs-3_3/tools/importExport.php     RosettaExportPlugin businessjournal
-
 ```
 ### Output
 
@@ -121,7 +112,6 @@ Schedule a recurring task in your operating system. For example \*nix
 based cronjob running daily at 8pm
 
 ``` {.bash}
-
 0 20 * * * php $OJS/tools/importExport.php RosettaExportPlugin
 ```
 
