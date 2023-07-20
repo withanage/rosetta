@@ -1,6 +1,6 @@
 # OJS-Rosetta Plugin
 
-[![TIB-LOGO](LOGO.png)](https://tib.eu)
+[![TIB-LOGO](LOGO.png)](https://tib.eu)![rosetta_horizonal](https://github.com/withanage/rosetta/assets/1921992/f21f4e9f-2931-44c4-85f0-b15b6a58dda8)
 
 
 [![validate-sip](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml/badge.svg)](https://github.com/withanage/rosetta/actions/workflows/validate-sip.yml)
