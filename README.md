@@ -47,10 +47,9 @@ This plugin requires a JAVA Runtime Environment in your system for SIP validatio
 
 `java --version`
 
-
 ### Download the plugin
 ```bash
-=path # OJS installation path
+$OJS_PATH=path # OJS installation path e.g. /var/www/html/ojs-3_3/
 git clone  https://github.com/withanage/rosetta/ $OJS/plugins/importexport/rosetta
 git checkout stable-3_3_0 # e.g. for OJS 3.3.0
 ```
