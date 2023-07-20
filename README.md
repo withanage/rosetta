@@ -43,7 +43,8 @@
 ## Installation
 
 ### Requirements
-This plugin requires a JAVA Runtime Environment in your system for SIP validation. Check with `java --version`
+This plugin requires a JAVA Runtime Environment in your system for SIP validation. Check with
+`java --version`
 
 
 ### Download the plugin
