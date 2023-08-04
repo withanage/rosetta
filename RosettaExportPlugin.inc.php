@@ -256,6 +256,9 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 			case 'rosettaProducerId':
 				$config_value = Config::getVar('rosetta', 'producerId');
 				break;
+            case 'testMode':
+                $config_value = Config::getVar('rosetta', 'testMode');
+                break;
 			default:
 				return parent::getSetting($contextId, $name);
 		}
