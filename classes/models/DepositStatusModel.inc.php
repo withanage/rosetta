@@ -55,7 +55,7 @@ class DepositStatusModel
     {
         foreach ($data as $key => $value) {
             if (property_exists(__CLASS__, $key)) {
-                if (!empty($value)) $this->$key = $value;
+                if (!empty($value) and isset($value))  $this->$key = $value;
             }
         }
     }
