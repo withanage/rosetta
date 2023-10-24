@@ -357,7 +357,7 @@ class RosettaExportDeployment
                 $depositStatus->id = $sipIdNode->nodeValue;
                 $depositStatus->status = true;
                 $depositStatus->date = Core::getCurrentDate();
-                $depositStatus->doi = $publication->getData($this->plugin->registeredDoiSettingName);
+                if(!empty($publication->getStoredPubId('doi'))) { $depositStatus->doi = $publication->getStoredPubId('doi'); }
 
                 // Wait for network to finish ingestion (adjust sleep time as needed)
                 sleep(30);
