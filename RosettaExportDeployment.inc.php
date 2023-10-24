@@ -160,9 +160,9 @@ class RosettaExportDeployment
                 $this->plugin->logInfo('Submission being processed: ' . $submission->getData('id'));
 
                 // Skip if production and there is no DOI for the submission.
-                if (!$this->isTest && empty($submission->getData($this->plugin->registeredDoiSettingName))) {
-                    continue;
-                }
+                //if (!$this->isTest && empty($submission->getData($this->plugin->registeredDoiSettingName))) {
+                //    continue;
+                //}
 
                 // Retrieve publications for this submission
                 $publications = $submission->getData('publications');
