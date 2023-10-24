@@ -500,8 +500,9 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
      */
     public static function logFilePath(): string
     {
-        return Config::getVar('files', 'files_dir') . '/rosetta.log';
-    }
+		return Config::getVar('rosetta', 'subDirectoryName') . '/rosetta.log';
+
+	}
 
     /**
      * Display the command-line usage information.
