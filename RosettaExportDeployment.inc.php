@@ -248,10 +248,10 @@ class RosettaExportDeployment
             if (!is_dir($MASTER_PATH)) mkdir($MASTER_PATH, 0777);
 
             $metsDom = new RosettaMETSDom($this->context, $submission, $publication, $this->plugin);
-            file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+            file_put_contents($IE_PATH, $metsDom->saveXML(),   LOCK_EX);
 
             $dcDom = new RosettaDCDom($this->context, $publication, $submission, false);
-            file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+            file_put_contents($DC_PATH, $dcDom->saveXML(),  LOCK_EX);
 
             list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
 
