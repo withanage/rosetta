@@ -12,8 +12,6 @@
  * @brief Plugin for depositing publications to Rosetta.
  */
 
-error_reporting(E_ERROR | E_PARSE);
-
 import('classes.plugins.PubObjectsExportPlugin');
 import('plugins.importexport.rosetta.RosettaExportDeployment');
 
@@ -576,4 +574,3 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
         return Config::getVar('files', 'files_dir');
     }
 }
-

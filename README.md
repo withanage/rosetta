@@ -71,7 +71,6 @@ host = $ROSETTA_DEPOSIT_URL e.g. https://<host>:<port>
 materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
 producerId = $PRODUCER_ID_FOR_OJS_ROSETTA
 testMode = true e.g. true false
-```
 
 #### 2. Add  Journals or specific issues to be deposited
 To select the individual Journals , add the acronym of the journal in the [settings.json](settings.json) file in the plugin folder.
