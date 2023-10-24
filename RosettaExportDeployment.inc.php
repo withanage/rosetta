@@ -1,325 +1,591 @@
 <?php
+/**
+ * @file plugins/importexport/rosetta/RosettaExportDeployment.inc.php
+ *
+ * Copyright (c) 2021+ TIB Hannover
+ * Copyright (c) 2021+ Dulip Withanage, Gazi Yucel
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * @class RosettaExportDeployment
+ * @ingroup plugins_importexport_rosettaexportplugin
+ *
+ * @brief Class responsible for depositing publications to Rosetta.
+ *
+ * The `RosettaExportDeployment` class is responsible for automating the deposit of publications into the Rosetta system.
+ * It processes and deposits publications that meet specific criteria, such as approved status and age.
+ *
+ * @property bool $isTest A flag indicating whether the system is in test mode.
+ * @property Context $context The journal context for which publications are being deposited.
+ * @property RosettaExportPlugin $plugin The instance of the Rosetta export plugin.
+ * @property object $client A Guzzle HTTP client object used for making HTTP requests to Rosetta.
+ * @property array|string[] $depositAcceptedStatuses An array of deposit status values that are considered accepted.
+ * @property array|string[] $depositRejectedStatuses An array of deposit status values that are considered rejected.
+ * @property string $username The username for Rosetta API authentication.
+ * @property string $password The password for Rosetta API authentication.
+ * @property string $institutionCode The institution code for Rosetta API authentication.
+ * @property string $producerId The producer ID for Rosetta API authentication.
+ * @property string $materialFlowId The material flow ID for Rosetta API authentication.
+ * @property string $subDirectory The mounted directory to the Rosetta server.
+ * @property string $host The host address of the Rosetta server.
+ *
+ * @note This class automates the deposit of publications to the Rosetta system based on specific criteria.
+ *
+ * @see RosettaExportDeployment::__construct()
+ * @see RosettaExportDeployment::process()
+ * @see RosettaExportDeployment::depositPublication()
+ */
+
+namespace TIBHannover\Rosetta;
+
 import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.dc.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
+import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
+import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
 
-# import('lib.pkp.classes.xml.XMLCustomWriter');
+use Context;
+use Core;
+use DOMDocument;
+use DOMXPath;
+use Exception;
+use GuzzleHttp\Client;
+use PKPString;
+use Publication;
+use PublicationDAO;
+use RosettaDCDom;
+use RosettaExportPlugin;
+use RosettaFileService;
+use RosettaMETSDom;
+use Services;
+use Submission;
+use SubmissionDAO;
+use TIBHannover\Rosetta\Models\DepositActivityModel;
+use TIBHannover\Rosetta\Models\DepositStatusModel;
 
 class RosettaExportDeployment
 {
-	/** @var Context The current import/export context */
-	var $_context;
-	/** @var Plugin The current import/export plugin */
-	var $_plugin;
+    protected bool $isTest = false;
+    protected Context $context;
+    protected RosettaExportPlugin $plugin;
+    protected object $client;
+    protected array $depositAcceptedStatuses = ['approved', 'finished'];
+    protected array $depositRejectedStatuses = ['declined', 'deleted'];
+    private string $username;
+    private string $password;
+    private string $institutionCode;
+    private string $producerId;
+    private string $materialFlowId;
+    private string $subDirectory;
+    private string $host;
 
-	/**
-	 * Constructor
-	 * @param $context Context
-	 * @param $plugin DOIPubIdExportPlugin
-	 */
-	function __construct($context, $plugin)
-	{
-		$this->setContext($context);
-		$this->setPlugin($plugin);
-	}
+    /**
+     * Constructor
+     *
+     * @param Context $context The journal context.
+     * @param RosettaExportPlugin $plugin The Rosetta export plugin instance.
+     */
+    function __construct(Context $context, RosettaExportPlugin $plugin)
+    {
+        $this->context = $context;
+        $this->plugin = $plugin;
 
-	// Getter/setters
+        $this->username = $this->plugin->getSetting($this->context->getId(), 'rosettaUsername');
+        $this->password = $this->plugin->getSetting($this->context->getId(), 'rosettaPassword');
+        $this->institutionCode = $this->plugin->getSetting($this->context->getId(), 'rosettaInstitutionCode');
+        $this->producerId = $this->plugin->getSetting($this->context->getId(), 'rosettaProducerId');
+        $this->materialFlowId = $this->plugin->getSetting($this->context->getId(), 'rosettaMaterialFlowId');
+        $this->host = $this->plugin->getSetting($this->context->getId(), 'rosettaHost');
+        $this->subDirectory = $this->plugin->getSetting($this->context->getId(), 'subDirectoryName');
 
-	/**
-	 * Return true if the zip extension is loaded.
-	 * @return boolean
-	 */
-	static function isZipFunctioanl(): bool
-	{
-		return (extension_loaded('zip'));
-	}
+        $isTest = $this->plugin->getSetting($this->context->getId(), 'testMode');
+        if (!empty($isTest)) $this->isTest = (bool)$isTest;
 
+        $this->client = new Client([
+            'headers' => ['User-Agent' => $this->plugin->userAgent],
+            'verify' => false
+        ]);
+    }
 
-	function getSubmissions(bool $isTest = false)
-	{
-		$context = $this->getContext();
-		$settings = $this->getPlugin()->getPluginSettings()[$this->getContext()->getLocalizedAcronym()];
-		// Load DOI settings
-		$submissions = Services::get('submission')->getMany([
-			'contextId' => $this->_context->getId(),
-			'orderBy' => 'seq',
-			'orderDirection' => 'ASC',
-			'status' => STATUS_PUBLISHED,
-		]);
-		foreach ($submissions as $submission) {
-			if (is_a($submission, 'Submission')) {
-				$publications = $submission->getData('publications');
-				foreach ($publications as $publication) {
-					if ($settings == null) {
-						$this->depositSubmission($context, $submission, $publication, $isTest);
-					} else {
-						$issue = Services::get('issue')->get($publication->getData('issueId'));
-						foreach ($settings as $setting) {
-							if (($issue->getData('number') == $setting['number'] && $issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) || $issue == null) {
-								$this->depositSubmission($context, $submission, $publication, $isTest);
-							}
-						}
-					}
+    /**
+     * Process submissions and deposit publications based on specified conditions.
+     *
+     * Steps:
+     *  1. Check if the specified subdirectory exists using `is_dir`.
+     *     - If not, log an error and exit the process.
+     *  2. Update the database with the latest data from the Rosetta server.
+     *  3. Retrieve plugin settings for the current context.
+     *  4. Retrieve submissions based on specified criteria .
+     *  5. Iterate through the retrieved submissions.:
+     *     a. Log information about the submission being processed.
+     *     b. Skip processing if it's a test and submission DOI is empty.
+     *     c. Retrieve the publications associated with the submission.
+     *     d. Iterate over each publication:
+     *        - Skip processing if it's a test and stored DOI is empty.
+     *        - Check depositStatus and depositActivity:
+     *          - If deposit status is true and the date is later than the last modified date of the publication:
+     *            - Log information about the publication change after deposit.
+     *          - Skip iteration if deposit activity status is not empty and not in the list of rejected statuses.
+     *        - Deposit the publication based on settings or all if settings are null.
+     *
+     * @return void
+     */
+    public function process(): void
+    {
+        // Check if the folder is mounted and return if not.
+        if (!is_dir($this->subDirectory)) {
+            $this->plugin->logError('The Rosetta drive "' . $this->subDirectory . '" is not mounted');
+            return;
+        }
 
-				}
-			}
-		}
-		return $submissions;
-	}
+        // Update the database with the latest data from the Rosetta server.
+        $this->updateIsDeposited();
 
-	/**op
-	 * Get the import/export context.
-	 * @return Context
-	 */
-	function getContext()
-	{
-		return $this->_context;
-	}
+        // Retrieve plugin settings for the current context.
+        $settings = $this->plugin->pluginSettings[$this->context->getLocalizedAcronym()];
 
-	/**
-	 * Set the import/export context.
-	 * @param $context Context
-	 */
-	function setContext($context)
-	{
-		$this->_context = $context;
-	}
+        // Retrieve published submissions based on specific criteria.
+        $submissions = Services::get('submission')->getMany([
+            'contextId' => $this->context->getId(),
+            'orderBy' => 'seq',
+            'orderDirection' => 'ASC',
+            'status' => STATUS_PUBLISHED,
+        ]);
 
-	/**
-	 * Get the import/export plugin.
-	 * @return ImportExportPlugin
-	 */
-	function getPlugin(): ImportExportPlugin
-	{
-		return $this->_plugin;
-	}
+        // Iterate through the retrieved submissions.
+        foreach ($submissions as $submission) {
+            if (is_a($submission, 'Submission')) {
 
-	/**
-	 * Set the import/export plugin.
-	 * @param $plugin ImportExportPlugin
-	 */
-	function setPlugin($plugin): void
-	{
-		$this->_plugin = $plugin;
-	}
+                // Log information about the submission being processed.
+                $this->plugin->logInfo('Submission being processed: ' . $submission->getData('id'));
 
-	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @return void
-	 */
-	public function depositSubmission(Context $context, Submission $submission, Publication $publication, bool $isTest): void
-	{
+                // Skip if production and there is no DOI for the submission.
+                if (!$this->isTest && empty($submission->getData($this->plugin->registeredDoiSettingName))) {
+                    continue;
+                }
 
-		$RosettaSubDirectory = $this->getPlugin()->getSetting($context->getId(), 'subDirectoryName');
-		$oldMask = umask(0);
+                // Retrieve publications for this submission
+                $publications = $submission->getData('publications');
 
-		if (is_dir($RosettaSubDirectory)) {
+                // Iterate through associated publications.
+                foreach ($publications as $publication) {
 
-			$galleyFiles = RosettaFileService::getGalleyFiles($publication);
+                    // Skip if test and publication DOI is empty.
+                    if ($this->isTest && empty($publication->getStoredPubId('doi'))) {
+                        continue;
+                    }
 
-			if ( $publication->getStoredPubId('doi') !== null and count($galleyFiles) > 0) {
+                    // Skip based on deposit status and on deposit activity status.
+                    $depositStatus = new DepositStatusModel(
+                        json_decode($publication->getData($this->plugin->depositStatusSettingName), true));
+                    $depositActivity = new DepositActivityModel(
+                        json_decode($publication->getData($this->plugin->depositActivitySettingName), true));
 
+                    // Decide if this publication should be skipped or deposited
+                    if($depositStatus->status){
+                        // Log if publication modified date is before deposit date.
+                        if($depositStatus->date >= $publication->getData('lastModified')) {
+                            $this->plugin->logInfo('Publication has changed after deposit > ' .
+                                'submission:' . $submission->getId() . '|publication:' . $publication->getId());
+                        }
 
-				list($INGEST_PATH, $SIP_PATH, $PUB_CONTENT_PATH, $STREAM_PATH) = $this->getSipContentPaths($context, $submission, $publication, $RosettaSubDirectory);
+                        // Skip if deposit activity status is not empty and is not declined nor deleted.
+                        if(!empty($depositActivity->status) &&
+                            !in_array(
+                                strtolower($depositActivity->status),
+                                $this->depositRejectedStatuses, true)){
+                            continue;
+                        }
+                    }
 
-				$previousDeposit = $submission->getData($this->getPlugin()->getDepositStatusSettingName());
+                    // Deposit the publication to Rosetta based on specified settings.
+                    if ($settings == null) {
+                        $this->depositPublication($submission, $publication);
+                    } else {
+                        $issue = Services::get('issue')->get($publication->getData('issueId'));
+                        foreach ($settings as $setting) {
+                            if (($issue->getData('number') == $setting['number'] &&
+                                $issue->getData('volume') == $setting['volume'] &&
+                                $issue->getData('year') == $setting['year']) /* || $issue == null */) {
+                                $this->depositPublication($submission, $publication);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-				if (!is_dir($SIP_PATH) and !$previousDeposit) {
+    /**
+     * Deposit a publication to Rosetta.
+     *
+     * This method deposits a single publication to Rosetta.
+     *
+     * @param Submission $submission The submission object.
+     * @param Publication $publication The publication object.
+     *
+     * @return void
+     */
+    private function depositPublication(Submission $submission, Publication $publication): void
+    {
+        $oldMask = umask(0);
 
-					if (is_dir($SIP_PATH) == false) {
-						mkdir($SIP_PATH, 0777);
-					}
-					mkdir($PUB_CONTENT_PATH, 0777);
-					mkdir($STREAM_PATH, 0777);
-					$masterPath = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
+        $galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
-					mkdir($masterPath, 0777);
-					$DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
-					$IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
+        if (count($galleyFiles) > 0) {
 
-					$metsDom = new RosettaMETSDom($context, $submission, $publication, $this->getPlugin());
-					file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
+            $INGEST_PATH = PKPString::strtolower($this->context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+            $SIP_PATH = join(DIRECTORY_SEPARATOR, array($this->subDirectory, $INGEST_PATH));
+            $PUB_CONTENT_PATH = join(DIRECTORY_SEPARATOR, array($SIP_PATH, 'content'));
+            $STREAM_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, 'streams'));
+            $IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
+            $DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
+            $MASTER_PATH = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
 
-					$dcDom = new RosettaDCDom($context, $publication, $submission, false);
-					file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
+            if (!is_dir($SIP_PATH)) mkdir($SIP_PATH, 0777);
+            if (!is_dir($PUB_CONTENT_PATH)) mkdir($PUB_CONTENT_PATH, 0777);
+            if (!is_dir($STREAM_PATH)) mkdir($STREAM_PATH, 0777);
+            if (!is_dir($MASTER_PATH)) mkdir($MASTER_PATH, 0777);
 
+            $metsDom = new RosettaMETSDom($this->context, $submission, $publication, $this->plugin);
+            file_put_contents($IE_PATH, $metsDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-					list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-					shell_exec('php' . " " . $_SERVER['argv'][0] . "  NativeImportExportPlugin export " . $xmlExport . " " . $_SERVER['argv'][2] . " article " . $submission->getData('id'));
+            $dcDom = new RosettaDCDom($this->context, $publication, $submission, false);
+            file_put_contents($DC_PATH, $dcDom->saveXML(), FILE_APPEND | LOCK_EX);
 
-					if (file_exists($xmlExport)) {
-						array_push($galleyFiles, $tmpExportFile);
-					}
-					$failedFiles = [];
-					foreach ($galleyFiles as $file) {
+            list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
 
-						$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($file["fullFilePath"]))));
-						if (!$copySuccess) $failedFiles [] = $file["fullFilePath"];
-						foreach ($file["dependentFiles"] as $dependentFile) {
-							$copySuccess = copy($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"], join(DIRECTORY_SEPARATOR, array($STREAM_PATH, $file["path"], basename($dependentFile["fullFilePath"]))));
-							if (!$copySuccess) $failedFiles [] = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile["fullFilePath"];
-						}
-					}
-					// Run validation
-					exec('java -jar ' . $this->getPlugin()->getPluginPath() . '/bin/xsd11-validator.jar -if ' . $IE_PATH . ' -sf ' . $this->getPlugin()->getPluginPath() . '/schema/mets_rosetta.xsd ', $validationOutPut, $validationStatus);
-					if (!$isTest and $validationStatus == 0 && count($failedFiles) == 0) {
-						$this->doDeposit($context, $INGEST_PATH, $SIP_PATH, $submission);
-						unlink($xmlExport);
-					} else {
-						foreach ($failedFiles as $failedFile) {
-							var_dump("Copy failed: " . $failedFile);
-						}
-					}
+            shell_exec('php' . ' ' . $_SERVER['argv'][0] . '  NativeImportExportPlugin export ' .
+                $xmlExport . ' ' . $_SERVER['argv'][2] . ' article ' . $submission->getData('id'));
 
-				}
-			} else {
-				var_dump("Submission " . $submission->getId() . " publication object " . $publication->getId() . " does not contain any galleys");
-			}
-		}
+            if (file_exists($xmlExport)) $galleyFiles[] = $tmpExportFile;
 
+            $failedFiles = [];
 
-		umask($oldMask);
-	}
+            foreach ($galleyFiles as $file) {
+                $copySuccess = copy(
+                    $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'],
+                    join(DIRECTORY_SEPARATOR,
+                        array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))));
 
-	/**
-	 * @param Context $context
-	 * @param Submission $submission
-	 * @param Publication $publication
-	 * @param $RosettaSubDirectory
-	 * @return array
-	 */
-	private function getSipContentPaths(Context $context, Submission $submission, Publication $publication, $RosettaSubDirectory): array
-	{
-		$ingestPath = PKPString::strtolower($context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
-		$sipPath = join(DIRECTORY_SEPARATOR, array($RosettaSubDirectory, $ingestPath));
-		$pubContentPath = join(DIRECTORY_SEPARATOR, array($sipPath, 'content'));
-		$streamsPath = join(DIRECTORY_SEPARATOR, array($pubContentPath, 'streams'));
+                if (!$copySuccess)
+                    $failedFiles [] = $file['fullFilePath'];
 
+                foreach ($file['dependentFiles'] as $dependentFile) {
+                    $copySuccess = copy(
+                        $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
+                        join(DIRECTORY_SEPARATOR,
+                            array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
 
-		return array($ingestPath, $sipPath, $pubContentPath, $streamsPath);
-	}
+                    if (!$copySuccess)
+                        $failedFiles [] = $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'];
+                }
+            }
 
-	/**
-	 * @param Context $context
-	 * @param string $ingestPath
-	 * @param string $sipPath
-	 * @param Submission $submission
-	 */
-	function doDeposit(Context $context, string $ingestPath, string $sipPath, Submission $submission): void
-	{
+            // change permissions of stream path recursively
+            $this->plugin->setPermissionsRecursively($STREAM_PATH, 0777);
 
-		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
+            if (count($failedFiles) > 0) {
+                foreach ($failedFiles as $failedFile) {
+                    var_dump("Copy of file failed for " . $failedFile);
+                }
+            }
 
-		$endpoint = $this->getPlugin()->getSetting($context->getId(), 'rosettaHost') . 'deposit/DepositWebServices?wsdl';
-		$producerId = $this->getPlugin()->getSetting($context->getId(), 'rosettaProducerId');
-		$materialFlowId = $this->getPlugin()->getSetting($context->getId(), 'rosettaMaterialFlowId');
-		$payload = $this->getSoapPayload($materialFlowId, $ingestPath, $producerId);
+            // Run validation
+            exec('java -jar ' . $this->plugin->getPluginPath() . '/bin/xsd11-validator.jar ' .
+                '-if ' . $IE_PATH . ' ' .
+                '-sf ' . $this->plugin->getPluginPath() . '/schema/mets_rosetta.xsd ',
+                $validationOutPut,
+                $validationStatus);
 
+            // if not testMode and validated
+            if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
+                $this->doDeposit($INGEST_PATH, $publication);
+                unlink($xmlExport);
+                $this->plugin->removeDirRecursively($SIP_PATH);
+            }
+        } else {
+            var_dump('Submission ' . $submission->getId() . ' publication object ' . $publication->getId() . ' does not contain any galleys');
+        }
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $endpoint);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		$headers = array();
-		$headers[] = 'Content-Type: text/xml';
-		$headers[] = 'SoapAction: ""';
-		$headers[] = 'Authorization: local ' . $this->getBase64Credentials($context);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        umask($oldMask);
+    }
 
-		$response = curl_exec($ch);
-		$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		$sipIdNode = $this->getSoapResponeXpath($ch, $response)->query("//ser:sip_id")[0];
-		$errorMessage = $this->getSoapResponeXpath($ch, $response)->query("//ser:message_code")[0];
-		$sipStatus = json_decode($submission->getData($this->getPlugin()->getDepositStatusSettingName()), true);
+    /**
+     * Deposit a publication to Rosetta.
+     *
+     * This method deposits a single publication to Rosetta.
+     *
+     * @param string $ingestPath The ingest path for the publication.
+     * @param Publication $publication The publication object.
+     *
+     * @return void
+     */
+    private function doDeposit(string $ingestPath, Publication $publication): void
+    {
+        // Get the deposit endpoint and SOAP payload
+        $endpoint = $this->getDepositEndpoint('soap');
+        $payload = $this->getSoapPayload($this->materialFlowId, $ingestPath, $this->producerId);
 
-		$isModifiedPublication = $sipStatus['date'] < $submission->getData('lastModified');
-		$registeredDoi = $submission->getData('crossref::registeredDoi');
+        // Define the HTTP headers
+        $headers = [
+            'Content-Type' => 'text/xml',
+            'SoapAction' => '""',
+            'Authorization' => 'local ' . $this->getBase64Credentials(),
+        ];
 
-		if (($responseCode == 200 && !is_null($sipIdNode)) && (!isset($sipStatus) || $isModifiedPublication) && $registeredDoi) {
-			$rosetta_status = array(
-				'id' => $sipIdNode->nodeValue,
-				'status' => true,
-				'date' => Core::getCurrentDate(),
-				'doi' => $registeredDoi
-			);
-			$submission->setData($this->getPlugin()->getDepositStatusSettingName(), json_encode($rosetta_status));
-			$submissionDao->updateObject($submission);
+        try {
+            // Send the HTTP POST request
+            $response = $this->client->post($endpoint, ['headers' => $headers, 'body' => $payload,]);
+            $responseCode = $response->getStatusCode();
+            $responseBody = $response->getBody()->getContents();
 
-			// Wait for network to finish ingestion
-			sleep(30);
+            // Extract relevant data from the SOAP response
+            $sipIdNode = $this->getSoapResponseXpath($responseBody)->query("//ser:sip_id")[0];
+            $errorMessage = $this->getSoapResponseXpath($responseBody)->query("//ser:message_code")[0];
 
-			$this->getPlugin()->rrmdir($sipPath);
-			$this->getPlugin()->logInfo($context->getData('id') . "-" . $submission->getData('id'));
+            // Handle error messages if present
+            if (!empty($errorMessage)) {
+                $this->plugin->logError($errorMessage);
+            }
 
-		} else {
-			$this->getPlugin()->logError($response);
-		}
+            // Create a deposit status model
+            $depositStatus = new DepositStatusModel();
 
+            // Check if the deposit was successful
+            if ($this->isTest || ($responseCode == 200 && !is_null($sipIdNode))) {
+                $depositStatus->id = $sipIdNode->nodeValue;
+                $depositStatus->status = true;
+                $depositStatus->date = Core::getCurrentDate();
+                $depositStatus->doi = $publication->getData($this->plugin->registeredDoiSettingName);
 
-		curl_close($ch);
-	}
+                // Wait for network to finish ingestion (adjust sleep time as needed)
+                sleep(30);
 
-	/**
-	 * @param $materialFlowId
-	 * @param string $ingestPath
-	 * @param $producerId
-	 * @return string
-	 */
-	private function getSoapPayload($materialFlowId, string $ingestPath, $producerId): string
-	{
-		$payload = '<?xml version="1.0" encoding="UTF-8"?>' .
-			'<soap:Envelope' .
-			'	soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"' .
-			'	xmlns:dbs="http://dps.exlibris.com/"' .
-			'	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' .
-			'	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"' .
-			'	xmlns:xsd="http://www.w3.org/2001/XMLSchema"' .
-			'	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
-			'  <soap:Body>' .
-			'	<dbs:submitDepositActivity>' .
-			'	  <arg1>' . $materialFlowId . '</arg1>' .
-			'	  <arg2>' . $ingestPath . '</arg2>' .
-			'	  <arg3>' . $producerId . '</arg3>' .
-			'	</dbs:submitDepositActivity>' .
-			'  </soap:Body>' .
-			'</soap:Envelope>';
-		return $payload;
-	}
+                // Log deposit information
+                $this->plugin->logInfo($this->context->getData('id') . "-" . $publication->getData('id'));
 
-	/**
-	 * @param Context $context
-	 * @return string
-	 */
-	private function getBase64Credentials(Context $context): string
-	{
-		$username = $this->getPlugin()->getSetting($context->getId(), 'rosettaUsername');
-		$password = $this->getPlugin()->getSetting($context->getId(), 'rosettaPassword');
-		$institutionCode = $this->getPlugin()->getSetting($context->getId(), 'rosettaInstitutionCode');
+                var_dump($this->context->getData('id') . "-" . $publication->getData('id'));
+            } else {
+                // Handle deposit failure
+                $depositStatus->id = '';
+                $depositStatus->status = false;
+                $depositStatus->date = '';
+                $depositStatus->doi = '';
 
-		$password = $username . '-institutionCode-' . $institutionCode . ':' . $password;
-		$base64_credentials = base64_encode($password);
-		return $base64_credentials;
-	}
+                // Log the response in case of an error
+                $this->plugin->logError($responseBody);
+            }
 
-	/**
-	 * @param $ch
-	 * @param string $response
-	 * @return DOMXPath
-	 */
-	protected function getSoapResponeXpath($ch, string $response): DOMXPath
-	{
-		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-		$body = substr($response, $header_size);
-		$doc = new DOMDocument();
-		$doc->loadXML(html_entity_decode($body));
-		$xpath = new DOMXpath($doc);
-		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
-		return $xpath;
-	}
+            // Update the publication object with deposit status
+            $publicationDao = new PublicationDAO();
+            $publication->setData($this->plugin->depositStatusSettingName, json_encode($depositStatus));
+            $publicationDao->updateObject($publication);
 
+        } catch (Exception $e) {
+            $this->plugin->logError($e->getMessage());
+        }
+    }
+
+    /**
+     * Generate SOAP payload for depositing a publication to Rosetta.
+     *
+     * This method constructs a SOAP XML payload with the necessary information for depositing a publication to Rosetta.
+     *
+     * @param string $materialFlowId The material flow ID associated with the publication.
+     * @param string $ingestPath The ingest path for the publication.
+     * @param string $producerId The producer ID for the publication.
+     *
+     * @return string The generated SOAP payload as a string.
+     */
+    private function getSoapPayload(string $materialFlowId, string $ingestPath, string $producerId): string
+    {
+        return
+            '<?xml version="1.0" encoding="UTF-8"?>' .
+            '<soap:Envelope' .
+            '	soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"' .
+            '	xmlns:dbs="http://dps.exlibris.com/"' .
+            '	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' .
+            '	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"' .
+            '	xmlns:xsd="http://www.w3.org/2001/XMLSchema"' .
+            '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
+            '  <soap:Body>' .
+            '	<dbs:submitDepositActivity>' .
+            '	  <arg1>' . $materialFlowId . '</arg1>' .
+            '	  <arg2>' . $ingestPath . '</arg2>' .
+            '	  <arg3>' . $producerId . '</arg3>' .
+            '	</dbs:submitDepositActivity>' .
+            '  </soap:Body>' .
+            '</soap:Envelope>';
+    }
+
+    /**
+     * Generate Base64-encoded credentials for Rosetta API authentication.
+     *
+     * This method constructs a Base64-encoded string containing the username, institution code,
+     * and password for authenticating with the Rosetta API.
+     *
+     * @return string The Base64-encoded credentials string.
+     */
+    private function getBase64Credentials(): string
+    {
+        return base64_encode($this->username . '-institutionCode-' . $this->institutionCode . ':' . $this->password);
+    }
+
+    /**
+     * Creates and returns a DOMXPath object for querying the XML response obtained from a SOAP request.
+     *
+     * This method loads the provided XML response into a DOMDocument and creates a DOMXPath object
+     * for performing XPath queries on the XML data. It also registers a namespace 'ser' for use in XPath queries.
+     *
+     * @param string $response The SOAP response as a string.
+     *
+     * @return DOMXPath The DOMXPath object containing the parsed SOAP response.
+     */
+    protected function getSoapResponseXpath(string $response): DOMXPath
+    {
+        // Create a new DOMDocument and load the XML response.
+        $doc = new DOMDocument();
+        $doc->loadXML(html_entity_decode($response));
+
+        // Create a DOMXPath object for querying the XML.
+        $xpath = new DOMXpath($doc);
+
+        // Register the 'ser' namespace for use in XPath queries.
+        $xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
+
+        return $xpath;
+    }
+
+    /**
+     * Update the deposited statuses of publications based on Rosetta API data.
+     *
+     * This method retrieves deposit activity information from the Rosetta API and updates the deposit status
+     * of corresponding publications in the system. It associates the deposit activity data with the respective
+     * publications and updates their records in the database.
+     *
+     * @return void
+     */
+    private function updateIsDeposited(): void
+    {
+        foreach ($this->getDepositsFromRosettaApi() as $key => $value) {
+            // Create a DepositActivityModel instance from the Rosetta API data.
+            $row = new DepositActivityModel($value);
+
+            // Extract submission ID from the subdirectory field.
+            $subdirectory = explode('-', $row->subdirectory);
+            $submissionId = $subdirectory[count($subdirectory) - 2];
+
+            // Retrieve the submission object based on the extracted submission ID.
+            $submissionDao = new SubmissionDAO();
+            $submission = $submissionDao->getById($submissionId);
+
+            if (is_a($submission, 'Submission')) {
+                // Get the list of publications associated with the submission.
+                $publications = $submission->getData('publications');
+
+                foreach ($publications as $publication) {
+                    // Check if the subdirectory matches the publication's version.
+                    if ($subdirectory[count($subdirectory) - 1] === 'v' . $publication->getData('version')) {
+                        // Update the publication's deposit activity data and save it to the database.
+                        $publication->setData($this->plugin->depositActivitySettingName, json_encode($row));
+                        $publicationDao = new PublicationDAO();
+                        $publicationDao->updateObject($publication);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Retrieve deposit activity data from the Rosetta API.
+     *
+     * This method makes HTTP requests to the Rosetta API to fetch deposit activity data based on specified parameters.
+     * It supports pagination by using an offset and retrieves a batch of deposit records at a time.
+     *
+     * @param int $offset The offset for pagination e.g. 0 (default), 1, 2, ...
+     *
+     * @return array An array containing deposit activity data obtained from the Rosetta API.
+     */
+    private function getDepositsFromRosettaApi(int $offset = 0): array
+    {
+        $deposits = []; // Array to store deposit activity data
+
+        // Get the deposit endpoint
+        $params = [
+            'producer' => $this->producerId,
+            'material_flow' => $this->materialFlowId,
+            'creation_date_from' => date('d/m/Y', strtotime('-' . $this->plugin->depositHistoryInDays . ' days')),
+            'creation_date_to' => date("d/m/Y"),
+            'offset' => $offset
+        ];
+        $endpoint = $this->getDepositEndpoint('rest') . '?' . http_build_query($params);
+
+        // Define the HTTP headers
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'local ' . $this->getBase64Credentials(),
+            'accept-encoding' => 'gzip, deflate'
+        ];
+
+        try {
+            // Make a GET request to the Rosetta API with the specified parameters.
+            $response = $this->client->get($endpoint, ['headers' => $headers]);
+
+            if ($response->getStatusCode() === 200) {
+                $body = json_decode($response->getBody(), true);
+
+                // Check if there are more records to fetch (pagination).
+                if ($body['total_record_count'] >= 100) {
+                    $deposits = array_merge($deposits, $this->getDepositsFromRosettaApi($offset + 1));
+                }
+
+                // Merge the fetched deposit records into the result array.
+                if (!empty($body['deposit'])) {
+                    $deposits = array_merge($deposits, $body['deposit']);
+                }
+            }
+        } catch (Exception $e) {
+            $this->plugin->logError($e->getMessage());
+        }
+
+        // If offset is 0, sort and log the total record count.
+        if ($offset === 0) {
+            $local = [];
+            foreach ($deposits as $row) {
+                $local[$row['id']] = $row;
+            }
+            ksort($local);
+            $deposits = $local;
+
+            var_dump('total_record_count:' . count($deposits));
+        }
+
+        return $deposits;
+    }
+
+    /**
+     * Generate the endpoint URL for Rosetta deposits based on the API type.
+     *
+     * This method constructs the endpoint URL for making deposits to Rosetta. It supports both SOAP and REST APIs
+     * by specifying the API type. The constructed URL is based on the provided host and protocol.
+     *
+     * @param string $apiType The type of the Rosetta API, either "soap" or "rest" (default).
+     *
+     * @return string The generated endpoint URL for Rosetta deposits.
+     */
+    private function getDepositEndpoint(string $apiType = ''): string
+    {
+        $protocol = explode(':', $this->host)[0]; // Extract the protocol (e.g., "https")
+
+        // Extract the host parts after removing the protocol.
+        $hostParts = explode('/',
+            str_replace($protocol . '://', '', $this->host));
+
+        return match ($apiType) {
+            'soap' => $protocol . '://' . $hostParts[0] . '/dpsws/deposit/DepositWebServices?wsdl',
+            default => $protocol . '://' . $hostParts[0] . '/rest/v0/deposits',
+        };
+    }
 }

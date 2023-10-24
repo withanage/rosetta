@@ -67,10 +67,10 @@ subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE
 institution_code = $INSTITUTE_NAME
 username = $ROSETTA_USER
 password = $ROSETTA_PASSWORD
-host = $ROSETTA_DEPOSIT_URL e.g. https://<host>:<port>/deposit/DepositWebServices?wsdl
+host = $ROSETTA_DEPOSIT_URL e.g. https://<host>:<port>
 materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
 producerId = $PRODUCER_ID_FOR_OJS_ROSETTA
-```
+testMode = true e.g. true false
 
 #### 2. Add  Journals or specific issues to be deposited
 To select the individual Journals , add the acronym of the journal in the [settings.json](settings.json) file in the plugin folder.
