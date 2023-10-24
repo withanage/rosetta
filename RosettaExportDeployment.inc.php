@@ -171,7 +171,7 @@ class RosettaExportDeployment
                 foreach ($publications as $publication) {
 
                     // Skip if test and publication DOI is empty.
-                    if ($this->isTest && empty($publication->getStoredPubId('doi'))) {
+                    if ($this->isTest && $publication->getStoredPubId('doi')) {
                         continue;
                     }
 
