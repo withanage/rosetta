@@ -295,10 +295,13 @@ class ModsDOM extends DOMDocument
 		$relatedItem->appendChild($extension);
 		$elementNames = array('abbreviation', 'acronym', 'authorInformation', 'clocksLicense', 'customHeaders', 'librarianInformation', 'lockssLicense', 'openAccessPolicy', 'privacyStatement', 'readerInformation', 'searchDescription', 'supportedLocales', 'supportedSubmissionLocales');
 		foreach ($elementNames as $elementName) {
-			foreach ($context->getData($elementName) as $lang => $value) {
-				$elem = $this->createElement($elementName, $value);
-				$elem->setAttribute("xml:lang", $lang);
-				$extension->appendChild($elem);
+			$data = $context->getData($elementName);
+			if($data) {
+				foreach ($data as $lang => $value) {
+					$elem = $this->createElement($elementName, $value);
+					$elem->setAttribute("xml:lang", $lang);
+					$extension->appendChild($elem);
+				}
 			}
 		}
 		//TODO
