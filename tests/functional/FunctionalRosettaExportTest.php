@@ -1,6 +1,8 @@
 <?php
 
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 require_mock_env('env2');
 
 import('plugins.importexport.rosetta.tests.functional.TestJournal');
@@ -59,7 +61,24 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	}
 
 	/**
-	 * @return mixed|\PHPUnit\Framework\MockObject\MockObject|PKPRouter
+	 * @param $router
+	 * @return mixed|MockObject|Request
+	 */
+	public function getRequest($router)
+	{
+		import('classes.core.Request');
+		$request = $this->getMockBuilder(Request::class)
+			->setMethods(array('getRouter'))
+			->getMock();
+		$request->expects($this->any())
+			->method('getRouter')
+			->will($this->returnValue($router));
+		Registry::set('request', $request);
+		return $request;
+	}
+
+	/**
+	 * @return mixed|MockObject|PKPRouter
 	 */
 	public function getRouter()
 	{
@@ -73,23 +92,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 			->method('url')
 			->will($this->returnCallback(array($this, 'getRouterUrl')));
 		return $router;
-	}
-
-	/**
-	 * @param $router
-	 * @return mixed|\PHPUnit\Framework\MockObject\MockObject|Request
-	 */
-	public function getRequest($router)
-	{
-		import('classes.core.Request');
-		$request = $this->getMockBuilder(Request::class)
-			->setMethods(array('getRouter'))
-			->getMock();
-		$request->expects($this->any())
-			->method('getRouter')
-			->will($this->returnValue($router));
-		Registry::set('request', $request);
-		return $request;
 	}
 
 	/**
@@ -124,6 +126,14 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	}
 
 	/**
+	 * @return Publication|null
+	 */
+	public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
+	/**
 	 * @param $dcDom
 	 */
 	public function removeCustomNodes($dcDom): void
@@ -138,7 +148,7 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	/**
 	 * @return Plugin
 	 */
-	public function getPlugin() : Plugin
+	public function getPlugin(): Plugin
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		return $importExportPlugins['RosettaExportPlugin'];
@@ -181,14 +191,6 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	public function setIsTest(bool $isTest): void
 	{
 		$this->isTest = $isTest;
-	}
-
-	/**
-	 * @return Publication|null
-	 */
-	public function getLatestPublication(): ?Publication
-	{
-		return $this->getSubmission()->getLatestPublication();
 	}
 
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)

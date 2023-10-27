@@ -29,34 +29,34 @@ namespace TIBHannover\Rosetta\Models;
 
 class DepositStatusModel
 {
-    public string $id = '';
-    public bool $status = false;
-    public string $date = '';
-    public string $doi = '';
+	public string $id = '';
+	public bool $status = false;
+	public string $date = '';
+	public string $doi = '';
 
-    /**
-     * Constructor
-     *
-     * @param array|null $data An associative array containing deposit status data to initialize the object.
-     */
-    function __construct(?array $data = [])
-    {
-        if (!empty($data)) $this->assignValues($data);
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param array|null $data An associative array containing deposit status data to initialize the object.
+	 */
+	function __construct(?array $data = [])
+	{
+		if (!empty($data)) $this->assignValues($data);
+	}
 
-    /**
-     * Assign values to class properties from the given data array.
-     *
-     * This method is used to populate the class properties with data from an associative array.
-     *
-     * @param array $data An associative array containing data to be assigned to class properties.
-     */
-    private function assignValues(array $data): void
-    {
-        foreach ($data as $key => $value) {
-            if (property_exists(__CLASS__, $key)) {
-                if (!empty($value) and isset($value))  $this->$key = $value;
-            }
-        }
-    }
+	/**
+	 * Assign values to class properties from the given data array.
+	 *
+	 * This method is used to populate the class properties with data from an associative array.
+	 *
+	 * @param array $data An associative array containing data to be assigned to class properties.
+	 */
+	private function assignValues(array $data): void
+	{
+		foreach ($data as $key => $value) {
+			if (property_exists(__CLASS__, $key)) {
+				if (!empty($value) and isset($value)) $this->$key = $value;
+			}
+		}
+	}
 }
