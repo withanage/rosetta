@@ -53,10 +53,10 @@ use GuzzleHttp\Client;
 use PKPString;
 use Publication;
 use PublicationDAO;
-use RosettaDCDom;
+use TIBHannover\Rosetta\Dc\RosettaDCDom;
 use RosettaExportPlugin;
-use RosettaFileService;
-use RosettaMETSDom;
+use TIBHannover\Rosetta\Files\RosettaFileService;
+use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use Services;
 use Submission;
 use SubmissionDAO;
@@ -134,7 +134,7 @@ class RosettaExportDeployment
     {
         // Check if the folder is mounted and return if not.
         if (!is_dir($this->subDirectory)) {
-            $this->plugin->logError('The Rosetta drive "' . $this->subDirectory . '" is not mounted');
+            $this->plugin->logError('The Rosetta drive ' . $this->subDirectory . ' is not mounted');
             return;
         }
 
@@ -234,11 +234,14 @@ class RosettaExportDeployment
 
         if (count($galleyFiles) > 0) {
 
-            $INGEST_PATH = PKPString::strtolower($this->context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
+            $INGEST_PATH = PKPString::strtolower(
+                $this->context->getLocalizedAcronym()) . '-' .
+                $submission->getId() .
+                '-v' . $publication->getData('version');
             $SIP_PATH = join(DIRECTORY_SEPARATOR, array($this->subDirectory, $INGEST_PATH));
             $PUB_CONTENT_PATH = join(DIRECTORY_SEPARATOR, array($SIP_PATH, 'content'));
             $STREAM_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, 'streams'));
-            $IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, "ie1.xml"));
+            $IE_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, 'ie1.xml'));
             $DC_PATH = $SIP_PATH . DIRECTORY_SEPARATOR . 'dc.xml';
             $MASTER_PATH = join(DIRECTORY_SEPARATOR, array($STREAM_PATH, MASTER_PATH));
 
@@ -287,7 +290,7 @@ class RosettaExportDeployment
 
             if (count($failedFiles) > 0) {
                 foreach ($failedFiles as $failedFile) {
-                    var_dump("Copy of file failed for " . $failedFile);
+                    var_dump('Copy of file failed for ' . $failedFile);
                 }
             }
 
@@ -305,7 +308,8 @@ class RosettaExportDeployment
                 $this->plugin->removeDirRecursively($SIP_PATH);
             }
         } else {
-            var_dump('Submission ' . $submission->getId() . ' publication object ' . $publication->getId() . ' does not contain any galleys');
+            var_dump('Submission ' . $submission->getId() . ' publication object ' .
+                $publication->getId() . ' does not contain any galleys');
         }
 
         umask($oldMask);
@@ -341,8 +345,8 @@ class RosettaExportDeployment
             $responseBody = $response->getBody()->getContents();
 
             // Extract relevant data from the SOAP response
-            $sipIdNode = $this->getSoapResponseXpath($responseBody)->query("//ser:sip_id")[0];
-            $errorMessage = $this->getSoapResponseXpath($responseBody)->query("//ser:message_code")[0];
+            $sipIdNode = $this->getSoapResponseXpath($responseBody)->query('//ser:sip_id')[0];
+            $errorMessage = $this->getSoapResponseXpath($responseBody)->query('//ser:message_code')[0];
 
             // Handle error messages if present
             if (!empty($errorMessage)) {
@@ -357,15 +361,16 @@ class RosettaExportDeployment
                 $depositStatus->id = $sipIdNode->nodeValue;
                 $depositStatus->status = true;
                 $depositStatus->date = Core::getCurrentDate();
-                if(!empty($publication->getStoredPubId('doi'))) { $depositStatus->doi = $publication->getStoredPubId('doi'); }
+                if(!empty($publication->getStoredPubId('doi')))
+                    $depositStatus->doi = $publication->getStoredPubId('doi');
 
                 // Wait for network to finish ingestion (adjust sleep time as needed)
                 sleep(30);
 
                 // Log deposit information
-                $this->plugin->logInfo($this->context->getData('id') . "-" . $publication->getData('id'));
+                $this->plugin->logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
 
-                var_dump($this->context->getData('id') . "-" . $publication->getData('id'));
+                var_dump($this->context->getData('id') . '-' . $publication->getData('id'));
             } else {
                 // Handle deposit failure
                 $depositStatus->id = '';
@@ -516,7 +521,7 @@ class RosettaExportDeployment
             'producer' => $this->producerId,
             'material_flow' => $this->materialFlowId,
             'creation_date_from' => date('d/m/Y', strtotime('-' . $this->plugin->depositHistoryInDays . ' days')),
-            'creation_date_to' => date("d/m/Y"),
+            'creation_date_to' => date('d/m/Y'),
             'offset' => $offset
         ];
         $endpoint = $this->getDepositEndpoint('rest') . '?' . http_build_query($params);
@@ -571,13 +576,13 @@ class RosettaExportDeployment
      * This method constructs the endpoint URL for making deposits to Rosetta. It supports both SOAP and REST APIs
      * by specifying the API type. The constructed URL is based on the provided host and protocol.
      *
-     * @param string $apiType The type of the Rosetta API, either "soap" or "rest" (default).
+     * @param string $apiType The type of the Rosetta API, either soap or rest (default).
      *
      * @return string The generated endpoint URL for Rosetta deposits.
      */
     private function getDepositEndpoint(string $apiType = ''): string
     {
-        $protocol = explode(':', $this->host)[0]; // Extract the protocol (e.g., "https")
+        $protocol = explode(':', $this->host)[0]; // Extract the protocol (e.g., 'https')
 
         // Extract the host parts after removing the protocol.
         $hostParts = explode('/',
