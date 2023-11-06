@@ -602,7 +602,7 @@ class RosettaExportDeployment
 
 		return $xpath;
 	}
-	public function getPlugin(): Plugin
+	public function getPlugin(): RosettaExportPlugin
 	{
 		return $this->plugin;
 	}
