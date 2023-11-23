@@ -342,6 +342,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 	 */
 	public function removeDirRecursively(string $dir): void
 	{
+
 		if (empty($dir)) return;
 
 		try {

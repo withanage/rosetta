@@ -160,8 +160,9 @@ class RosettaMETSDom extends DOMDocument
 			$structMapNode->setAttribute('TYPE', 'PHYSICAL');
 			$divNode->appendChild($structMapDiv);
 			$structMapNode->appendChild($divNode);
-
-			$this->record->appendChild($fileSec);
+			if(count($galleyFiles)>1) {
+				$this->record->appendChild($fileSec);
+			}
 
 			$this->record->appendChild($structMapNode);
 		}
