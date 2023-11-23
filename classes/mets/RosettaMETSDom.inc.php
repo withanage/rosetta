@@ -116,10 +116,11 @@ class RosettaMETSDom extends DOMDocument
 		// get Galley files
 		$galleyFiles = RosettaFileService::getGalleyFiles($this->getPublication());
 		// TODO append import export file
+		/**
 		list($xmlExport, $exportFile) = $this->appendImportExportFile();
 		if (file_exists($xmlExport)) {
 			$galleyFiles[] = $exportFile;
-		}
+		}*/
 
 		// mets:fileSec
 		$fileSec = $this->createElementNS($this->metsNS, 'mets:fileSec');

@@ -347,14 +347,15 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		try {
 			if (is_dir($dir)) {
 				// iterate through all items in current directory
-				$items = new DirectoryIterator($dir);
+				$items = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 				foreach ($items as $item) {
+					$pathName = $item->getPathname();
 					if ($item->isDir() && !$item->isDot()) {
 						// current item is a directory, call this method again
-						$this->removeDirRecursively($item->getPathname());
+						$this->removeDirRecursively($pathName);
 					} else {
 						// current item is a file, remove file
-						unlink($item->getPathname());
+						unlink($pathName);
 					}
 				}
 				// Remove the directory itself after its contents are deleted.

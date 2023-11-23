@@ -412,13 +412,13 @@ class RosettaExportDeployment
 
 		$dcDom = new RosettaDCDom($this->context, $publication, $submission, false);
 		file_put_contents($DC_PATH, $dcDom->saveXML(), LOCK_EX);
-
+		//TODO remove this
+		/**
 		list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-
 		shell_exec('php' . ' ' . $_SERVER['argv'][0] . '  NativeImportExportPlugin export ' .
 			$xmlExport . ' ' . $_SERVER['argv'][2] . ' article ' . $submission->getData('id'));
-
 		if (file_exists($xmlExport)) $galleyFiles[] = $tmpExportFile;
+		*/
 
 		$failedFiles = [];
 
@@ -461,7 +461,7 @@ class RosettaExportDeployment
 		// if not testMode and validated
 		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
 			$this->doDeposit($INGEST_PATH, $publication);
-			unlink($xmlExport);
+			//TODO unlink($xmlExport);
 			$this->plugin->removeDirRecursively($SIP_PATH);
 		}
 
