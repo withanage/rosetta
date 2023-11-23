@@ -350,7 +350,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 				$items = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 				foreach ($items as $item) {
 					$pathName = $item->getPathname();
-					if ($item->isDir() && !$item->isDot()) {
+					if ($item->isDir()) {
 						// current item is a directory, call this method again
 						$this->removeDirRecursively($pathName);
 					} else {
