@@ -442,7 +442,7 @@ class RosettaExportDeployment
 		}
 
 		// change permissions of stream path recursively
-		$this->plugin->setPermissionsRecursively($STREAM_PATH, 0777);
+		$this->plugin->setPermissionsRecursively($STREAM_PATH, 0775);
 
 		if (count($failedFiles) > 0) {
 			foreach ($failedFiles as $failedFile) {
