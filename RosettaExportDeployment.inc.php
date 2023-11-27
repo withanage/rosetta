@@ -179,7 +179,7 @@ class RosettaExportDeployment
 						if (!file_exists($fileFullPath)) {
 							$galleyFileMissing = true;
 						} else {
-							var_dump('File ' . $galleyFile['fullFilePath'] . ' does not exist');
+							var_dump('File ' . $fileFullPath . ' does not exist');
 						}
 					}
 
