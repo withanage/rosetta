@@ -117,10 +117,10 @@ class RosettaMETSDom extends DOMDocument
 		$galleyFiles = RosettaFileService::getGalleyFiles($this->getPublication());
 		// TODO append import export file
 		/**
-		list($xmlExport, $exportFile) = $this->appendImportExportFile();
-		if (file_exists($xmlExport)) {
-			$galleyFiles[] = $exportFile;
-		}*/
+		 * list($xmlExport, $exportFile) = $this->appendImportExportFile();
+		 * if (file_exists($xmlExport)) {
+		 * $galleyFiles[] = $exportFile;
+		 * }*/
 
 		// mets:fileSec
 		$fileSec = $this->createElementNS($this->metsNS, 'mets:fileSec');
@@ -130,14 +130,16 @@ class RosettaMETSDom extends DOMDocument
 		$fileGrpNode->setAttribute('ADMID', 'rep' . $repId . '-amd');
 		$fileSec->appendChild($fileGrpNode);
 
-		//mets structMap
+		//mets:structMap
 		$divNode = $this->createElementNS($this->metsNS, 'mets:div');
 		$divNode->setAttribute('LABEL', 'Preservation Master');
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
 		if (!$isTest) {
 			$galleyFilesCount = count($galleyFiles) + 1;
+			$galleyFilesExist = 0;
 			foreach ($galleyFiles as $index => $file) {
+				if (file_exists($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'])) $galleyFilesExist += 1;
 				$this->createFileCharacteristics($index + 1, $repIdSuffix, $recordId, $file);
 				$fileNode = $this->createMetsFileSecChildElements($repId, strval($index + 1), $file);
 				$fileGrpNode->appendChild($fileNode);
@@ -145,6 +147,7 @@ class RosettaMETSDom extends DOMDocument
 				$structMapDiv->appendChild($structMap);
 				$dependentFiles = $file['dependentFiles'];
 				foreach ($dependentFiles as $dependentFile) {
+					if (file_exists($this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'])) $galleyFilesExist += 1;
 					$this->createFileCharacteristics($galleyFilesCount, $repIdSuffix, $recordId, $dependentFile);
 					$fileNode = $this->createMetsFileSecChildElements($repId, strval($galleyFilesCount), $dependentFile);
 					$fileGrpNode->appendChild($fileNode);
@@ -160,11 +163,10 @@ class RosettaMETSDom extends DOMDocument
 			$structMapNode->setAttribute('TYPE', 'PHYSICAL');
 			$divNode->appendChild($structMapDiv);
 			$structMapNode->appendChild($divNode);
-			if(count($galleyFiles)>0) {
+			if (count($galleyFiles) == $galleyFilesCount) {
 				$this->record->appendChild($fileSec);
+				$this->record->appendChild($structMapNode);
 			}
-
-			$this->record->appendChild($structMapNode);
 		}
 	}
 
@@ -245,26 +247,6 @@ class RosettaMETSDom extends DOMDocument
 	}
 
 	/**
-	 * Append the OJS export file to the METS document.
-	 *
-	 * @return array An array containing the XML export file and its information.
-	 */
-	public function appendImportExportFile(): array
-	{
-		$xmlExport = sys_get_temp_dir() . DIRECTORY_SEPARATOR .
-			PKPString::strtolower($this->context->getLocalizedAcronym()) . '-' . $this->submission->getId() .
-			'-v' . $this->publication->getData('version') . '-nativeExport.xml';
-		$exportFile = array(
-			'dependentFiles' => array(),
-			'fullFilePath' => $xmlExport,
-			'label' => 'NativeImportExportXML',
-			'path' => 'MASTER',
-			'revision' => 1
-		);
-		return array($xmlExport, $exportFile);
-	}
-
-	/**
 	 * Create the structMap div element.
 	 *
 	 * @param string $repId The representation ID.
@@ -281,39 +263,6 @@ class RosettaMETSDom extends DOMDocument
 	}
 
 	/**
-	 * Create file characteristics for a file.
-	 *
-	 * @param int $index The index of the file.
-	 * @param string $repIdSuffix The representation ID suffix.
-	 * @param string $recordId The record ID.
-	 * @param array $file The galley file information.
-	 *
-	 * @return void
-	 */
-	private function createFileCharacteristics(int $index, string $repIdSuffix, string $recordId, $file): void
-	{
-		$filePath = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'];
-
-		if (file_exists($filePath)) {
-
-			$generalFileChars = $this->createElementNS($this->metsNS, 'mets:amdSec');
-			$generalFileChars->setAttribute('ID', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd');
-			$md5_file = md5_file($filePath);
-			XMLUtils::createIEAmdSections($this, array(
-					array('id' => 'generalFileCharacteristics', 'records' => array(
-						['id' => 'fileOriginalPath', 'value' => '/' . $recordId . '/content/streams/' . $file['path'] . '/' . basename($file['fullFilePath'])],
-					)),
-					array('id' => 'fileFixity', 'records' => array(
-						['id' => 'fixityType', 'value' => 'MD5'],
-						['id' => 'fixityValue', 'value' => $md5_file],
-					))
-				)
-				, 'techMD', 'tech', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
-			$this->record->appendChild($generalFileChars);
-		}
-	}
-
-	/**
 	 * @return Plugin
 	 */
 	public function getPlugin(): Plugin
@@ -327,6 +276,36 @@ class RosettaMETSDom extends DOMDocument
 	public function setPlugin(Plugin $plugin): void
 	{
 		$this->plugin = $plugin;
+	}
+
+	/**
+	 * Create file characteristics for a file.
+	 *
+	 * @param int $index The index of the file.
+	 * @param string $repIdSuffix The representation ID suffix.
+	 * @param string $recordId The record ID.
+	 * @param array $file The galley file information.
+	 *
+	 * @return void
+	 */
+	private function createFileCharacteristics(int $index, string $repIdSuffix, string $recordId, $file): void
+	{
+		$filePath = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'];
+		$generalFileChars = $this->createElementNS($this->metsNS, 'mets:amdSec');
+		$generalFileChars->setAttribute('ID', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd');
+		$md5_file = md5_file($filePath);
+		XMLUtils::createIEAmdSections($this, array(
+				array('id' => 'generalFileCharacteristics', 'records' => array(
+					['id' => 'fileOriginalPath', 'value' => '/' . $recordId . '/content/streams/' . $file['path'] . '/' . basename($file['fullFilePath'])],
+				)),
+				array('id' => 'fileFixity', 'records' => array(
+					['id' => 'fixityType', 'value' => 'MD5'],
+					['id' => 'fixityValue', 'value' => $md5_file],
+				))
+			)
+			, 'techMD', 'tech', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
+		$this->record->appendChild($generalFileChars);
+
 	}
 
 	/**
@@ -370,6 +349,26 @@ class RosettaMETSDom extends DOMDocument
 		$fptrNode->setAttribute('FILEID', 'fid' . $id . '-' . $fid);
 		$divDivDivNode->appendChild($fptrNode);
 		return $divDivDivNode;
+	}
+
+	/**
+	 * Append the OJS export file to the METS document.
+	 *
+	 * @return array An array containing the XML export file and its information.
+	 */
+	public function appendImportExportFile(): array
+	{
+		$xmlExport = sys_get_temp_dir() . DIRECTORY_SEPARATOR .
+			PKPString::strtolower($this->context->getLocalizedAcronym()) . '-' . $this->submission->getId() .
+			'-v' . $this->publication->getData('version') . '-nativeExport.xml';
+		$exportFile = array(
+			'dependentFiles' => array(),
+			'fullFilePath' => $xmlExport,
+			'label' => 'NativeImportExportXML',
+			'path' => 'MASTER',
+			'revision' => 1
+		);
+		return array($xmlExport, $exportFile);
 	}
 
 	/**

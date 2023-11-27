@@ -142,27 +142,6 @@
       </mets:mdWrap>
     </mets:techMD>
   </mets:amdSec>
-  <mets:amdSec ID="fid1-1-amd">
-    <mets:techMD ID="fid1-1-amd-tech">
-      <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
-        <mets:xmlData>
-          <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
-            <section id="generalFileCharacteristics">
-              <record>
-                <key id="fileOriginalPath">/publicknowledge-1-v1/content/streams/MASTER/649b288325d69.pdf</key>
-              </record>
-            </section>
-            <section id="fileFixity">
-              <record>
-                <key id="fixityType">MD5</key>
-                <key id="fixityValue"/>
-              </record>
-            </section>
-          </dnx>
-        </mets:xmlData>
-      </mets:mdWrap>
-    </mets:techMD>
-  </mets:amdSec>
   <mets:fileSec>
     <mets:fileGrp ID="rep1" ADMID="rep1-amd">
       <mets:file ID="fid1-1" ADMID="fid1-1-amd">
