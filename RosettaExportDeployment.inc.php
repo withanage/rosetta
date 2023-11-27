@@ -178,7 +178,6 @@ class RosettaExportDeployment
 						$fileFullPath = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $galleyFile['fullFilePath'];
 						if (!file_exists($fileFullPath)) {
 							$galleyFileMissing = true;
-						} else {
 							var_dump('File ' . $fileFullPath . ' does not exist');
 						}
 					}
