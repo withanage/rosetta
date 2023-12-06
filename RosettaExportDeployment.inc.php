@@ -82,10 +82,10 @@ class RosettaExportDeployment
 	/**
 	 * Constructor
 	 *
-	 * @param Context $context The journal context.
 	 * @param RosettaExportPlugin $plugin The Rosetta export plugin instance.
+	 * @param Context $context The journal context.
 	 */
-	function __construct(Context $context, RosettaExportPlugin $plugin)
+	function __construct(RosettaExportPlugin $plugin, Context $context)
 	{
 		$this->context = $context;
 		$this->plugin = $plugin;

@@ -224,14 +224,14 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 					PluginRegistry::loadCategory('pubIds', true, $journal->getId()); // DO not remove
 
 					if (key_exists(strtoupper($journal->getLocalizedAcronym()), array_change_key_case($this->pluginSettings, CASE_UPPER))) {
-						$deployment = new RosettaExportDeployment($journal, $this);
+						$deployment = new RosettaExportDeployment($this, $journal);
 						$deployment->process();
 					}
 				}
 			} else {
 				// Deploy submissions
 				PluginRegistry::loadCategory('pubIds', true, $journal->getId());
-				$deployment = new RosettaExportDeployment($journal, $this);
+				$deployment = new RosettaExportDeployment($this, $journal);
 				$deployment->process();
 			}
 		} catch (Exception $exception) {
