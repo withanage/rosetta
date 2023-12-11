@@ -81,12 +81,12 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		$schema = $params[0];
 
 		// Add the 'depositStatus' property to the schema
-//        $schema->properties->{$this->depositStatusSettingName} = (object)[
-//            'type' => 'string',
-//            'multilingual' => false,
-//            'writeOnly' => true,
-//            'validation' => ['nullable'],
-//        ];
+        $schema->properties->{$this->depositStatusSettingName} = (object)[
+            'type' => 'string',
+            'multilingual' => false,
+            'writeOnly' => true,
+            'validation' => ['nullable'],
+        ];
 
 		// Add the 'depositActivity' property to the schema
 		$schema->properties->{$this->depositActivitySettingName} = (object)[
