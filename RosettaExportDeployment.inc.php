@@ -285,7 +285,7 @@ class RosettaExportDeployment
 			'producer' => $this->producerId,
 			'material_flow' => $this->materialFlowId,
 			'creation_date_from' => date('d/m/Y', strtotime('-' . $this->plugin->depositHistoryInDays . ' days')),
-			'creation_date_to' => date('d/m/Y'),
+			'creation_date_to' => date('d/m/Y',strtotime('+1 days')),
 			'offset' => $offset
 		];
 		$endpoint = $this->getDepositEndpoint('rest') . '?' . http_build_query($params);
