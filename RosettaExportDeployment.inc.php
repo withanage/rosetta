@@ -422,13 +422,17 @@ class RosettaExportDeployment
 		$failedFiles = [];
 
 		foreach ($galleyFiles as $file) {
+
+
+			$sourceFilePath = $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'];
+			if(!file_exists($sourceFilePath)) {
+				$failedFiles [] = $file['fullFilePath'];
+				continue;
+			}
 			$copySuccess = copy(
-				$this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'],
+				$sourceFilePath,
 				join(DIRECTORY_SEPARATOR,
 					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))));
-
-			if (!$copySuccess)
-				$failedFiles [] = $file['fullFilePath'];
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
 				$copySuccess = copy(
@@ -437,7 +441,7 @@ class RosettaExportDeployment
 						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
 
 				if (!$copySuccess)
-					$failedFiles [] = $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'];
+					$failedFiles [] = $dependentFile['fullFilePath'];
 			}
 		}
 
