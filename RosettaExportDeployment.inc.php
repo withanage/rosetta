@@ -160,11 +160,6 @@ class RosettaExportDeployment
 				$this->plugin->logInfo('Submission being processed: ' . $submission->getData('id'));
 
 				// Skip if production and there is no DOI for the submission.
-				//if (!$this->isTest && empty($submission->getData($this->plugin->registeredDoiSettingName))) {
-				//    continue;
-				//}
-
-				// Retrieve publications for this submission
 				$publications = $submission->getData('publications');
 				var_dump($submission->getData('id'));
 
@@ -175,6 +170,7 @@ class RosettaExportDeployment
 
 					$galleyFileMissing = false;
 					foreach ($galleyFiles as $galleyFile) {
+
 						$fileFullPath = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $galleyFile['fullFilePath'];
 						if (!file_exists($fileFullPath)) {
 							$galleyFileMissing = true;
@@ -183,7 +179,7 @@ class RosettaExportDeployment
 					}
 
 					// Skip if test and publication DOI is empty and no gallery files
-					if ($publication->getStoredPubId('doi') == null && count($galleyFiles) == 0 && $galleyFileMissing) {
+					if ($publication->getStoredPubId('doi') == null && count($galleyFiles) == 0 || $galleyFileMissing) {
 
 						continue;
 					}
