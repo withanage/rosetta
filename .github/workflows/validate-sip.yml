@@ -1,16 +1,5 @@
 name: validate-sip
-on:
-  push:
-    branches:
-      - main
-      - stable-3_2_1
-      - stable-3_3_0
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: '0 1 1 * *'
-
+on: [push,pull_request]
 jobs:
   full_ci:
     name: ${{matrix.pkp-application}}(BRANCH=${{matrix.pkp-branch}} ;PHP=${{matrix.php-versions}}; DB=${{matrix.dbs}})
