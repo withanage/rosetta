@@ -28,7 +28,7 @@ class TestJournal extends Journal
 		$this->createIssue();
 		$this->createSection();
 		$this->createSubmission($this->getSection());
-		$this->createAuthors($this->getSubmission());
+		//$this->createAuthors($this->getSubmission());
 		$this->setGalleys($this->getSubmission());
 		$this->createOAI($this->getSection(), $this->getIssue());
 	}
@@ -42,11 +42,12 @@ class TestJournal extends Journal
 	{
 		$this->setPrimaryLocale($primaryLocale);
 		$this->setData('acronym', 'Testjournal', $primaryLocale);
+		$this->setData('supportedFormLocales',['en_US']);
 
 		$journalSettings = array(
 			'id' => $journalId,
 			'urlPath' => 'journal-path',
-
+			'publisherInstitution'=> 'Publisher',
 			'name' => 'Test Journal'
 		);
 		foreach ($journalSettings as $key => $value) {
@@ -131,6 +132,8 @@ class TestJournal extends Journal
 		$submission->setData('issueId', $this->getIssue()->getData('id'));
 
 
+
+
 		$publication = $this->createPublication($submission);
 
 		$submission->setData('publications', [$publication]);
@@ -192,7 +195,8 @@ class TestJournal extends Journal
 
 		$publication->setData('title', 'article-title-en', $this->getPrimaryLocale());
 		$publication->setData('title', 'article-title-de', 'de_DE');
-
+		$publication->setData('authors', $this->createAuthors());
+		$publication->setData('datePublished', '2023-12-25');
 		return $publication;
 
 	}
@@ -215,7 +219,7 @@ class TestJournal extends Journal
 		$author->setFamilyName('author-lastname', $primaryLocale);
 		$author->setAffiliation('author-affiliation', $primaryLocale);
 		$author->setEmail('someone@example.com');
-		$author->setSubmissionId($this->getSubmission()->getId());
+		$author->setSubmissionId(9);
 		$authors[] = $author;
 		return $authors;
 	}

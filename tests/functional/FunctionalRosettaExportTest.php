@@ -1,7 +1,9 @@
 <?php
-
+declare(strict_types=1);
 
 use PHPUnit\Framework\MockObject\MockObject;
+use TIBHannover\Rosetta\Dc\RosettaDCDom as RosettaDCDom;
+use TIBHannover\Rosetta\Mets\RosettaMETSDom as RosettaMETSDom;
 
 require_mock_env('env2');
 
@@ -99,13 +101,12 @@ class FunctionalRosettaExportTest extends PluginTestCase
 	 */
 	public function validateDublinCore(): void
 	{
-		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission()->getLatestPublication(), false, false);
-
-		$this->removeCustomNodes($dcDom);
-
-
+		$submission = $this->getTestJournal()->getSubmission();
+		$latestPublication = $submission->getLatestPublication();
 		$dcXml = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 
+		$dcDom = new RosettaDCDom($this->getTestJournal()->getContext(), $latestPublication, $submission, false);
+		$this->removeCustomNodes($dcDom);
 		$this->assertXmlStringEqualsXmlFile($dcXml, $dcDom->saveXML());
 	}
 

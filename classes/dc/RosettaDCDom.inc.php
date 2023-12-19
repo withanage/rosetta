@@ -48,9 +48,10 @@ class RosettaDCDom extends DOMDocument
 	 */
 	public function __construct(Context $context, Publication $publication, Submission $submission, bool $isMultilingual = true)
 	{
+		parent::__construct('1.0', 'UTF-8');
+
 		$this->context = $context;
 		$this->publication = $publication;
-		parent::__construct('1.0', 'UTF-8');
 		$this->preserveWhiteSpace = false;
 		$this->formatOutput = true;
 		$this->locale = $publication->getData('locale');
