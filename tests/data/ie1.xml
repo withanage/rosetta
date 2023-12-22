@@ -39,7 +39,6 @@
 					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
 						<mods:titleInfo>
 							<mods:title xml:lang="en_US">article-title-en</mods:title>
-							<mods:title xml:lang="de_DE">article-title-de</mods:title>
 						</mods:titleInfo>
 						<mods:name type="personal">
 							<mods:namePart xml:lang="en_US" type="family">author-lastname</mods:namePart>
@@ -76,3 +75,4 @@
 		</mets:techMD>
 	</mets:amdSec>
 </mets:mets>
+	

@@ -31,11 +31,7 @@ import('lib.pkp.classes.services.PKPSchemaService');
 class RosettaFunctionalTest extends PluginTestCase
 {
 
-	public function testSipContent()
-	{	$this->testDublinCore();
-		//$this->validateMets();
 
-	}
 
 		public function getRequest($router)
 	{
@@ -69,32 +65,20 @@ class RosettaFunctionalTest extends PluginTestCase
 		public function testDublinCore(): void
 	{
 
-		$request = Application::get()->getRequest();
-		if (is_null($request->getRouter())) {
-			$router = new PKPRouter();
-			$request->setRouter($router);
-		}
-		$router = $this->getRouter();
-		$this->getRequest($router);
-
-		$testSubmission = new TestSubmission();
+		$this->createRouter();
 		$testJournal = new TestJournal();
-
+		$testSubmission = new TestSubmission();
 		$latestPublication = $testSubmission->getLatestPublication();
+
 		$dublinCoreFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 
 		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
 		$this->removeCustomNodes($dcDom);
+
 		$this->assertXmlStringEqualsXmlFile($dublinCoreFile, $dcDom->saveXML());
-		$x=1;
 	}
 
 
-
-		public function getLatestPublication(): ?Publication
-	{
-		return $this->getSubmission()->getLatestPublication();
-	}
 
 		public function removeCustomNodes($dcDom): void
 	{
@@ -111,10 +95,12 @@ class RosettaFunctionalTest extends PluginTestCase
 		return $importExportPlugins['RosettaExportPlugin'];
 	}
 
-		public function validateMets(): void
+		public function testMets(): void
 	{
+		$testSubmission = new TestSubmission();
+		$testJournal = new TestJournal();
 
-		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), true);
+		$metsDom = new RosettaMETSDom($testJournal,$testSubmission,$testSubmission->getLatestPublication(), $this->getPlugin(), true);
 		$metsDom->preserveWhiteSpace = false;
 		$metsDom->formatOutput = true;
 		$this->removeCustomNodes($metsDom);
@@ -126,7 +112,7 @@ class RosettaFunctionalTest extends PluginTestCase
 
 		$regExLineBreaks = '/\r\n|\r|\n|\t/';
 		$saveXML = $metsDom->saveXML();
-		//$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $saveXML)), array_filter(preg_split($regExLineBreaks, $expectedDom->saveXML())));
+		$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $saveXML)), array_filter(preg_split($regExLineBreaks, $expectedDom->saveXML())));
 
 
 	}
@@ -140,18 +126,18 @@ class RosettaFunctionalTest extends PluginTestCase
 		return $handler . '-' . $op . '-' . implode('-', $path);
 	}
 
+
 	/**
-	 * @return void
+	 * @return PKPRouter
 	 */
-	public function initialize(): void
+	public function createRouter(): PKPRouter
 	{
 		$request = Application::get()->getRequest();
 		if (is_null($request->getRouter())) {
 			$router = new PKPRouter();
 			$request->setRouter($router);
 		}
-		$router = $this->getRouter();
-		$this->getRequest($router);
+		return $router;
 	}
 
 	protected function getMockedDAOs()
