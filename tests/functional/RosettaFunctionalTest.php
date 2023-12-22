@@ -1,0 +1,168 @@
+<?php
+declare(strict_types=1);
+
+
+
+use PHPUnit\Framework\MockObject\MockObject;
+use TIBHannover\Rosetta\Dc\RosettaDCDom as RosettaDCDom;
+use TIBHannover\Rosetta\Mets\RosettaMETSDom as RosettaMETSDom;
+
+require_mock_env('env2');
+
+
+import('plugins.importexport.rosetta.tests.classes.TestSubmission');
+import('plugins.importexport.rosetta.tests.classes.TestJournal');
+
+import('plugins.importexport.rosetta.RosettaExportPlugin');
+import('plugins.importexport.rosetta.RosettaExportDeployment');
+import('lib.pkp.tests.plugins.PluginTestCase');
+import('lib.pkp.tests.plugins.metadata.MetadataPluginTestCase');
+
+import('lib.pkp.tests.PKPTestCase');
+
+import('lib.pkp.classes.oai.OAIStruct');
+import('lib.pkp.classes.oai.OAIUtils');
+import('plugins.oaiMetadataFormats.dc.OAIMetadataFormat_DC');
+import('plugins.oaiMetadataFormats.dc.OAIMetadataFormatPlugin_DC');
+import('lib.pkp.classes.core.PKPRouter');
+import('lib.pkp.classes.services.PKPSchemaService');
+
+
+class RosettaFunctionalTest extends PluginTestCase
+{
+
+	public function testSipContent()
+	{	$this->testDublinCore();
+		//$this->validateMets();
+
+	}
+
+		public function getRequest($router)
+	{
+		import('classes.core.Request');
+		$request = $this->getMockBuilder(Request::class)
+			->setMethods(array('getRouter'))
+			->getMock();
+		$request->expects($this->any())
+			->method('getRouter')
+			->will($this->returnValue($router));
+		Registry::set('request', $request);
+		return $request;
+	}
+
+		public function getRouter()
+	{
+		$application = Application::get();
+
+		import('lib.pkp.classes.core.PKPRouter');
+		$router = $this->getMockBuilder(PKPRouter::class)
+			->setMethods(array('url'))
+			->getMock();
+		$router->setApplication($application);
+		$router->expects($this->any())
+			->method('url')
+			->will($this->returnCallback(array($this, 'getRouterUrl')));
+
+		return $router;
+	}
+
+		public function testDublinCore(): void
+	{
+
+		$request = Application::get()->getRequest();
+		if (is_null($request->getRouter())) {
+			$router = new PKPRouter();
+			$request->setRouter($router);
+		}
+		$router = $this->getRouter();
+		$this->getRequest($router);
+
+		$testSubmission = new TestSubmission();
+		$testJournal = new TestJournal();
+
+		$latestPublication = $testSubmission->getLatestPublication();
+		$dublinCoreFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
+
+		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
+		$this->removeCustomNodes($dcDom);
+		$this->assertXmlStringEqualsXmlFile($dublinCoreFile, $dcDom->saveXML());
+		$x=1;
+	}
+
+
+
+		public function getLatestPublication(): ?Publication
+	{
+		return $this->getSubmission()->getLatestPublication();
+	}
+
+		public function removeCustomNodes($dcDom): void
+	{
+		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
+		if ($nodeModified) $nodeModified->parentNode->removeChild($nodeModified);
+
+		$nodePartOf = $dcDom->getElementsByTagName('dcterms:isPartOf')->item(0);
+		if ($nodePartOf) $nodePartOf->parentNode->removeChild($nodePartOf);
+	}
+
+		public function getPlugin(): Plugin
+	{
+		$importExportPlugins = PluginRegistry::loadCategory('importexport');
+		return $importExportPlugins['RosettaExportPlugin'];
+	}
+
+		public function validateMets(): void
+	{
+
+		$metsDom = new RosettaMETSDom($this->getTestJournal()->getContext(), $this->getTestJournal()->getSubmission(), $this->getTestJournal()->getSubmission()->getLatestPublication(), $this->getPlugin(), true);
+		$metsDom->preserveWhiteSpace = false;
+		$metsDom->formatOutput = true;
+		$this->removeCustomNodes($metsDom);
+
+		$expectedDom = new DOMDocument();
+		$expectedDom->preserveWhiteSpace = false;
+		$expectedDom->formatOutput = true;
+		$expectedDom->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
+
+		$regExLineBreaks = '/\r\n|\r|\n|\t/';
+		$saveXML = $metsDom->saveXML();
+		//$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $saveXML)), array_filter(preg_split($regExLineBreaks, $expectedDom->saveXML())));
+
+
+	}
+
+
+
+
+
+	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
+	{
+		return $handler . '-' . $op . '-' . implode('-', $path);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function initialize(): void
+	{
+		$request = Application::get()->getRequest();
+		if (is_null($request->getRouter())) {
+			$router = new PKPRouter();
+			$request->setRouter($router);
+		}
+		$router = $this->getRouter();
+		$this->getRequest($router);
+	}
+
+	protected function getMockedDAOs()
+	{
+		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO');
+	}
+
+		protected function getMockedRegistryKeys()
+	{
+		return array('request');
+	}
+
+
+}
