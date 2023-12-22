@@ -73,14 +73,14 @@ class RosettaFunctionalTest extends PluginTestCase
 		$dublinCoreFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 
 		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
-		$this->removeCustomNodes($dcDom);
+		$this->removeUnnecessaryNodes($dcDom);
 
 		$this->assertXmlStringEqualsXmlFile($dublinCoreFile, $dcDom->saveXML());
 	}
 
 
 
-		public function removeCustomNodes($dcDom): void
+		public function removeUnnecessaryNodes($dcDom): void
 	{
 		$nodeModified = $dcDom->getElementsByTagName('dcterms:modified')->item(0);
 		if ($nodeModified) $nodeModified->parentNode->removeChild($nodeModified);
@@ -97,28 +97,21 @@ class RosettaFunctionalTest extends PluginTestCase
 
 		public function testMets(): void
 	{
+		$regExLineBreaks = '/\r\n|\r|\n|\t/';
+
 		$testSubmission = new TestSubmission();
 		$testJournal = new TestJournal();
 
 		$metsDom = new RosettaMETSDom($testJournal,$testSubmission,$testSubmission->getLatestPublication(), $this->getPlugin(), true);
 		$metsDom->preserveWhiteSpace = false;
 		$metsDom->formatOutput = true;
-		$this->removeCustomNodes($metsDom);
+		$this->removeUnnecessaryNodes($metsDom);
+		$ieFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 
-		$expectedDom = new DOMDocument();
-		$expectedDom->preserveWhiteSpace = false;
-		$expectedDom->formatOutput = true;
-		$expectedDom->loadXML(file_get_contents(join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'))));
-
-		$regExLineBreaks = '/\r\n|\r|\n|\t/';
-		$saveXML = $metsDom->saveXML();
-		$this->assertEqualsCanonicalizing(array_filter(preg_split($regExLineBreaks, $saveXML)), array_filter(preg_split($regExLineBreaks, $expectedDom->saveXML())));
+		$this->assertXmlStringEqualsXmlFile($ieFile, $metsDom->saveXML());
 
 
 	}
-
-
-
 
 
 	function getRouterUrl($request, $newContext = null, $handler = null, $op = null, $path = null)
