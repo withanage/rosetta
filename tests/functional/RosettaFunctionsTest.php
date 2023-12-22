@@ -28,9 +28,8 @@ import('lib.pkp.classes.core.PKPRouter');
 import('lib.pkp.classes.services.PKPSchemaService');
 
 
-class RosettaFunctionalTest extends PluginTestCase
+class RosettaFunctionsTest extends PluginTestCase
 {
-
 
 
 		public function getRequest($router)
@@ -62,14 +61,13 @@ class RosettaFunctionalTest extends PluginTestCase
 		return $router;
 	}
 
-		public function testDublinCore(): void
+		public function testDublincore(): void
 	{
 
 		$this->createRouter();
 		$testJournal = new TestJournal();
 		$testSubmission = new TestSubmission();
 		$latestPublication = $testSubmission->getLatestPublication();
-
 		$dublinCoreFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'dc.xml'));
 
 		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
@@ -96,19 +94,18 @@ class RosettaFunctionalTest extends PluginTestCase
 	}
 
 		public function testMets(): void
-	{
-		$regExLineBreaks = '/\r\n|\r|\n|\t/';
 
+	{
+		$this->createRouter();
 		$testSubmission = new TestSubmission();
 		$testJournal = new TestJournal();
 
 		$metsDom = new RosettaMETSDom($testJournal,$testSubmission,$testSubmission->getLatestPublication(), $this->getPlugin(), true);
-		$metsDom->preserveWhiteSpace = false;
-		$metsDom->formatOutput = true;
 		$this->removeUnnecessaryNodes($metsDom);
-		$ieFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 
-		$this->assertXmlStringEqualsXmlFile($ieFile, $metsDom->saveXML());
+		$metsFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $this->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
+
+		$this->assertXmlStringEqualsXmlFile($metsFile, $metsDom->saveXML());
 
 
 	}
