@@ -4,10 +4,14 @@
 		<mets:mdWrap MDTYPE="DC">
 			<mets:xmlData>
 				<dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-					<dc:title>article-title-en</dc:title>
 					<dc:type>status-type:publishedVersion</dc:type>
 					<dc:type>doc-type:article</dc:type>
 					<dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
+					<dc:title>article-title-en</dc:title>
+					<dc:creator>author-firstname author-lastname</dc:creator>
+					<dc:date>2023-12-25</dc:date>
+					<dc:identifier>DOI:</dc:identifier>
+					<dc:publisher>Publisher</dc:publisher>
 					<dc:language>en-US</dc:language>
 				</dc:record>
 			</mets:xmlData>
@@ -35,23 +39,14 @@
 					<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/mods/v3/mods-3-7.xsd" version="3.7">
 						<mods:titleInfo>
 							<mods:title xml:lang="en_US">article-title-en</mods:title>
-							<mods:title xml:lang="de_DE">article-title-de</mods:title>
 						</mods:titleInfo>
-						<mods:subject authority="disciplines"/>
-						<mods:subject authority="keywords"/>
-						<mods:subject authority="languages"/>
-						<mods:subject authority="subjects"/>
-						<mods:subject authority="supportingAgencies"/>
-						<mods:location displayLabel="coverage"/>
-						<mods:accessCondition displayLabel="rights"/>
-						<mods:identifier type="doi"/>
-						<mods:recordInfo>
-							<mods:recordContentSource/>
-						</mods:recordInfo>
-						<mods:originInfo>
-							<mods:publisher/>
-						</mods:originInfo>
-						<mods:genre/>
+						<mods:name type="personal">
+							<mods:namePart xml:lang="en_US" type="family">author-lastname</mods:namePart>
+							<mods:namePart xml:lang="en_US" type="given">author-firstname</mods:namePart>
+							<mods:affiliation xml:lang="en_US">author-affiliation</mods:affiliation>
+						</mods:name>
+						<mods:recordInfo/>
+						<mods:originInfo/>
 						<mods:relatedItem type="host" displayLabel="Testjournal">
 							<extension>
 								<acronym xml:lang="en_US">Testjournal</acronym>
@@ -79,4 +74,42 @@
 			</mets:mdWrap>
 		</mets:techMD>
 	</mets:amdSec>
+	<mets:amdSec ID="fid1-1-amd">
+		<mets:techMD ID="fid1-1-amd-tech">
+			<mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+				<mets:xmlData>
+					<dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+						<section id="generalFileCharacteristics">
+							<record>
+								<key id="fileOriginalPath">/journal-path-9-v1/content/streams/MASTER/6226a2f072fd1.pdf</key>
+							</record>
+						</section>
+						<section id="fileFixity">
+							<record>
+								<key id="fixityType">MD5</key>
+								<key id="fixityValue">ab60d29270250992281cd480770f0685</key>
+							</record>
+						</section>
+					</dnx>
+				</mets:xmlData>
+			</mets:mdWrap>
+		</mets:techMD>
+	</mets:amdSec>
+	<mets:fileSec>
+		<mets:fileGrp ID="rep1" ADMID="rep1-amd">
+			<mets:file ID="fid1-1" ADMID="fid1-1-amd">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" xlink:href="file://MASTER/6226a2f072fd1.pdf" />
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+	<mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+		<mets:div LABEL="Preservation Master">
+			<mets:div LABEL="rep1">
+				<mets:div LABEL="" TYPE="FILE">
+					<mets:fptr FILEID="fid1-1"/>
+				</mets:div>
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
 </mets:mets>
+

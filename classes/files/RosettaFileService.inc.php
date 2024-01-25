@@ -1,13 +1,13 @@
 <?php
 
-class RosettaFileService
+namespace TIBHannover\Rosetta\Files;
 
+use Publication;
+use Services;
+
+class RosettaFileService
 {
-	/**
-	 * @param Publication $publication
-	 * @return array
-	 */
-	public static function getGalleyFiles(Publication $publication): array
+		public static function getGalleyFiles(Publication $publication): array
 	{
 		// get all galleys
 
@@ -17,9 +17,10 @@ class RosettaFileService
 		foreach ($galleysIterator as $galley) {
 			$fileId = $galley->getData('submissionFileId');
 			$galleyFile = $galley->getFile();
-			if (is_null($galleyFile) == false) {
+			if (!is_null($galleyFile)) {
 				$galleyFilePath = $galleyFile->getData('path');
-				$dependentFilePaths = RosettaFileService::getDependentFilePaths($publication->getData('submissionId'), $fileId, MASTER_PATH);
+				$dependentFilePaths = RosettaFileService::getDependentFilePaths(
+					$publication->getData('submissionId'), $fileId, MASTER_PATH);
 				$files[] = array(
 					"label" => $galley->getLocalizedName(),
 					"revision" => $publication->getData("version"),
@@ -32,14 +33,7 @@ class RosettaFileService
 		return $files;
 	}
 
-
-	/**
-	 * @param int $submissionId
-	 * @param int $fileId
-	 * @param string $path
-	 * @return array
-	 */
-	public static function getDependentFilePaths(int $submissionId, int $fileId, string $path): array
+		public static function getDependentFilePaths(int $submissionId, int $fileId, string $path): array
 	{
 		$submissionFile = Services::get('submissionFile')->get($fileId);
 		$dependentFilesIterator = Services::get('submissionFile')->getMany([
@@ -49,12 +43,9 @@ class RosettaFileService
 			'assocIds' => [$submissionFile->getId()],
 		]);
 
-
-
 		$assetsFilePaths = array();
 		foreach ($dependentFilesIterator as $dependentFile) {
-			$originalFileName =$submissionFile->getLocalizedData('name');
-
+			$originalFileName = $submissionFile->getLocalizedData('name');
 
 			$assetsFilePaths[$originalFileName] = array(
 				"fullFilePath" => $dependentFile->getData('path'),
@@ -64,5 +55,4 @@ class RosettaFileService
 		}
 		return $assetsFilePaths;
 	}
-
 }

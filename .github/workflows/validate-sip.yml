@@ -1,108 +1,103 @@
-name: validate-sip
+name: test
 on:
-  push:
-    branches:
-      - main
-      - stable-3_2_1
-      - stable-3_3_0
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: '0 1 1 * *'
+    push:
+        branches:
+            - '**'
+    pull_request:
+        branches:
+            - main
+    schedule:
+        - cron: '0 1 1 * *'
+env:
+    APPLICATION: '${{ github.event.repository.name }}'
+    DBUSERNAME: ojs-ci
+    DBPASSWORD: ojs-ci
+    DBNAME: ojs-ci
+    DBHOST: 127.0.0.1
+    DATABASEDUMP: database.sql.gz
+    FILESDIR: files
+    FILESDUMP: files.tar.gz
+    CYPRESS_BASE_URL: http://127.0.0.1:8000
+    CYPRESS_DBNAME: ojs-ci
+    CYPRESS_DBUSERNAME: ojs-ci
+    CYPRESS_DBPASSWORD: ojs-ci
+    CYPRESS_DBHOST: 127.0.0.1
+    CYPRESS_FILESDIR: files
 
 jobs:
-  full_ci:
-    name: ${{matrix.pkp-application}}(BRANCH=${{matrix.pkp-branch}} ;PHP=${{matrix.php-versions}}; DB=${{matrix.dbs}})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: ['7.4','8.0','8.1']
-        dbs: ['pgsql', 'mysql']
-        pkp-application: ['ojs']
-        pkp-branch: ['stable-3_3_0']
-    services:
-      mysql:
-        image: bitnami/mysql:latest
+    install:
+        name: ${{matrix.pkp-application}}(BRANCH=${{matrix.pkp-branch}} ;PHP=${{matrix.php-versions}}; DB=${{matrix.dbs}})
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-versions: [ '8.1','8.2' ]
+                dbs: [ 'pgsql', 'mysql','mariadb']
+                pkp-application: ['ojs' ]
+                pkp-branch: [ 'stable-3_3_0' ]
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_USER: ojs-ci
-          MYSQL_PASSWORD: ojs-ci
-          MYSQL_DATABASE: ojs-ci
-          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: ojs-ci
-          POSTGRES_PASSWORD: ojs-ci
-          POSTGRES_DB: ojs-ci
-        ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=5
-    env:
-      CYPRESS_BASE_URL: http://127.0.0.1:8000
-      CYPRESS_DBTYPE: ${{matrix.dbs  == 'pgsql' && 'PostgreSQL' || 'MySQLi'}}
-      CYPRESS_DBNAME: ojs-ci
-      CYPRESS_DBUSERNAME: ojs-ci
-      CYPRESS_DBPASSWORD: ojs-ci
-      CYPRESS_DBHOST: 127.0.0.1
-      CYPRESS_FILESDIR: files
-    steps:
-      - name: Setup PHP, extensions and composer
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{matrix.php-versions}}
-          extensions: bcmath, bz2, common, cli, curl, fpm, gd, intl, mbstring, mysql,mysqlnd, mysqli, opcache, pdo_mysql,  pgsql, json,soap, xml, zip
-        env:
-          update: true
+            DBTYPE: ${{matrix.dbs == 'pgsql' && 'PostgreSQL' || 'MySQLi'}}
+            CYPRESS_DBTYPE: ${{matrix.dbs=='pgsql' && 'PostgreSQL' || 'MySQLi'}}
+            TEST: ${{matrix.dbs}}
 
-      - name: Install PKP Application
-        run: |
-          git clone -b ${{matrix.pkp-branch}} https://github.com/pkp/${{matrix.pkp-application}} ~/${{matrix.pkp-application}}
-          cd ~/${{matrix.pkp-application}}
-          git submodule update --init --recursive
+        steps:
+            - name: install postgres server
+              if: ${{matrix.dbs == 'pgsql'}}
+              run: |
+                  sudo apt install postgresql postgresql-contrib
+                  sudo dpkg-reconfigure locales
+                  sudo sed -i -E 's\peer|scram-sha-256\trust\g' /etc/postgresql/14/main/pg_hba.conf
 
-      - name: Prepare Tests
-        run: |
-          cd ~/${{matrix.pkp-application}}
-          cp config.TEMPLATE.inc.php config.inc.php
-          sed -i -e "s/enable_cdn = On/enable_cdn = Off/" config.inc.php
-          mkdir --parents files
+            - name: Install server
+              if: ${{matrix.dbs == 'mysql'}}
+              run: |
+                  sudo apt install -q -y mysql-server mysql-client
+                  sudo service mysql start
+                  sudo mysqladmin -u root -p'root' password ''
 
-      - name: Install Composer Dependencies
-        run: |
-          cd ~/${{matrix.pkp-application}}
-          lib/pkp/tools/travis/install-composer-dependencies.sh
-          npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
+            - name: Install mariadb  server
+              if: ${{matrix.dbs == 'mariadb'}}
+              uses: ankane/setup-mariadb@v1
+              with:
+                  mariadb-version: "10.11"
 
-      - name: Run Server
-        run: |
-          cd ~/${{matrix.pkp-application}}
-          php -S 127.0.0.1:8000 -t . >& access.log &
+            - name: Install ${{matrix.pkp-application}}
+              run: |
+                  git clone -b ${{matrix.pkp-branch}} https://github.com/pkp/${{matrix.pkp-application}} ~/${{matrix.pkp-application}}
+                  cd ~/${{matrix.pkp-application}}
+                  git submodule update --init --recursive
+            - name: Setup PHP, extensions and composer
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{matrix.php-versions}}
+                  extensions: bcmath, bz2, common, cli, curl, fpm, gd, intl, mbstring, mysql,mysqlnd, mysqli, opcache, pdo_mysql, pgsql, json,soap, xml, zip
+                  coverage: xdebug
+              env:
+                  update: true
 
-      - name: Create Content (${{matrix.dbs}})
-        run: |
-          cd ~/${{matrix.pkp-application}}
-          npx cypress run --spec "cypress/tests/data/10-Installation.spec.js"
-          # change path to cypress tests files here!
+            - name: Install composer dependencies
+              run: |
+                  cd ~/${{matrix.pkp-application}}
+                  lib/pkp/tools/travis/install-composer-dependencies.sh
+                  npm i g -npm && npm i @vue/cli-service && npm i cypress && npm install && npm run build
 
-      - name: Checkout Plugin
-        uses: actions/checkout@main
+            - name: Create additional directories
+              run: |
+                  mkdir -p $HOME/bin
 
-      - name: Link Plugin Folder
-        run: |
-          cd ${{github.workspace}}
-          ln -s ${{github.workspace}} ~/${{matrix.pkp-application}}/plugins/importexport/rosetta
+            - name: Checkout Plugin
+              uses: actions/checkout@main
 
-      - name: Run Rosetta Tests
-        run: |
-          cd  ~/${{matrix.pkp-application}}
-          php ~/${{matrix.pkp-application}}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
-          --configuration ~/${{matrix.pkp-application}}/lib/pkp/tests/phpunit-env2.xml \
-          --filter FunctionalRosettaExportTest \
-          --test-suffix FunctionalRosettaExportTest.php \
-          -v ~/${{matrix.pkp-application}}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.php
+            - name: Link Plugin Folder
+              run: |
+                cd ${{github.workspace}}
+                ln -s ${{github.workspace}} ~/${{matrix.pkp-application}}/plugins/importexport/rosetta
+
+            - name: Run Rosetta Tests
+              run: |
+                  cd  ~/${{matrix.pkp-application}}
+                  php ~/${{matrix.pkp-application}}/lib/pkp/lib/vendor/phpunit/phpunit/phpunit \
+                  --configuration ~/${{matrix.pkp-application}}/lib/pkp/tests/phpunit-env2.xml \
+                  --filter FunctionalRosettaExportTest \
+                  --test-suffix FunctionalRosettaExportTest.php \
+                  -v ~/${{matrix.pkp-application}}/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.php
