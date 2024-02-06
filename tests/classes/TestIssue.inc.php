@@ -18,11 +18,11 @@ class TestIssue extends Issue
 	public function initialize(): void
 	{
 
-		$issue->setId(96);
-		$issue->setDatePublished('2010-11-05');
-		$issue->setStoredPubId('doi', 'issue-doi');
-		$issue->setJournalId($this->getData('id'));
-		$this->issue = $issue;
+		$this->issue->setId(96);
+		$this->issue->setDatePublished('2010-11-05');
+		$this->issue->setStoredPubId('doi', 'issue-doi');
+		$this->issue->setJournalId($this->getData('id'));
+
 
 	}
 

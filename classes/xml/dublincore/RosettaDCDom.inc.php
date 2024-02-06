@@ -71,13 +71,11 @@ class RosettaDCDom extends DOMDocument
 
 		$this->createCopyrightYear();
 
-		try {
-			$this->createIdentifier();
-		} catch (DOMException $e) {
 
-		}
+		$this->createIdentifier();
 
-		$this->createlastModifiedDate();
+
+		$this->createLastModifiedDate();
 
 
 		$this->createPublisherInstitution();
@@ -87,6 +85,8 @@ class RosettaDCDom extends DOMDocument
 		$this->createLicenseURL();
 
 		$this->createCopyrightHolderOther();
+
+		$this->createISSN();
 	}
 
 	private function createDCElement(): void
@@ -194,7 +194,7 @@ class RosettaDCDom extends DOMDocument
 	/**
 	 * @return void
 	 */
-	public function createlastModifiedDate(): void
+	public function createLastModifiedDate(): void
 	{
 		$dateModified = $this->publication->getData('lastModified');
 		$this->createQualifiedElement('dcterms:modified', $dateModified);
@@ -232,6 +232,18 @@ class RosettaDCDom extends DOMDocument
 				$this->createQualifiedElement('dc:rights',
 					$this->context->getData('copyrightHolderOther')[$locale]);
 			}
+		}
+	}
+	public function createISSN(): void
+	{
+		$issn = $this->context->getData('onlineIssn');
+
+		if ($issn) {
+			$node = $this->createElement('dc:identifier',$issn);
+			$typeAttribute = $this->createAttribute('xsi:type');
+			$typeAttribute->value ='dcterms:ISSN' ;
+			$node->appendChild($typeAttribute);
+			$this->record->appendChild($node);
 		}
 	}
 

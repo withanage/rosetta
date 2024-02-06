@@ -32,7 +32,8 @@ class TestJournal extends Journal
 			'id' => $this->journalId,
 			'urlPath' => 'journal-path',
 			'publisherInstitution' => 'Publisher',
-			'name' => 'Test Journal'
+			'name' => 'Test Journal',
+			'onlineIssn'=> '2747-9986'
 		);
 		foreach ($journalSettings as $key => $value) {
 			$this->setData($key, $value);

@@ -9,4 +9,6 @@
 	<dc:identifier>DOI:</dc:identifier>
 	<dc:publisher>Publisher</dc:publisher>
 	<dc:language>en-US</dc:language>
+	<dc:identifier xsi:type="dcterms:ISSN">2747-9986</dc:identifier>
+
 </dc:record>

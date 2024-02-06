@@ -17,7 +17,6 @@ class DublinCore
 
 		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
 		General::removeNodesListFromDom($dcDom, $nodeNames);
-
 		$rosettaFunctionsTest->assertXmlStringEqualsXmlFile($dublinCoreFile, $dcDom->saveXML());
 	}
 }
