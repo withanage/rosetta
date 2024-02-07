@@ -97,11 +97,10 @@ class RosettaExportDeployment
 
 				// Skip if production and there is no DOI for the submission.
 				$publications = $submission->getData('publications');
-				var_dump($submission->getData('id'));
 
 				// Iterate through associated publications.
 				foreach ($publications as $publication) {
-					var_dump($publication->getData('id'));
+					var_dump($submission->getData('id').'-'.$publication->getData('id').': ('.$publication->getLocalizedFullTitle('title').')');
 					$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
 					$galleyFileMissing = false;
