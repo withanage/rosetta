@@ -1,5 +1,5 @@
 <?php
-namespace TIBHannover\Rosetta\Utils;
+
 class Utils
 {
 	public static function print_rr($input, $level = 0)
