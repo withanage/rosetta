@@ -81,12 +81,7 @@ class RosettaExportDeployment
 		$currentContextSettings = $this->plugin->rosettaContextSettings[$this->context->getLocalizedAcronym()];
 
 		// Retrieve published submissions based on specific criteria.
-		$submissions = Services::get('submission')->getMany([
-			'contextId' => $this->context->getId(),
-			'orderBy' => 'seq',
-			'orderDirection' => 'ASC',
-			'status' => STATUS_PUBLISHED,
-		]);
+		$submissions = $this->getPublishedSubmissions();
 
 		// Iterate through the retrieved submissions.
 		foreach ($submissions as $submission) {
@@ -151,7 +146,7 @@ class RosettaExportDeployment
 						foreach ($currentContextSettings as $setting) {
 							if (($issue->getData('number') == $setting['number'] &&
 								$issue->getData('volume') == $setting['volume'] &&
-								$issue->getData('year') == $setting['year']) ) {
+								$issue->getData('year') == $setting['year']) /* || $issue == null */) {
 								$this->depositPublication($submission, $publication, $galleyFiles);
 							}
 						}
@@ -163,7 +158,9 @@ class RosettaExportDeployment
 
 	private function updateIsDeposited(): void
 	{
-		foreach ($this->getDepositsFromRosettaApi() as $key => $value) {
+		$getDepositedArticles = $this->getDepositsFromRosettaApi();
+		var_dump(explode(',',$getDepositedArticles));
+		foreach ($getDepositedArticles as $key => $value) {
 			// Create a DepositActivityModel instance from the Rosetta API data.
 			$row = new DepositActivityModel($value);
 
@@ -462,5 +459,19 @@ class RosettaExportDeployment
 		$xpath->registerNamespace('ser', 'http://www.exlibrisgroup.com/xsd/dps/deposit/service');
 
 		return $xpath;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPublishedSubmissions()
+	{
+		$submissions = Services::get('submission')->getMany([
+			'contextId' => $this->context->getId(),
+			'orderBy' => 'seq',
+			'orderDirection' => 'ASC',
+			'status' => STATUS_PUBLISHED,
+		]);
+		return $submissions;
 	}
 }
