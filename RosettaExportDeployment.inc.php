@@ -151,7 +151,7 @@ class RosettaExportDeployment
 						foreach ($currentContextSettings as $setting) {
 							if (($issue->getData('number') == $setting['number'] &&
 								$issue->getData('volume') == $setting['volume'] &&
-								$issue->getData('year') == $setting['year']) /* || $issue == null */) {
+								$issue->getData('year') == $setting['year']) ) {
 								$this->depositPublication($submission, $publication, $galleyFiles);
 							}
 						}
