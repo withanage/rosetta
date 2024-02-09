@@ -27,6 +27,7 @@ use TIBHannover\Rosetta\Files\RosettaFileService;
 use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use TIBHannover\Rosetta\Models\DepositActivityModel;
 use TIBHannover\Rosetta\Models\DepositStatusModel;
+use TIBHannover\Rosetta\Utils;
 
 class RosettaExportDeployment
 {
@@ -159,7 +160,7 @@ class RosettaExportDeployment
 	private function updateIsDeposited(): void
 	{
 		$getDepositedArticles = $this->getDepositsFromRosettaApi();
-		var_dump(implode(',',$getDepositedArticles));
+		Utils::print_rr($getDepositedArticles);
 		foreach ($getDepositedArticles as $key => $value) {
 			// Create a DepositActivityModel instance from the Rosetta API data.
 			$row = new DepositActivityModel($value);
