@@ -8,6 +8,7 @@ import('plugins.importexport.rosetta.classes.xml.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
 import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
+import('plugins.importexport.rosetta.classes.utilities.Utils');
 
 use Context;
 use Core;
@@ -27,7 +28,7 @@ use TIBHannover\Rosetta\Files\RosettaFileService;
 use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use TIBHannover\Rosetta\Models\DepositActivityModel;
 use TIBHannover\Rosetta\Models\DepositStatusModel;
-use TIBHannover\Rosetta\Utils;
+
 
 class RosettaExportDeployment
 {
