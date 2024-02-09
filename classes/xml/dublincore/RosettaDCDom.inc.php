@@ -86,7 +86,7 @@ class RosettaDCDom extends DOMDocument
 
 		$this->createCopyrightHolderOther();
 
-		//$this->createISSN();
+		$this->createISSN();
 	}
 
 	private function createDCElement(): void
