@@ -2,7 +2,7 @@
 
 class Utils
 {
-	public static function print_rr($input, $level = 0)
+	public  function print_rr($input, $level = 0)
 	{
 		if ($level == 4) {
 			return;

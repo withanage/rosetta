@@ -161,8 +161,8 @@ class RosettaExportDeployment
 	private function updateIsDeposited(): void
 	{
 		$getDepositedArticles = $this->getDepositsFromRosettaApi();
-
-		Utils::print_rr($getDepositedArticles);
+		$utils = new Utils();
+		$utils->print_rr($getDepositedArticles);
 		foreach ($getDepositedArticles as $key => $value) {
 			// Create a DepositActivityModel instance from the Rosetta API data.
 			$row = new DepositActivityModel($value);
