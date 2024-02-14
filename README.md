@@ -161,7 +161,7 @@ php $OJS/lib/pkp/lib/vendor/phpunit/phpunit/phpunit --configuration
 $OJS/lib/pkp/tests/phpunit-env2.xml --filter
 FunctionalRosettaExportTest --test-suffix
 FunctionalRosettaExportTest.php -v
-$OJS/plugins/importexport/rosetta/tests/functional/FunctionalRosettaExportTest.php
+$OJS/plugins/importexport/rosetta/tests/functional/RosettaFunctionsTest.php
 ```
 ## Github actions
 
@@ -275,3 +275,9 @@ Continuous Integration / Continuous Delivery (CI/CD) Pipeline is already configu
 ```
 #  Development
 - [Dulip Withanage](https://orcid.org/0000-0002-4996-7007)
+
+
+# TODO check
+
+- <dcterms:isPartOf >Open Access E-Journals/TIB OP/TH-Wildau-ENSP/2021/1/1</dcterms:isPartOf>
+-

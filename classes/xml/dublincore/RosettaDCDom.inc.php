@@ -10,6 +10,7 @@ use DOMException;
 use Publication;
 use Submission;
 
+
 class RosettaDCDom extends DOMDocument
 {
 
@@ -146,12 +147,15 @@ class RosettaDCDom extends DOMDocument
 	{
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		$issue = $issueDao->getById($this->publication->getId(), $this->context->getId());
-		$rosettaIssue = '';
 		if ($issue) {
 			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' .
 				$issue->getData('volume') . '/' . $issue->getData('id') . '/';
+			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
 		}
-		$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
+		else {
+			error_log('Issue id '.$this->publication->getId().' not found\n', 3, \RosettaExportPlugin::logFilePath());
+		}
+
 	}
 
 	/**

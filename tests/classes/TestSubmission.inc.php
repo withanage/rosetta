@@ -21,7 +21,8 @@ class TestSubmission extends Submission
 		$this->locale= 'en_US';
 		$this->inititalize();
 		//$section = new TestSection($this->getSubmissionLocale());
-		//$issue = new TestIssue();
+
+		$issue = new TestIssue();
 	}
 
 

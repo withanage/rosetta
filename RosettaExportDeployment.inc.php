@@ -259,7 +259,7 @@ class RosettaExportDeployment
 
 		return match ($apiType) {
 			'soap' => $protocol . '://' . $hostParts[0] . '/dpsws/deposit/DepositWebServices?wsdl',
-			default => $protocol . '://' . $hostParts[0] . '/rest/v0/deposits',
+			default => $protocol . '://' . $hostParts[0] . '/rest/v0/deposits'
 		};
 	}
 
