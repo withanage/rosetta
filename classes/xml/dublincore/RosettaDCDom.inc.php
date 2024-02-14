@@ -146,7 +146,7 @@ class RosettaDCDom extends DOMDocument
 	public function createIssue(mixed $acronym): void
 	{
 		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issue = $issueDao->getById($this->publication->getId(), $this->context->getId());
+		$issue = $issueDao->getById($this->publication->getData('issueId'), $this->context->getId());
 		if ($issue) {
 			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $acronym . '/' . $issue->getData('year') . '/' .
 				$issue->getData('volume') . '/' . $issue->getData('id') . '/';
