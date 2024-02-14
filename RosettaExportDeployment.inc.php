@@ -351,8 +351,8 @@ class RosettaExportDeployment
 
 		// if not testMode and validated
 		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
-			//$this->doDeposit($INGEST_PATH, $publication);
-			//$this->plugin->removeDirRecursively($SIP_PATH);
+			$this->doDeposit($INGEST_PATH, $publication);
+			$this->plugin->removeDirRecursively($SIP_PATH);
 		}
 
 
