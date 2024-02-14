@@ -7,21 +7,23 @@ import('classes.issue.Issue');
 class TestIssue extends Issue
 
 {
-	public $issue;
 
-	function __construct(Issue $issue)
+	function __construct()
 	{
-		$this->issue =$issue;
+
 		$this->initialize();
 	}
 
 	public function initialize(): void
 	{
 
-		$this->issue->setId(96);
-		$this->issue->setDatePublished('2010-11-05');
-		$this->issue->setStoredPubId('doi', 'issue-doi');
-		$this->issue->setJournalId($this->getData('id'));
+		$this->setId(1);
+		$this->setJournalId(10000);
+		$this->setVolume(1);
+		$this->setYear(2024);
+		$this->setNumber(1);
+		$this->setDatePublished('2010-11-05');
+		$this->setStoredPubId('doi', '10.1234/jpkjpk.v1i2');
 
 
 	}

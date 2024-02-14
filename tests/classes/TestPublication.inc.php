@@ -22,9 +22,10 @@ class TestPublication extends Publication
 		$this->setData('status', 'status');
 		$this->setData('primaryContactId', 1);
 		$this->setData('urlPath', 'url_path');
+		$this->setData('urlPath', 'url_path');
+		$this->setData('issueId', '1');
 
 		$this->setData('title', 'article-title-en', $submission->getLocale());
-//		$this->setData('title', 'article-title-de', 'de_DE');
 		$this->setData('authors', $this->createAuthors());
 		$this->setData('datePublished', '2023-12-25');
 		return $this;

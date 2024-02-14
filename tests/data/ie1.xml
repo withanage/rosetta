@@ -10,7 +10,7 @@
 					<dc:title>article-title-en</dc:title>
 					<dc:creator>author-firstname author-lastname</dc:creator>
 					<dc:date>2023-12-25</dc:date>
-					<dcterms:isPartOf>Open Access E-Journals/TIB OP/JPKJPK/2014/1/1/</dcterms:isPartOf>
+					<!--dcterms:isPartOf>Open Access E-Journals/TIB OP/JPKJPK/2014/1/1/</dcterms:isPartOf-->
 					<dc:identifier>DOI:</dc:identifier>
 					<dc:publisher>Publisher</dc:publisher>
 					<dc:language>en-US</dc:language>

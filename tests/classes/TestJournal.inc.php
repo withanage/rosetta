@@ -18,7 +18,7 @@ class TestJournal extends Journal
 	public function __construct()
 	{
 		$this->initialize($this->getPrimaryLocale());
-		//$this->createIssue();
+
 		//$this->createOAI($this->getSection(), $this->getIssue());
 	}
 
