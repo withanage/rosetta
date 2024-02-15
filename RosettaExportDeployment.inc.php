@@ -251,14 +251,17 @@ class RosettaExportDeployment
 		$result_head_once= true;
 		foreach ($deposits as $deposit) {
 			if ($result_head_once) {
-				var_dump(implode(' |', array_keys($deposit)));
+				var_dump(implode(' |', array_keys($deposit))).'\n';
 				$result_head_once = false;
 			}
 			foreach (array_values($deposit) as $value){
 				if(gettype($value) =='array') {
 					$result.= implode(' |', $value);
 				}
-				else $result.=$value;
+				else {
+					$result.=$value;}
+				$result .= "\n";
+
 			}
 			var_dump($result);
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
