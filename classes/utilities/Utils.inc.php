@@ -1,5 +1,6 @@
 <?php
 
+namespace TIBHannover\Rosetta\Utils;
 class Utils
 {
 	public static function writeLog(string $message, string $level): void
