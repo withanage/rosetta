@@ -270,7 +270,7 @@ class RosettaExportDeployment
 					$result.='|'.$value;
 				}
 
-
+				$result.= PHP_EOL;
 			}
 			$result.= PHP_EOL;
 
