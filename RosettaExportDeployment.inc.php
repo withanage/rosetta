@@ -252,14 +252,15 @@ class RosettaExportDeployment
 		foreach ($deposits as $deposit) {
 			if ($result_head_once) {
 				var_dump(implode(' |', array_keys($deposit))).'\n';
+				var_dump(sizeof($deposit));
 				$result_head_once = false;
 			}
 			foreach (array_values($deposit) as $value){
 				if(gettype($value) =='array') {
-					$result.= ', '.implode(' |', $value);
+					$result.= '|'.implode(' |', $value);
 				}
 				else {
-					$result.=', '.$value;}
+					$result.='|'.$value;}
 
 				$result;
 			}
