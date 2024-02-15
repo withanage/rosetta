@@ -1,5 +1,7 @@
 <?php
 
+require './vendor/autoload.php';
+
 namespace TIBHannover\Rosetta;
 
 import('classes.core.Services');
@@ -29,6 +31,9 @@ use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use TIBHannover\Rosetta\Models\DepositActivityModel;
 use TIBHannover\Rosetta\Models\DepositStatusModel;
 use TIBHannover\Rosetta\Utils\Utils;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 
 class RosettaExportDeployment
@@ -76,6 +81,25 @@ class RosettaExportDeployment
 			$this->plugin->logError('The Rosetta drive ' . $this->subDirectory . ' is not mounted');
 			return;
 		}
+
+
+		$spreadsheet = new Spreadsheet();
+		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+
+		/* Set CSV parsing options */
+
+		$reader->setDelimiter(',');
+		$reader->setEnclosure('"');
+		$reader->setSheetIndex(0);
+
+		/* Load a CSV file and save as a XLS */
+
+		$spreadsheet = $reader->load('../../uploads/test.csv');
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('test.xlsx');
+
+		$spreadsheet->disconnectWorksheets();
+		unset($spreadsheet);
 
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
@@ -251,8 +275,7 @@ class RosettaExportDeployment
 		$result_head_once= true;
 		foreach ($deposits as $deposit) {
 			if ($result_head_once) {
-				var_dump(implode(' |', array_keys($deposit))).'\n';
-				var_dump(sizeof($deposit));
+				var_dump(implode(' |', array_keys($deposit))).PHP_EOL;
 				$result_head_once = false;
 			}
 			foreach (array_values($deposit) as $value){
