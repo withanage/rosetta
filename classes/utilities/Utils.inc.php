@@ -21,7 +21,7 @@ class Utils
 
 	public static function logFilePath(): string
 	{
-		return Config::getVar('rosetta', 'subDirectoryName') . '/rosetta.log';
+		return \Config::getVar('rosetta', 'subDirectoryName') . '/rosetta.log';
 
 	}
 

@@ -165,7 +165,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 		public function logError(string $message): void
 	{
-		Utils::writeLog($message, 'ERROR');
+		TIBHannover\Rosetta\Utils\Utils::writeLog($message, 'ERROR');
 	}
 
 	public function getSetting($contextId, $name): mixed
@@ -262,7 +262,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 		public function logInfo(string $message): void
 	{
-		Utils::writeLog($message, 'INFO');
+		TIBHannover\Rosetta\Utils\Utils::writeLog($message, 'INFO');
 	}
 
 		public function usage($scriptName): void
