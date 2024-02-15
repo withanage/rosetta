@@ -507,17 +507,12 @@ class RosettaExportDeployment
 		$result = '';
 		$result_head_once = true;
 		foreach ($deposits as $deposit) {
-			if ($result_head_once) {
-				$result .= implode('| |', array_keys($deposit)) . PHP_EOL;
-				$result_head_once = false;
-			}
 			foreach (array_values($deposit) as $value) {
 				if (gettype($value) == 'array') {
 					$result.= '|'.implode(' |', $value);
 				} else {
 					$result.='|'.$value;
 				}
-
 
 			}
 			$result .= PHP_EOL;
