@@ -169,7 +169,8 @@ class RosettaExportDeployment
 	private function updateIsDeposited(): void
 	{
 		$depositedArticles = $this->getDepositsFromRosettaApi();
-		$this->logDeposits($depositedArticles);
+		$results = $this->logDeposits($depositedArticles);
+		error_log($results, 3, '/tmp/rosetta-api.csv');
 
 		foreach ($depositedArticles as $key => $value) {
 			// Create a DepositActivityModel instance from the Rosetta API data.
@@ -501,7 +502,7 @@ class RosettaExportDeployment
 	 * @param array $deposits
 	 * @return void
 	 */
-	public function logDeposits(array $deposits): void
+	public function logDeposits(array $deposits): string
 	{
 		$result = '';
 		$result_head_once = true;
@@ -521,8 +522,9 @@ class RosettaExportDeployment
 			}
 			$result .= PHP_EOL;
 
-			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
+
 		}
-		error_log($result, 3, '/tmp/rosetta-api.csv');
+		return $result;
+
 	}
 }
