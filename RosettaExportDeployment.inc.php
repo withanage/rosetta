@@ -508,7 +508,7 @@ class RosettaExportDeployment
 		$result_head_once = true;
 		foreach ($deposits as $deposit) {
 			if ($result_head_once) {
-				$result .= mplode(' |', array_keys($deposit)) . PHP_EOL;
+				$result .= implode(' |', array_keys($deposit)) . PHP_EOL;
 				$result_head_once = false;
 			}
 			foreach (array_values($deposit) as $value) {
