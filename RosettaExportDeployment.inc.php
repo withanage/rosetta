@@ -261,7 +261,7 @@ class RosettaExportDeployment
 				else {
 					$result.=', '.$value;}
 
-				$result
+				$result;
 			}
 			var_dump($result.'\n');
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
