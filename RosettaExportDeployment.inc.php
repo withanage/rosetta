@@ -1,6 +1,6 @@
 <?php
 
-require './vendor/autoload.php';
+
 
 namespace TIBHannover\Rosetta;
 
@@ -83,23 +83,7 @@ class RosettaExportDeployment
 		}
 
 
-		$spreadsheet = new Spreadsheet();
-		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
 
-		/* Set CSV parsing options */
-
-		$reader->setDelimiter(',');
-		$reader->setEnclosure('"');
-		$reader->setSheetIndex(0);
-
-		/* Load a CSV file and save as a XLS */
-
-		$spreadsheet = $reader->load('../../uploads/test.csv');
-		$writer = new Xlsx($spreadsheet);
-		$writer->save('test.xlsx');
-
-		$spreadsheet->disconnectWorksheets();
-		unset($spreadsheet);
 
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
