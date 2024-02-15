@@ -260,10 +260,10 @@ class RosettaExportDeployment
 				}
 				else {
 					$result.=$value;}
-				$result .= "\n";
+
 
 			}
-			var_dump($result);
+			var_dump($result.'\n');
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
 		}
 		return $deposits;
