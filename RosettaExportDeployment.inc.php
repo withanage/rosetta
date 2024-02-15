@@ -256,12 +256,12 @@ class RosettaExportDeployment
 			}
 			foreach (array_values($deposit) as $value){
 				if(gettype($value) =='array') {
-					$result.= implode(' |', $value);
+					$result.= ', '.implode(' |', $value);
 				}
 				else {
-					$result.=$value;}
+					$result.=', '.$value;}
 
-
+				$result
 			}
 			var_dump($result.'\n');
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
