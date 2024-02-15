@@ -28,6 +28,7 @@ use TIBHannover\Rosetta\Files\RosettaFileService;
 use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use TIBHannover\Rosetta\Models\DepositActivityModel;
 use TIBHannover\Rosetta\Models\DepositStatusModel;
+use Utils;
 
 
 class RosettaExportDeployment
