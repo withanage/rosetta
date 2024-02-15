@@ -165,32 +165,10 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 		public function logError(string $message): void
 	{
-		self::writeLog($message, 'ERROR');
+		Utils::writeLog($message, 'ERROR');
 	}
 
-		public static function writeLog(string $message, string $level): void
-	{
-		try {
-			// Generate a timestamp with microsecond precision.
-			$fineStamp = date('Y-m-d H:i:s') . substr(microtime(), 1, 4);
-
-			// Construct the log entry.
-			$logEntry = "$fineStamp $level $message\n";
-
-			// Write the log entry to the log file.
-			error_log($logEntry, 3, self::logFilePath());
-		} catch (Exception $e) {
-			var_dump($e->getMessage());
-		}
-	}
-
-		public static function logFilePath(): string
-	{
-		return Config::getVar('rosetta', 'subDirectoryName') . '/rosetta.log';
-
-	}
-
-		public function getSetting($contextId, $name): mixed
+	public function getSetting($contextId, $name): mixed
 	{
 		switch ($name) {
 			case 'rosettaHost':
@@ -284,7 +262,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
 		public function logInfo(string $message): void
 	{
-		self::writeLog($message, 'INFO');
+		Utils::writeLog($message, 'INFO');
 	}
 
 		public function usage($scriptName): void

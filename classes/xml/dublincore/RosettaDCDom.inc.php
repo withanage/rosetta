@@ -9,6 +9,7 @@ use DOMElement;
 use DOMException;
 use Publication;
 use Submission;
+use Utils;
 
 
 class RosettaDCDom extends DOMDocument
@@ -153,7 +154,7 @@ class RosettaDCDom extends DOMDocument
 			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
 		}
 		else {
-			error_log('Issue id '.$this->publication->getId().' not found\n', 3, \RosettaExportPlugin::logFilePath());
+			error_log('Issue id '.$this->publication->getId().' not found\n', 3, Utils::logFilePath());
 		}
 
 	}

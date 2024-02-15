@@ -89,7 +89,6 @@ class RosettaExportDeployment
 		foreach ($submissions as $submission) {
 			if (is_a($submission, 'Submission')) {
 
-				// Log information about the submission being processed.
 				$this->plugin->logInfo('Submission being processed: ' . $submission->getData('id'));
 
 				// Skip if production and there is no DOI for the submission.
