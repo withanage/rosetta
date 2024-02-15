@@ -215,7 +215,7 @@ class RosettaExportDeployment
 
 		try {
 			// Make a GET request to the Rosetta API with the specified parameters.
-			$response = $this->client->get($endpoint, ['headers' => $headers]);
+			$response = $this->apiRequest($endpoint, $headers);
 
 			if ($response->getStatusCode() === 200) {
 				$body = json_decode($response->getBody(), true);
@@ -474,5 +474,15 @@ class RosettaExportDeployment
 			'status' => STATUS_PUBLISHED,
 		]);
 		return $submissions;
+	}
+
+	/**
+	 * @param string $endpoint
+	 * @param array $headers
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	public function apiRequest(string $endpoint, array $headers): \Psr\Http\Message\ResponseInterface
+	{
+		return $this->client->get($endpoint, ['headers' => $headers]);
 	}
 }
