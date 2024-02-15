@@ -243,9 +243,12 @@ class RosettaExportDeployment
 			ksort($local);
 			$deposits = $local;
 
-			var_dump('total_record_count:' . count($deposits));
+
 		}
-		Utils::writeLog(implode(' | ',$deposits), 'INFO');
+		var_dump('total_record_count:' . count($deposits));
+		foreach ($deposits as $deposit) {
+			Utils::writeLog(implode(' => ', $deposit), 'INFO');
+		}
 		return $deposits;
 	}
 
