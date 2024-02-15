@@ -264,7 +264,7 @@ class RosettaExportDeployment
 
 				$result;
 			}
-			error_log($result,3,'/tmp/rosetta-api.log');
+			error_log($result,3,'/tmp/rosetta-api.csv');
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
 		}
 		return $deposits;
