@@ -244,7 +244,7 @@ class RosettaExportDeployment
 
 			var_dump('total_record_count:' . count($deposits));
 		}
-
+		Utils::writeLog(implode(' | ',$deposits), 'INFO');
 		return $deposits;
 	}
 
