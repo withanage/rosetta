@@ -267,13 +267,15 @@ class RosettaExportDeployment
 					$result.= '|'.implode(' |', $value);
 				}
 				else {
-					$result.='|'.$value;}
+					$result.='|'.$value;
+				}
 
 				$result.PHP_EOL;
 			}
-			error_log($result.PHP_EOL,3,'/tmp/rosetta-api.csv');
+
 			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
 		}
+		error_log($result.PHP_EOL,3,'/tmp/rosetta-api.csv');
 		return $deposits;
 	}
 
