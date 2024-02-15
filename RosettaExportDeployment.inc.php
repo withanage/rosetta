@@ -248,8 +248,12 @@ class RosettaExportDeployment
 		var_dump('total_record_count:' . count($deposits));
 
 		$result= '';
+		$result_head_once= true;
 		foreach ($deposits as $deposit) {
-			var_dump(array_keys($deposit));
+			if ($result_head_once) {
+				var_dump(implode(' |', array_keys($deposit)));
+				$result_head_once = false;
+			}
 			foreach (array_values($deposit) as $value){
 				if(gettype($value) =='array') {
 					$result.= implode(' |', $value);
