@@ -168,9 +168,10 @@ class RosettaExportDeployment
 
 	private function updateIsDeposited(): void
 	{
-		$getDepositedArticles = $this->getDepositsFromRosettaApi();
+		$depositedArticles = $this->getDepositsFromRosettaApi();
+		$this->logDeposits($depositedArticles);
 
-		foreach ($getDepositedArticles as $key => $value) {
+		foreach ($depositedArticles as $key => $value) {
 			// Create a DepositActivityModel instance from the Rosetta API data.
 			$row = new DepositActivityModel($value);
 
@@ -255,28 +256,7 @@ class RosettaExportDeployment
 		}
 		var_dump('total_record_count:' . count($deposits));
 
-		$result= '';
-		$result_head_once= true;
-		foreach ($deposits as $deposit) {
-			if ($result_head_once) {
-				var_dump(implode(' |', array_keys($deposit))).PHP_EOL;
-				$result_head_once = false;
-			}
-			foreach (array_values($deposit) as $value){
-				if(gettype($value) =='array') {
-					$result.= '|'.implode(' |', $value);
-				}
-				else {
-					$result.='|'.$value;
-				}
 
-				$result.= PHP_EOL;
-			}
-			$result.= PHP_EOL;
-
-			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
-		}
-		error_log($result,3,'/tmp/rosetta-api.csv');
 		return $deposits;
 	}
 
@@ -515,5 +495,34 @@ class RosettaExportDeployment
 	public function apiRequest(string $endpoint, array $headers): \Psr\Http\Message\ResponseInterface
 	{
 		return $this->client->get($endpoint, ['headers' => $headers]);
+	}
+
+	/**
+	 * @param array $deposits
+	 * @return void
+	 */
+	public function logDeposits(array $deposits): void
+	{
+		$result = '';
+		$result_head_once = true;
+		foreach ($deposits as $deposit) {
+			if ($result_head_once) {
+				var_dump(implode(' |', array_keys($deposit))) . PHP_EOL;
+				$result_head_once = false;
+			}
+			foreach (array_values($deposit) as $value) {
+				if (gettype($value) == 'array') {
+					//$result.= '|'.implode(' |', $value);
+				} else {
+					//$result.='|'.$value;
+				}
+
+
+			}
+			$result .= PHP_EOL;
+
+			#Utils::writeLog(implode(' => ', $deposit), 'INFO');
+		}
+		error_log($result, 3, '/tmp/rosetta-api.csv');
 	}
 }
