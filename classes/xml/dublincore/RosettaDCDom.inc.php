@@ -20,10 +20,11 @@ class RosettaDCDom extends DOMDocument
 	public Publication $publication;
 	public Context $context;
 	public string $locale;
+	public  bool $isMultilingual = true;
 	public array $supportedFormLocales;
 	public Submission $submission;
 
-	public function __construct(Context $context, Publication $publication, Submission $submission, bool $isMultilingual = true)
+	public function __construct(Context $context, Publication $publication, Submission $submission)
 	{
 		parent::__construct('1.0', 'UTF-8');
 
@@ -34,11 +35,10 @@ class RosettaDCDom extends DOMDocument
 		$this->locale = $publication->getData('locale');
 		$this->supportedFormLocales = $context->getSupportedFormLocales();
 		$this->submission = $submission;
-
-		$this->createInstance($isMultilingual);
+		$this->createInstance();
 	}
 
-	public function createInstance(bool $isMultilingual): void
+	public function createInstance(): void
 	{
 		$acronym = $this->context->getData('acronym', 'en_US');
 
@@ -50,18 +50,7 @@ class RosettaDCDom extends DOMDocument
 
 		$this->createQualifiedElement('dcterms:license', 'TIB_OJS_Lizenzvereinbarung');
 
-
-		// title
-		if ($isMultilingual) {
-			$titles = $this->publication->getData('title');
-			foreach ($titles as $language => $title) {
-				$this->createQualifiedElement('dc:title', $title, $language);
-			}
-		} else {
-			$node = $this->createElement('dc:title', $this->publication->getLocalizedTitle());
-			$this->record->appendChild($node);
-		}
-
+		$this->createTitle();
 
 		$this->createAuthors();
 
@@ -89,6 +78,8 @@ class RosettaDCDom extends DOMDocument
 		$this->createCopyrightHolderOther();
 
 		$this->createISSN();
+
+		$this->createQualifiedElement('dcterms:hasVersion', 'Version '.$this->publication->getData('version'));
 	}
 
 	private function createDCElement(): void
@@ -154,7 +145,7 @@ class RosettaDCDom extends DOMDocument
 			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
 		}
 		else {
-			error_log('Issue id '.$this->publication->getId().' not found\n', 3, Utils::logFilePath());
+			error_log('Issue id '.$this->publication->getId().' not found\n', 3, \TIBHannover\Rosetta\Utils\Utils::logFilePath());
 		}
 
 	}
@@ -255,6 +246,23 @@ class RosettaDCDom extends DOMDocument
 	public function getRecord(): DOMElement
 	{
 		return $this->record;
+	}
+
+	/**
+	 * @return void
+	 * @throws DOMException
+	 */
+	public function createTitle(): void
+	{
+		if ($this->isMultilingual) {
+			$titles = $this->publication->getData('title');
+			foreach ($titles as $language => $title) {
+				$this->createQualifiedElement('dc:title', $title, $language);
+			}
+		} else {
+			$node = $this->createElement('dc:title', $this->publication->getLocalizedTitle());
+			$this->record->appendChild($node);
+		}
 	}
 
 

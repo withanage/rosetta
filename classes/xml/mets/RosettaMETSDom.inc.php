@@ -86,7 +86,7 @@ class RosettaMETSDom extends DOMDocument
 		$divNode->setAttribute('LABEL', 'Preservation Master');
 
 		$repIdSuffix = '1';
-		$recordId = (string)$this->context->getData('urlPath') . '-' . (string)$this->submission->getData('id') . '-v' . (string)$this->publication->getData('version');
+		$recordId = (string) $this->context->getData('urlPath') . '-' . (string)$this->submission->getData('id') . '-v' . (string)$this->publication->getData('version');
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
 		$galleyFiles = RosettaFileService::getGalleyFiles($this->publication);

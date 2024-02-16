@@ -24,7 +24,7 @@ class TestPublication extends Publication
 		$this->setData('urlPath', 'url_path');
 		$this->setData('urlPath', 'url_path');
 		$this->setData('issueId', '1');
-
+		$this->setData('version', '1');
 		$this->setData('title', 'article-title-en', $submission->getLocale());
 		$this->setData('authors', $this->createAuthors());
 		$this->setData('datePublished', '2023-12-25');
