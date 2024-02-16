@@ -254,15 +254,9 @@ class RosettaDCDom extends DOMDocument
 	 */
 	public function createTitle(): void
 	{
-		if ($this->isMultilingual) {
-			$titles = $this->publication->getData('title');
-			foreach ($titles as $language => $title) {
-				$this->createQualifiedElement('dc:title', $title, $language);
-			}
-		} else {
 			$node = $this->createElement('dc:title', $this->publication->getLocalizedTitle());
 			$this->record->appendChild($node);
-		}
+
 	}
 
 

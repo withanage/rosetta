@@ -3,7 +3,7 @@
 	<dc:type>status-type:publishedVersion</dc:type>
 	<dc:type>doc-type:article</dc:type>
 	<dcterms:license>TIB_OJS_Lizenzvereinbarung</dcterms:license>
-	<dc:title  xml:lang="en_US">article-title-en</dc:title>
+	<dc:title>article-title-en</dc:title>
 	<dc:creator>author-firstname author-lastname</dc:creator>
 	<dc:date>2023-12-25</dc:date>
 	<!--dcterms:isPartOf>Open Access E-Journals/TIB OP/JPKJPK/2024/1/1/</dcterms:isPartOf-->
