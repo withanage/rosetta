@@ -192,9 +192,9 @@ class RosettaExportDeployment
 					// Check if the subdirectory matches the publication's version.
 					if ($subdirectory[count($subdirectory) - 1] === 'v' . $publication->getData('version')) {
 						// Update the publication's deposit activity data and save it to the database.
-						$publication->setData($this->plugin->depositActivitySettingName, json_encode($row));
-						$publicationDao = new PublicationDAO();
-						$publicationDao->updateObject($publication);
+						//$publication->setData($this->plugin->depositActivitySettingName, json_encode($row));
+						//$publicationDao = new PublicationDAO();
+						//$publicationDao->updateObject($publication);
 					}
 				}
 			}
@@ -429,9 +429,9 @@ class RosettaExportDeployment
 			}
 
 			// Update the publication object with deposit status
-			$publicationDao = new PublicationDAO();
-			$publication->setData($this->plugin->depositStatusSettingName, json_encode($depositStatus));
-			$publicationDao->updateObject($publication);
+			//$publicationDao = new PublicationDAO();
+			//$publication->setData($this->plugin->depositStatusSettingName, json_encode($depositStatus));
+			//$publicationDao->updateObject($publication);
 
 		} catch (Exception $e) {
 			$this->plugin->logError($e->getMessage());
