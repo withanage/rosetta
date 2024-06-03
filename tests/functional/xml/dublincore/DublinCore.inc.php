@@ -7,7 +7,7 @@ class DublinCore
 {
 	public function testDublincore(RosettaFunctionsTest $rosettaFunctionsTest): void
 	{
-		$nodeNames = ['dcterms:modified', 'dcterms:isPartOf'];
+		$nodeNames = ['dcterms:modified'];
 
 		$rosettaFunctionsTest->createRouter();
 		$testJournal = new TestJournal();
@@ -19,6 +19,10 @@ class DublinCore
 
 		$dcDom = new RosettaDCDom($testJournal, $latestPublication, $testSubmission, false);
 		General::removeNodesListFromDom($dcDom, $nodeNames);
-		$rosettaFunctionsTest->assertXmlStringEqualsXmlFile($dublinCoreFile, $dcDom->saveXML());
+		$saveXML = $dcDom->saveXML();
+		$rosettaFunctionsTest->assertXmlStringEqualsXmlFile($dublinCoreFile, $saveXML);
 	}
+
+
+
 }

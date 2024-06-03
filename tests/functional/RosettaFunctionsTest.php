@@ -62,7 +62,7 @@ class RosettaFunctionsTest extends PluginTestCase
 
 	protected function getMockedDAOs()
 	{
-		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO');
+		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO','IssueDAO');
 	}
 
 	protected function getMockedRegistryKeys()

@@ -138,10 +138,9 @@ class RosettaDCDom extends DOMDocument
 	{
 		$issn = $this->context->getData('onlineIssn');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issue = $issueDao->getById($this->publication->getData('issueId'), $this->context->getId());
+		$issue = $issueDao->getById($this->publication->getData('issueId'));
 		if ($issue) {
-			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' .
-				$issue->getData('volume') . '/' . $issue->getData('id') ;
+			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' .$issue->getData('volume')  ;
 			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
 		}
 		else {
