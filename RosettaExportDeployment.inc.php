@@ -197,7 +197,7 @@ class RosettaExportDeployment
 			'offset' => $offset
 		];
 		$endpoint = $this->getDepositEndpoint('rest') . '?' . http_build_query($params);
-		echo($endpoint);
+		
 
 		// Define the HTTP headers
 		$headers = [
