@@ -187,6 +187,7 @@ class RosettaExportDeployment
 	private function getDepositsFromRosettaApi(int $offset = 0): array
 	{
 		$deposits = []; // Array to store deposit activity data
+		echo($offset);
 
 		// Get the deposit endpoint
 		$params = [
@@ -197,7 +198,7 @@ class RosettaExportDeployment
 			'offset' => $offset
 		];
 		$endpoint = $this->getDepositEndpoint('rest') . '?' . http_build_query($params);
-		
+
 
 		// Define the HTTP headers
 		$headers = [
