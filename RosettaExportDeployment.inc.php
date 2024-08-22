@@ -219,7 +219,6 @@ class RosettaExportDeployment
 			if ($response->getStatusCode() === 200) {
 				$body = json_decode($response->getBody(), true);
 				//echo(serialize($body));
-				echo($body['total_record_count']);
 				// Check if there are more records to fetch (pagination).
 				if ($body['total_record_count'] > 0) {
 					$deposits = array_merge($deposits, $this->getDepositsFromRosettaApi($offset + 1));
