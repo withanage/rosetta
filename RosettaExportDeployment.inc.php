@@ -220,7 +220,7 @@ class RosettaExportDeployment
 				$body = json_decode($response->getBody(), true);
 				echo(serialize($body));
 				// Check if there are more records to fetch (pagination).
-				if ($body['total_record_count'] >= 0) {
+				if ($body['total_record_count'] >= 10) {
 					$deposits = array_merge($deposits, $this->getDepositsFromRosettaApi($offset + 1));
 				}
 
