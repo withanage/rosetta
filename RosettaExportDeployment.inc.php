@@ -213,10 +213,11 @@ class RosettaExportDeployment
 		try {
 			// Make a GET request to the Rosetta API with the specified parameters.
 			$response = $this->apiRequest($endpoint, $headers);
-			echo(json_decode($response->getBody()));
+
 
 			if ($response->getStatusCode() === 200) {
 				$body = json_decode($response->getBody(), true);
+				echo($body);
 				// Check if there are more records to fetch (pagination).
 				if ($body['total_record_count'] >= 100) {
 					$deposits = array_merge($deposits, $this->getDepositsFromRosettaApi($offset + 1));
