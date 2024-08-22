@@ -188,7 +188,7 @@ class RosettaExportDeployment
 	{
 		$deposits = []; // Array to store deposit activity data
 		echo($offset);
-		exit(1);
+
 
 		// Get the deposit endpoint
 		$params = [
