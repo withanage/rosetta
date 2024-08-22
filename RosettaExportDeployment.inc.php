@@ -105,7 +105,7 @@ class RosettaExportDeployment
 
 				// Iterate through associated publications.
 				foreach ($publications as $publication) {
-					var_dump($submission->getData('id').'-'.$publication->getData('id').': ('.$publication->getLocalizedFullTitle('title').')');
+
 					$galleyFiles = RosettaFileService::getGalleyFiles($publication);
 
 					$galleyFileMissing = false;
@@ -255,9 +255,6 @@ class RosettaExportDeployment
 
 
 		}
-		var_dump('total_record_count:' . count($deposits));
-
-
 		return $deposits;
 	}
 
@@ -363,6 +360,7 @@ class RosettaExportDeployment
 
 		// if not testMode and validated
 		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
+			var_dump($submission->getData('id').'-'.$publication->getData('id').': ('.$publication->getLocalizedFullTitle('title').')');
 			$this->doDeposit($INGEST_PATH, $publication);
 			$this->plugin->removeDirRecursively($SIP_PATH);
 		}
