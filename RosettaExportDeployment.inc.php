@@ -82,9 +82,6 @@ class RosettaExportDeployment
 			return;
 		}
 
-
-
-
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
 
@@ -118,7 +115,6 @@ class RosettaExportDeployment
 
 					// Skip if test and publication DOI is empty and no gallery files
 					if ($publication->getStoredPubId('doi') == null && count($galleyFiles) == 0 || $galleyFileMissing) {
-
 						continue;
 					}
 
@@ -140,7 +136,8 @@ class RosettaExportDeployment
 						if (!empty($depositActivity->status) &&
 							!in_array(
 								strtolower($depositActivity->status),
-								$this->depositRejectedStatuses, true)) {
+								$this->depositRejectedStatuses, true))
+						{
 							continue;
 						}
 					}
@@ -155,6 +152,8 @@ class RosettaExportDeployment
 	private function updateIsDeposited(): void
 	{
 		$depositedArticles = $this->getDepositsFromRosettaApi();
+		echo($depositedArticles);
+		exit(1);
 		$results = $this->logDeposits($depositedArticles);
 		error_log($results, 3, '/tmp/rosetta-api.csv');
 
