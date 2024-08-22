@@ -88,8 +88,6 @@ class RosettaExportDeployment
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
 
-		// Retrieve plugin settings for the current context.
-		$currentContextSettings = $this->plugin->rosettaContextSettings[$this->context->getLocalizedAcronym()];
 
 		// Retrieve published submissions based on specific criteria.
 		$submissions = $this->getPublishedSubmissions();
@@ -146,21 +144,9 @@ class RosettaExportDeployment
 							continue;
 						}
 					}
+					//$this->depositPublicationBySettings($submission, $publication, $galleyFiles);
 
 
-					// Deposit the publication to Rosetta based on specified settings.
-					if ($currentContextSettings == null) {
-						$this->depositPublication($submission, $publication, $galleyFiles);
-					} else {
-						$issue = Services::get('issue')->get($publication->getData('issueId'));
-						foreach ($currentContextSettings as $setting) {
-							if (($issue->getData('number') == $setting['number'] &&
-								$issue->getData('volume') == $setting['volume'] &&
-								$issue->getData('year') == $setting['year']) /* || $issue == null */) {
-								$this->depositPublication($submission, $publication, $galleyFiles);
-							}
-						}
-					}
 				}
 			}
 		}
@@ -521,5 +507,30 @@ class RosettaExportDeployment
 		}
 		return $result;
 
+	}
+
+	/**
+	 * @param mixed $submission
+	 * @param mixed $publication
+	 * @param array $galleyFiles
+	 * @return void
+	 */
+	public function depositPublicationBySettings(mixed $submission, mixed $publication, array $galleyFiles): void
+	{
+// Deposit the publication to Rosetta based on specified settings.
+		$currentContextSettings = $this->plugin->rosettaContextSettings[$this->context->getLocalizedAcronym()];
+
+		if ($currentContextSettings == null) {
+			$this->depositPublication($submission, $publication, $galleyFiles);
+		} else {
+			$issue = Services::get('issue')->get($publication->getData('issueId'));
+			foreach ($currentContextSettings as $setting) {
+				if (($issue->getData('number') == $setting['number'] &&
+					$issue->getData('volume') == $setting['volume'] &&
+					$issue->getData('year') == $setting['year']) /* || $issue == null */) {
+					$this->depositPublication($submission, $publication, $galleyFiles);
+				}
+			}
+		}
 	}
 }
