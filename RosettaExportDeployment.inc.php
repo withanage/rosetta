@@ -213,7 +213,7 @@ class RosettaExportDeployment
 		try {
 			// Make a GET request to the Rosetta API with the specified parameters.
 			$response = $this->apiRequest($endpoint, $headers);
-			echo(json_decode($response));
+			echo(json_decode($response->getBody()));
 
 			if ($response->getStatusCode() === 200) {
 				$body = json_decode($response->getBody(), true);
