@@ -153,6 +153,7 @@ class RosettaExportDeployment
 	private function updateIsDeposited(): void
 	{
 		$depositedArticles = $this->getDepositsFromRosettaApi();
+		echo(sizeof($depositedArticles));
 		$results = $this->logDeposits($depositedArticles);
 		error_log($results, 3, '/tmp/rosetta-api.csv');
 
