@@ -185,7 +185,7 @@ class RosettaExportDeployment
 		}
 	}
 
-	private function getDepositsFromRosettaApi(int $offset = 10): array
+	private function getDepositsFromRosettaApi(int $offset = 2): array
 	{
 		$deposits = []; // Array to store deposit activity data
 
