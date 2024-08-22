@@ -241,9 +241,6 @@ class RosettaExportDeployment
 
 
 		}
-		var_dump('total_record_count:' . count($deposits));
-
-
 		return $deposits;
 	}
 
