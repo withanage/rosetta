@@ -244,7 +244,7 @@ class RosettaExportDeployment
 
 
 		}
-		echo(serialize($body));
+		echo(serialize($deposits));
 		return $deposits;
 	}
 
