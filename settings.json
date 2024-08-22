@@ -1,13 +1,13 @@
 {
-"bis": [],
- "JPKJPK": [],
-  "ocp": [
-	{
-	  "volume": 1,
-	  "number": 1,
-	  "year": 2022
-	}
-  ],
-  "scp": [],
-  "th-wildau-ensp": []
+	"BIS": [],
+	"OCP": [
+		{
+			"VOLUME": 1,
+			"NUMBER": 1,
+			"YEAR": 2022
+		}
+	],
+	"SCP": [],
+	"TH-WILDAU-ENSP": []
 }
+
