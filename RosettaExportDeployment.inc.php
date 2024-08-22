@@ -84,6 +84,7 @@ class RosettaExportDeployment
 
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
+		exit(1);
 
 
 		// Retrieve published submissions based on specific criteria.
