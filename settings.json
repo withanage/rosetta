@@ -1,6 +1,10 @@
 {
-	"AGRIPV": [],
+	"agripv": [],
+	"CoRDI": [],
+	"dae-p": [],
 	"BIS": [],
+	"glass-europe": [],
+	"isec": [],
 	"OCP": [
 		{
 			"VOLUME": 1,
@@ -8,7 +12,12 @@
 			"YEAR": 2022
 		}
 	],
+	"pv-symposium": [],
 	"SCP": [],
-	"TH-Wildau-ENSP": []
+	"siliconpv": [],
+	"solarspaces": [],
+	"ST-symposium": [],
+	"TH-Wildau-ENSP": [],
+	"zukunftsnetz": []
 }
 
