@@ -43,16 +43,14 @@ class RosettaFileService
 			'assocIds' => [$submissionFile->getId()],
 		]);
 
-		$assetsFilePaths = array();
+		$dependentFilePaths = array();
 		foreach ($dependentFilesIterator as $dependentFile) {
-			$originalFileName = $submissionFile->getLocalizedData('name');
 
-			$assetsFilePaths[$originalFileName] = array(
+			$dependentFilePaths[] = array(
 				"fullFilePath" => $dependentFile->getData('path'),
-				"path" => $path,
-				"originalFileName" => $originalFileName
+				"path" => $path
 			);
 		}
-		return $assetsFilePaths;
+		return $dependentFilePaths;
 	}
 }
