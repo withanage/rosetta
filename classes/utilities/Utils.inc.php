@@ -3,7 +3,7 @@
 namespace TIBHannover\Rosetta\Utils;
 class Utils
 {
-	public static function writeLog(string $message, string $level): void
+	public static function writeLog($message, string $level): void
 	{
 		try {
 			// Generate a timestamp with microsecond precision.

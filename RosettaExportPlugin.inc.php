@@ -163,7 +163,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 		}
 	}
 
-		public function logError(string $message): void
+		public function logError($message): void
 	{
 		TIBHannover\Rosetta\Utils\Utils::writeLog($message, 'ERROR');
 	}
