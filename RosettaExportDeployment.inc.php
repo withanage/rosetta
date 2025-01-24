@@ -411,7 +411,7 @@ class RosettaExportDeployment
 					$depositStatus->doi = $publication->getStoredPubId('doi');
 
 				// Wait for network to finish ingestion (adjust sleep time as needed)
-				sleep(600);
+				sleep(120);
 
 				// Log deposit information
 				$this->plugin->logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
