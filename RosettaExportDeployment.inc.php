@@ -145,6 +145,8 @@ class RosettaExportDeployment
 								$this->depositRejectedStatuses, true)) {
 							continue;
 						}
+						// skip if deposit entry is present.
+						continue;
 					}
 
 
