@@ -1,0 +1,11 @@
+{
+	"host": "https://example.com/",
+	"username": "user123",
+	"institutionCode": "XYZ",
+	"password": "*****",
+	"producerId": 12345678,
+	"materialFlowId": 12345678,
+	"plugin": {
+		"depositHistoryInDays": 730
+	}
+}
