@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 
 class DepositHandler
 {
@@ -68,10 +69,21 @@ class DepositHandler
 			'accept-encoding' => 'gzip, deflate'
 		];
 		try {
+			// Make a GET request to the Rosetta API with the specified parameters.
 			$response = $this->apiRequest($endpoint, $headers);
+
 			if ($response->getStatusCode() === 200) {
 				$body = json_decode($response->getBody(), true);
-				$deposits = $body['deposits'] ?? [];
+
+				// Check if there are more records to fetch (pagination).
+				if ($body['total_record_count'] > 0) {
+					$deposits = array_merge($deposits, $this->getDepositsFromRosettaApi($offset + 1));
+				}
+
+				// Merge the fetched deposit records into the result array.
+				if (!empty($body['deposit'])) {
+					$deposits = array_merge($deposits, $body['deposit']);
+				}
 			}
 		} catch (Exception $e) {
 			error_log('Error fetching deposits: ' . $e->getMessage());
@@ -80,13 +92,13 @@ class DepositHandler
 		return $deposits;
 	}
 
-	public function apiRequest(string $endpoint, array $headers): \Psr\Http\Message\ResponseInterface
+	public function apiRequest(string $endpoint, array $headers): ResponseInterface
 	{
 		return $this->client->get($endpoint, ['headers' => $headers]);
 	}
 }
 
-$settingsFile =  __DIR__.DIRECTORY_SEPARATOR.'RosettaSettings.json';
+$settingsFile = __DIR__ . DIRECTORY_SEPARATOR . 'RosettaSettings.json';
 $depositHandler = new DepositHandler($settingsFile);
 $deposits = $depositHandler->getDepositsFromRosettaApi(0);
 
