@@ -41,7 +41,7 @@ class DepositHandler
 
 	private function getDepositEndpoint(string $apiType = ''): string
 	{
-		return $this->host . '/rest/v0/deposits/' . $apiType . '/';
+		return $this->host . '/' . $apiType . '/v0/deposits/';
 	}
 
 	private function getBase64Credentials(): string
