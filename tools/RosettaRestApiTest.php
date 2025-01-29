@@ -1,7 +1,8 @@
 <?php
 
 
-require_once '/../vendor/autoload.php';
+// Include Composer's autoloader
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 
 use GuzzleHttp\Client;
@@ -29,6 +30,7 @@ class DepositHandler
 		$this->password = $settings['password'];
 		$this->producerId = $settings['producerId'];
 		$this->materialFlowId = $settings['materialFlowId'];
+
 		$this->depositHistoryInDays = 730;
 		$this->client = new Client([
 			'headers' => ['User-Agent' => $this->userAgent],
