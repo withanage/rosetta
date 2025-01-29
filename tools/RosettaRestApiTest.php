@@ -104,6 +104,6 @@ $deposits = $depositHandler->getDepositsFromRosettaApi(0);
 
 echo date('Y-m-d H:i:s', time());
 foreach ($deposits as $deposit) {
-	print_r(json_encode($deposits).PHP_EOL);
+	print_r(json_encode($deposit).PHP_EOL);
 }
 echo date('Y-m-d H:i:s', time());
