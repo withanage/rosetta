@@ -1,5 +1,11 @@
 <?php
+
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+
 use GuzzleHttp\Client;
+
 class DepositHandler
 {
 	private string $host;
