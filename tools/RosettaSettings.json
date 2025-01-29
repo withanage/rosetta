@@ -5,7 +5,6 @@
 	"password": "*****",
 	"producerId": 12345678,
 	"materialFlowId": 12345678,
-	"plugin": {
-		"depositHistoryInDays": 730
-	}
+	"depositHistoryInDays": 730
+
 }
