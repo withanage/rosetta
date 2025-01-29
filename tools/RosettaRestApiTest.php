@@ -101,4 +101,9 @@ class DepositHandler
 $settingsFile = __DIR__ . DIRECTORY_SEPARATOR . 'RosettaSettings.json';
 $depositHandler = new DepositHandler($settingsFile);
 $deposits = $depositHandler->getDepositsFromRosettaApi(0);
-print_r(json_encode($deposits));
+
+echo date('Y-m-d H:i:s', time());
+foreach ($deposits as $deposit) {
+	print_r(json_encode($deposits).PHP_EOL);
+}
+echo date('Y-m-d H:i:s', time());
