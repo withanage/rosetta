@@ -101,5 +101,4 @@ class DepositHandler
 $settingsFile = __DIR__ . DIRECTORY_SEPARATOR . 'RosettaSettings.json';
 $depositHandler = new DepositHandler($settingsFile);
 $deposits = $depositHandler->getDepositsFromRosettaApi(0);
-
-print_r(implode(', ', $deposits));
+print_r(json_encode($deposits));
