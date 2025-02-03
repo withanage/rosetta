@@ -169,7 +169,7 @@ class ModsDOM extends DOMDocument
 				$authorGivenNameEmpty = !array_filter(array_values($author->getData('givenName')));
 				$authorType = ($authorGivenNameEmpty) ? 'corporate' : 'personal';
 				$nameDom->setAttribute('type', $authorType);
-				if (array_key_exists($locale, $author->getData('familyName'))) {
+				if ($author->getData('familyName') && array_key_exists($locale, $author->getData('familyName'))) {
 					$familyNamePartDom = $this->createElementNS(MODS_NS, 'namePart', $author->getData('familyName')[$locale]);
 					if (preg_match('/^([a-z]{2})_/i', $locale, $matches)) {
 						$shortLocale = $matches[1];
@@ -178,7 +178,7 @@ class ModsDOM extends DOMDocument
 					$familyNamePartDom->setAttribute('type', 'family');
 					$nameDom->appendChild($familyNamePartDom);
 				}
-				if (array_key_exists($locale, $author->getData('givenName'))) {
+				if ($author->getData('givenName') && array_key_exists($locale, $author->getData('givenName'))) {
 
 					$givenNamePartDom = $this->createElementNS(MODS_NS, 'namePart', $author->getData('givenName')[$locale]);
 					if (preg_match('/^([a-z]{2})_/i', $locale, $matches)) {
