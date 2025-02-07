@@ -88,8 +88,9 @@ class RosettaExportDeployment
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
 
-		// Retrieve plugin settings for the current context.
-		$currentContextSettings = $this->plugin->rosettaContextSettings[$this->context->getLocalizedAcronym()];
+
+		$localizedAcronymLowerCase = strtolower($this->context->getLocalizedAcronym());
+		$currentContextSettings = $this->plugin->rosettaContextSettings[$localizedAcronymLowerCase];
 
 		// Retrieve published submissions based on specific criteria.
 		$submissions = $this->getPublishedSubmissions();
@@ -156,9 +157,7 @@ class RosettaExportDeployment
 					} else {
 						$issue = Services::get('issue')->get($publication->getData('issueId'));
 						foreach ($currentContextSettings as $setting) {
-							if (($issue->getData('number') == $setting['number'] &&
-								$issue->getData('volume') == $setting['volume'] &&
-								$issue->getData('year') == $setting['year']) /* || $issue == null */) {
+							if ($issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) {
 								$this->depositPublication($submission, $publication, $galleyFiles);
 							}
 						}
