@@ -33,6 +33,7 @@ class DepositHandler
 		$this->materialFlowId = $settings['materialFlowId'];
 
 		$this->depositHistoryInDays = 730;
+
 		$this->client = new Client([
 			'headers' => ['User-Agent' => $this->userAgent],
 			'verify' => false
@@ -42,7 +43,7 @@ class DepositHandler
 
 	private function getDepositEndpoint(string $apiType = ''): string
 	{
-		return $this->host . '/' . $apiType . '/v0/deposits/';
+		return $this->host . '/' . $apiType . '/v0/sips/';
 	}
 
 	private function getBase64Credentials(): string
