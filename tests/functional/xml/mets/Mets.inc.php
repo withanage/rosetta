@@ -4,23 +4,19 @@ import('plugins.importexport.rosetta.tests.functional.xml.utils.General');
 
 class Mets
 {
+    public function testMets(RosettaFunctionsTest $rosettaFunctionsTest): void
+    {
+        $nodeNames = ['dcterms:modified', 'dcterms:isPartOf'];
 
-	public function testMets(RosettaFunctionsTest $rosettaFunctionsTest): void
+        $rosettaFunctionsTest->createRouter();
+        $testSubmission = new TestSubmission();
+        $testJournal = new TestJournal();
 
-	{
-		$nodeNames = ['dcterms:modified', 'dcterms:isPartOf'];
+        $metsDom = new \TIBHannover\Rosetta\Mets\RosettaMETSDom($testJournal, $testSubmission, $testSubmission->getLatestPublication(), $rosettaFunctionsTest->getPlugin(), true);
+        General::removeNodesListFromDom($metsDom, $nodeNames);
 
-		$rosettaFunctionsTest->createRouter();
-		$testSubmission = new TestSubmission();
-		$testJournal = new TestJournal();
+        $metsFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaFunctionsTest->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
 
-		$metsDom = new \TIBHannover\Rosetta\Mets\RosettaMETSDom($testJournal, $testSubmission, $testSubmission->getLatestPublication(), $rosettaFunctionsTest->getPlugin(), true);
-		General::removeNodesListFromDom($metsDom, $nodeNames);
-
-		$metsFile = join(DIRECTORY_SEPARATOR, array(getcwd(), $rosettaFunctionsTest->getPlugin()->getPluginPath(), 'tests', 'data', 'ie1.xml'));
-
-		$rosettaFunctionsTest->assertXmlStringEqualsXmlFile($metsFile, $metsDom->saveXML());
-
-
-	}
+        $rosettaFunctionsTest->assertXmlStringEqualsXmlFile($metsFile, $metsDom->saveXML());
+    }
 }
