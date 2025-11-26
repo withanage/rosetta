@@ -1,25 +1,25 @@
 <?php
 
 /**
- * @file plugins/importexport/rosetta/RosettaExportPlugin.php
+ * @file plugins/importexport/rosetta/classes/xml/mets/RosettaMetsDom.php
  *
  * Copyright (c) 2014-2025 Simon Fraser University
  * Copyright (c) 2003-2025 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
- * @class RosettaExportPlugin
+ * @class RosettaMetsDom
  *
  * @ingroup plugins_importexport_rosetta
  *
  * @brief Rosetta export plugin
  */
 
-namespace APP\plugins\importexport\rosetta\classes\Mets;
+namespace APP\plugins\importexport\rosetta\classes\xml\mets;
 
-use APP\plugins\importexport\rosetta\classes\Dc\RosettaDCDom;
-use APP\plugins\importexport\rosetta\classes\Files\RosettaFileService;
-use APP\plugins\importexport\rosetta\classes\Mods\ModsDOM;
-use APP\plugins\importexport\rosetta\classes\Xml\XMLUtils;
+use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDCDom;
+use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
+use APP\plugins\importexport\rosetta\classes\xml\mods\ModsDOM;
+use APP\plugins\importexport\rosetta\classes\xml\XMLUtils;
 use APP\publication\Publication;
 use APP\submission\Submission;
 use DOMDocument;

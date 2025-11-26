@@ -1,22 +1,22 @@
 <?php
 
 /**
- * @file plugins/importexport/rosetta/RosettaExportPlugin.php
+ * @file plugins/importexport/rosetta/classes/xml/XMLUtils.php
  *
  * Copyright (c) 2014-2025 Simon Fraser University
  * Copyright (c) 2003-2025 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
- * @class RosettaExportPlugin
+ * @class XMLUtils
  *
  * @ingroup plugins_importexport_rosetta
  *
  * @brief Rosetta export plugin
  */
 
-namespace APP\plugins\importexport\rosetta\classes\Xml;
+namespace APP\plugins\importexport\rosetta\classes\xml;
 
-use APP\plugins\importexport\rosetta\classes\Mets\RosettaMetsDom;
+use APP\plugins\importexport\rosetta\classes\xml\mets\RosettaMetsDom;
 use DOMElement;
 
 class XMLUtils

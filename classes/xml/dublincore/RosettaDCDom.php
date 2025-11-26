@@ -1,20 +1,20 @@
 <?php
 
 /**
- * @file plugins/importexport/rosetta/RosettaExportPlugin.php
+ * @file plugins/importexport/rosetta/classes/xml/dublincore/RosettaDCDom.php
  *
  * Copyright (c) 2014-2025 Simon Fraser University
  * Copyright (c) 2003-2025 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
- * @class RosettaExportPlugin
+ * @class RosettaDCDom
  *
  * @ingroup plugins_importexport_rosetta
  *
  * @brief Rosetta export plugin
  */
 
-namespace APP\plugins\importexport\rosetta\classes\Dc;
+namespace APP\plugins\importexport\rosetta\classes\xml\dublincore;
 
 use APP\publication\Publication;
 use APP\submission\Submission;
@@ -124,7 +124,7 @@ class RosettaDCDom extends DOMDocument
             $rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' . $issue->getData('volume');
             $this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
         } else {
-            error_log('Issue id ' . $this->publication->getId() . ' not found\n', 3, \TIBHannover\Rosetta\Utils\Utils::logFilePath());
+            error_log('Issue id ' . $this->publication->getId() . ' not found\n', 3, Utils::logFilePath());
         }
     }
 

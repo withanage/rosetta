@@ -16,26 +16,21 @@
 
 namespace APP\plugins\importexport\rosetta;
 
+use APP\core\Services;
 use APP\facades\Repo;
-use APP\plugins\importexport\rosetta\classes\Dc\RosettaDCDom;
 use APP\plugins\importexport\rosetta\classes\Files\RosettaFileService;
-use APP\plugins\importexport\rosetta\classes\Mets\RosettaMetsDom;
 use APP\plugins\importexport\rosetta\classes\Models\DepositActivityModel;
 use APP\plugins\importexport\rosetta\classes\Models\DepositStatusModel;
-use Context;
-use Core;
+use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDCDom;
+use APP\plugins\importexport\rosetta\classes\xml\mets\RosettaMetsDom;
+use APP\publication\Publication;
+use APP\submission\Submission;
 use DOMDocument;
 use DOMXPath;
 use Exception;
 use GuzzleHttp\Client;
-use PKP\submission\PKPSubmission;
-use PKPString;
-use Psr\Http\Message\ResponseInterface;
-use Publication;
-use Services;
-use Submission;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PKP\context\Context;
+use PKP\core\Core;
 
 class RosettaExportDeployment
 {
@@ -282,11 +277,7 @@ class RosettaExportDeployment
     {
         $oldMask = umask(0);
 
-
-        $INGEST_PATH = PKPString::strtolower(
-                $this->context->getLocalizedAcronym()) . '-' .
-            $submission->getId() .
-            '-v' . $publication->getData('version');
+        $INGEST_PATH = strtolower($this->context->getLocalizedAcronym()) . '-' . $submission->getId() . '-v' . $publication->getData('version');
         $SIP_PATH = join(DIRECTORY_SEPARATOR, array($this->subDirectory, $INGEST_PATH));
         $PUB_CONTENT_PATH = join(DIRECTORY_SEPARATOR, array($SIP_PATH, 'content'));
         $STREAM_PATH = join(DIRECTORY_SEPARATOR, array($PUB_CONTENT_PATH, 'streams'));

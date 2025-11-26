@@ -16,18 +16,22 @@
 
 namespace APP\plugins\importexport\rosetta;
 
+use APP\core\Application;
 use APP\facades\Repo;
 use APP\notification\Notification;
 use APP\notification\NotificationManager;
 use APP\plugins\importexport\rosetta\classes\Form\RosettaSettingsForm;
+use APP\plugins\importexport\rosetta\classes\utilities\Utils;
 use APP\plugins\PubObjectsExportPlugin;
 use APP\template\TemplateManager;
+use DirectoryIterator;
 use Exception;
 use PKP\config\Config;
 use PKP\core\JSONMessage;
 use PKP\db\DAORegistry;
 use PKP\plugins\Hook;
 use PKP\plugins\PluginRegistry;
+use RecursiveDirectoryIterator;
 
 class RosettaExportPlugin extends PubObjectsExportPlugin
 {
@@ -124,7 +128,6 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
         if ($request->getUserVar('verb') == 'settings') {
             $user = $request->getUser();
             $this->addLocaleData();
-            $this->import('classes.form.RosettaSettingsForm');
             $form = new RosettaSettingsForm($this, $request->getContext()->getId());
             if ($request->getUserVar('save')) {
                 $form->readInputData();
@@ -180,7 +183,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
     public function logError($message): void
     {
-        TIBHannover\Rosetta\Utils\Utils::writeLog($message, 'ERROR');
+        Utils::writeLog($message, 'ERROR');
     }
 
     public function getSetting($contextId, $name): mixed
@@ -277,7 +280,7 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 
     public function logInfo(string $message): void
     {
-        TIBHannover\Rosetta\Utils\Utils::writeLog($message, 'INFO');
+        Utils::writeLog($message, 'INFO');
     }
 
     public function usage($scriptName): void

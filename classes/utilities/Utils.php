@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file plugins/importexport/rosetta/RosettaExportPlugin.php
+ * @file plugins/importexport/rosetta/classes/utilities/RosettaExportPlugin.php
  *
  * Copyright (c) 2014-2025 Simon Fraser University
  * Copyright (c) 2003-2025 John Willinsky
@@ -14,7 +14,7 @@
  * @brief Rosetta export plugin
  */
 
-namespace APP\plugins\importexport\rosetta\classes\Utils;
+namespace APP\plugins\importexport\rosetta\classes\utilities;
 
 use Exception;
 use PKP\config\Config;

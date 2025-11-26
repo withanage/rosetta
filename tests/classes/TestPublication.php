@@ -1,6 +1,24 @@
 <?php
-import('classes.publication.Publication');
-import('classes.article.Author');
+
+/**
+ * @file plugins/importexport/rosetta/tests/classes/TestIssue.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class TestIssue
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
+
+namespace APP\plugins\importexport\rosetta\tests\classes;
+
+use APP\author\Author;
+use APP\publication\Publication;
+use APP\submission\Submission;
 
 class TestPublication extends Publication
 {
@@ -15,7 +33,7 @@ class TestPublication extends Publication
         $this->stampModified();
 
         $this->setData('id', 1);
-        $this->setData('locale', $submission->getLocale());
+        $this->setData('locale', $submission->getDefaultLocale());
         $this->setData('version', 1);
         $this->setData('seq', 'seq');
         $this->setData('accessStatus', 'access_status');
@@ -25,7 +43,7 @@ class TestPublication extends Publication
         $this->setData('urlPath', 'url_path');
         $this->setData('issueId', '1');
         $this->setData('version', '1');
-        $this->setData('title', 'article-title-en', $submission->getLocale());
+        $this->setData('title', 'article-title-en', $submission->getDefaultLocale());
         $this->setData('authors', $this->createAuthors());
         $this->setData('datePublished', '2023-12-25');
         $this->setData('keywords', ['keyword1', 'keyword2'], 'en_US');
@@ -40,7 +58,7 @@ class TestPublication extends Publication
         $primaryLocale = 'en_US';
         $author->setGivenName('author-firstname', $primaryLocale);
         $author->setFamilyName('author-lastname', $primaryLocale);
-        $author->setAffiliation('author-affiliation', $primaryLocale);
+//        $author->setAffiliation('author-affiliation', $primaryLocale);
         $author->setEmail('someone@example.com');
         $author->setSubmissionId($this->getId());
         $authors[] = $author;
