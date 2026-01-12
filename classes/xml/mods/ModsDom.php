@@ -1,25 +1,35 @@
 <?php
 
-namespace TIBHannover\Rosetta\Mods;
+/**
+ * @file plugins/importexport/rosetta/classes/xml/mods/ModsDom.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class ModsDom
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-use Author;
-use Context;
+namespace APP\plugins\importexport\rosetta\classes\xml\mods;
+
+use APP\author\Author;
+use APP\publication\Publication;
 use DOMDocument;
 use DOMElement;
-use Publication;
+use PKP\context\Context;
 
 define('MODS_NS', 'http://www.loc.gov/mods/v3');
 
-class ModsDOM extends DOMDocument
+class ModsDom extends DOMDocument
 {
 	public Context $context;
-
 	public string $locale;
-
 	public DOMElement $record;
-
 	public array $supportedFormLocales;
-
 	private Publication $publication;
 
 	public function __construct(Context $context, Publication $publication)
@@ -52,15 +62,14 @@ class ModsDOM extends DOMDocument
 		$keywords = $this->publication->getData($subjects);
 		if ($keywords) {
 			$localKeywords = reset($keywords);
-				foreach ($localKeywords as $topic) {
-					$subject = $this->createElementNS(MODS_NS, 'subject');
-					$topic = $this->createElementNS(MODS_NS,'topic', $topic);
-					$topic->setAttribute('authority', $subjects);
-					$subject->appendChild($topic);
-					$this->record->appendChild($subject);
-				}
+			foreach ($localKeywords as $topic) {
+				$subject = $this->createElementNS(MODS_NS, 'subject');
+				$topic = $this->createElementNS(MODS_NS, 'topic', $topic);
+				$topic->setAttribute('authority', $subjects);
+				$subject->appendChild($topic);
+				$this->record->appendChild($subject);
+			}
 		}
-
 
 		$this->createDataElement('disciplines', $this->publication, $this->record, 'subject', array('authority' => 'disciplines'));
 		$this->createDataElement('languages', $this->publication, $this->record, 'subject', array('authority' => 'languages'));
@@ -91,7 +100,6 @@ class ModsDOM extends DOMDocument
 		$this->createDataElement('type', $this->publication, $this->record, 'genre');
 
 		// Add  Context Info
-
 		$this->createContext($this->context);
 	}
 
@@ -163,8 +171,6 @@ class ModsDOM extends DOMDocument
 		foreach ($authors as $author) {
 			$nameDom = $this->createElementNS(MODS_NS, 'mods:name');
 			foreach ($this->supportedFormLocales as $locale) {
-
-
 				// namePart
 				$authorGivenNameEmpty = !array_filter(array_values($author->getData('givenName')));
 				$authorType = ($authorGivenNameEmpty) ? 'corporate' : 'personal';
@@ -195,14 +201,12 @@ class ModsDOM extends DOMDocument
 					$this->createDataElement($key, $author, $nameDom, $value);
 				}
 				$this->createNameRoles($author, $locale, $nameDom);
-
 			}
 			$this->createNameOrcid($author, $nameDom);
 			$this->createNameURL($author, $nameDom);
 			$this->createNameCountry($author, $nameDom);
 
 			$this->record->appendChild($nameDom);
-
 		}
 	}
 
@@ -294,7 +298,7 @@ class ModsDOM extends DOMDocument
 		$relatedItem->setAttribute('type', 'host');
 		$relatedItem->setAttribute('displayLabel', $context->getData('acronym', 'en_US'));
 		$this->record->appendChild($relatedItem);
-		$extension = $this->createElementNS(MODS_NS,'extension');
+		$extension = $this->createElementNS(MODS_NS, 'extension');
 		$relatedItem->appendChild($extension);
 		$elementNames = array('abbreviation', 'acronym', 'authorInformation', 'clocksLicense', 'customHeaders', 'librarianInformation', 'lockssLicense', 'openAccessPolicy', 'privacyStatement', 'readerInformation', 'searchDescription', 'supportedLocales', 'supportedSubmissionLocales');
 

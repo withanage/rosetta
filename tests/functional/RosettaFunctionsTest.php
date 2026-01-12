@@ -1,35 +1,33 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * @file plugins/importexport/rosetta/tests/functional/RosettaFunctionsTest.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaFunctionsTest
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-use PHPUnit\Framework\MockObject\MockObject;
+namespace APP\plugins\importexport\rosetta\tests\functional;
 
-require_mock_env('env2');
-
-import('plugins.importexport.rosetta.tests.functional.xml.mets.Mets');
-import('plugins.importexport.rosetta.tests.functional.xml.dublincore.DublinCore');
-import('plugins.importexport.rosetta.tests.classes.TestSubmission');
-import('plugins.importexport.rosetta.tests.classes.TestJournal');
-
-import('plugins.importexport.rosetta.RosettaExportPlugin');
-import('plugins.importexport.rosetta.RosettaExportDeployment');
-import('lib.pkp.tests.plugins.PluginTestCase');
-import('lib.pkp.tests.plugins.metadata.MetadataPluginTestCase');
-
-import('lib.pkp.tests.PKPTestCase');
-
-import('lib.pkp.classes.oai.OAIStruct');
-import('lib.pkp.classes.oai.OAIUtils');
-import('plugins.oaiMetadataFormats.dc.OAIMetadataFormat_DC');
-import('plugins.oaiMetadataFormats.dc.OAIMetadataFormatPlugin_DC');
-import('lib.pkp.classes.core.PKPRouter');
-import('lib.pkp.classes.services.PKPSchemaService');
-
+use APP\core\Application;
+use APP\core\PageRouter;
+use APP\plugins\importexport\rosetta\RosettaExportPlugin;
+use APP\plugins\importexport\rosetta\tests\functional\xml\dublincore\DublinCore;
+use APP\plugins\importexport\rosetta\tests\functional\xml\mets\Mets;
+use PKP\core\PKPRouter;
+use PKP\plugins\PluginRegistry;
+use PKP\tests\plugins\PluginTestCase;
 
 class RosettaFunctionsTest extends PluginTestCase
 {
-
-	public function getPlugin(): Plugin
+	public function getPlugin(): RosettaExportPlugin
 	{
 		$importExportPlugins = PluginRegistry::loadCategory('importexport');
 		return $importExportPlugins['RosettaExportPlugin'];
@@ -51,7 +49,7 @@ class RosettaFunctionsTest extends PluginTestCase
 	{
 		$request = Application::get()->getRequest();
 		if (is_null($request->getRouter())) {
-			$router = new PKPRouter();
+			$router = new PageRouter();
 			$request->setRouter($router);
 		} else {
 			$router = $request->getRouter();
@@ -60,15 +58,13 @@ class RosettaFunctionsTest extends PluginTestCase
 		return $router;
 	}
 
-	protected function getMockedDAOs()
+	protected function getMockedDAOs(): array
 	{
-		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO','IssueDAO');
+		return array('AuthorDAO', 'OAIDAO', 'ArticleGalleyDAO', 'IssueDAO');
 	}
 
-	protected function getMockedRegistryKeys()
+	protected function getMockedRegistryKeys(): array
 	{
 		return array('request');
 	}
-
-
 }

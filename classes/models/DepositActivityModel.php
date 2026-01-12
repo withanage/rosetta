@@ -1,6 +1,20 @@
 <?php
 
-namespace TIBHannover\Rosetta\Models;
+/**
+ * @file plugins/importexport/rosetta/classes/models/DepositActivityModel.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class DepositActivityModel
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
+
+namespace APP\plugins\importexport\rosetta\classes\models;
 
 class DepositActivityModel
 {
@@ -17,12 +31,12 @@ class DepositActivityModel
 	public string $sip_id = '';
 	public string $sip_reason = '';
 
-		function __construct(?array $data = [])
+	public function __construct(?array $data = [])
 	{
 		if (!empty($data)) $this->assignValues($data);
 	}
 
-		private function assignValues(array $data): void
+	private function assignValues(array $data): void
 	{
 		foreach ($data as $key => $value) {
 			if (property_exists(__CLASS__, $key)) {

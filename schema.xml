@@ -44,7 +44,5 @@
 		<index name="rosetta_submission_id">
 			<col>submission_id</col>
 		</index>
-
 	</table>
-
 </schema>

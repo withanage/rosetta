@@ -1,12 +1,31 @@
 <?php
 
-import('lib.pkp.classes.scheduledTask.ScheduledTask');
+/**
+ * @file plugins/importexport/rosetta/RosettaInfoSender.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaInfoSender
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
+
+namespace APP\plugins\importexport\rosetta;
+
+use PKP\db\DAORegistry;
+use PKP\plugins\PluginRegistry;
+use PKP\scheduledTask\ScheduledTask;
+use PKP\scheduledTask\ScheduledTaskHelper;
 
 class RosettaInfoSender extends ScheduledTask
 {
-		var RosettaExportPlugin $plugin;
+	protected RosettaExportPlugin $plugin;
 
-	function __construct($args)
+	public function __construct($args)
 	{
 		PluginRegistry::loadCategory('importexport');
 		$plugin = PluginRegistry::getPlugin('importexport', 'RosettaExportPlugin');
@@ -19,37 +38,37 @@ class RosettaInfoSender extends ScheduledTask
 		parent::__construct($args);
 	}
 
-		function getPlugin(): RosettaExportPlugin
+	public function getPlugin(): RosettaExportPlugin
 	{
 		return $this->plugin;
 	}
 
-		function getName()
+	public function getName(): string
 	{
 		return __('plugins.importexport.rosetta.senderTask.name');
 	}
 
-		function _addLogEntry($result)
+	public function _addLogEntry($result)
 	{
 		if (is_array($result)) {
 			foreach ($result as $error) {
 				assert(is_array($error) && count($error) >= 1);
 				$this->addExecutionLogEntry(
-					__($error[0], array('param' => (isset($error[1]) ? $error[1] : null))),
-					SCHEDULED_TASK_MESSAGE_TYPE_WARNING
+					__($error[0], ['param' => ($error[1] ?? null)]),
+					ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_WARNING
 				);
 			}
 		} else {
 			$this->addExecutionLogEntry(
-				__('plugins.importexport.common.register.error.mdsError', array('param' => ' - ')),
-				SCHEDULED_TASK_MESSAGE_TYPE_WARNING
+				__('plugins.importexport.common.register.error.mdsError', ['param' => ' - ']),
+				ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_WARNING
 			);
 		}
 	}
 
-		protected function executeActions()
+	protected function executeActions(): bool
 	{
-		if ($this->getPlugin() == false) return false;
+		if (!$this->getPlugin()) return false;
 
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journals = $journalDao->getAll();

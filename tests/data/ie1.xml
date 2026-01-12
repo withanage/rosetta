@@ -106,7 +106,7 @@
 	<mets:fileSec>
 		<mets:fileGrp ID="rep1" ADMID="rep1-amd">
 			<mets:file ID="fid1-1" ADMID="fid1-1-amd">
-				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" xlink:href="file://MASTER/655858c94c124.pdf" />
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" xlink:href="file://MASTER/655858c94c124.pdf"/>
 			</mets:file>
 		</mets:fileGrp>
 	</mets:fileSec>
@@ -120,4 +120,3 @@
 		</mets:div>
 	</mets:structMap>
 </mets:mets>
-
