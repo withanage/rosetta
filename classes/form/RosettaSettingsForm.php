@@ -1,12 +1,24 @@
 <?php
 
-namespace TIBHannover\Rosetta\Form;
+/**
+ * @file plugins/importexport/rosetta/classes/form/RosettaSettingsForm.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaSettingsForm
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-use Form;
-use FormValidator;
-use RosettaExportPlugin;
+namespace APP\plugins\importexport\rosetta\classes\form;
 
-import('lib.pkp.classes.form.Form');
+use APP\plugins\importexport\rosetta\RosettaExportPlugin;
+use PKP\form\Form;
+use PKP\form\validation\FormValidator;
 
 class RosettaSettingsForm extends Form
 {
@@ -15,7 +27,7 @@ class RosettaSettingsForm extends Form
 	private array $fields = ['rosettaHost', 'subDirectoryName', 'rosettaUsername', 'rosettaPassword',
 		'rosettaProducerId', 'rosettaMaterialFlowId', 'journals'];
 
-		public function __construct(RosettaExportPlugin $plugin, $journalId)
+	public function __construct(RosettaExportPlugin $plugin, $journalId)
 	{
 		$this->journalId = $journalId;
 		$this->plugin = $plugin;
@@ -26,31 +38,31 @@ class RosettaSettingsForm extends Form
 		}
 	}
 
-		public function initData(): void
+	public function initData(): void
 	{
 		foreach ($this->fields as $name) {
 			$this->setData($name, $this->plugin->getSetting($this->journalId, $name));
 		}
 	}
 
-		public function readInputData(): void
+	public function readInputData(): void
 	{
 		$this->readUserVars($this->fields);
 	}
 
-		public function execute(...$functionArgs): void
+	public function execute(...$functionArgs): void
 	{
 		foreach ($this->fields as $name) {
 			$this->plugin->updateSetting($this->journalId, $name, $this->getData($name));
 		}
 	}
 
-		function getFormFields(): array
+	public function getFormFields(): array
 	{
 		return $this->fields;
 	}
 
-		function isOptional(string $settingName): bool
+	public function isOptional(string $settingName): bool
 	{
 		return in_array($settingName, $this->fields);
 	}

@@ -1,14 +1,23 @@
 <?php
 
-
-// Include Composer's autoloader
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-
+/**
+ * @file plugins/importexport/rosetta/tools/RosettaRestApiTest.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaRestApiTest
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
-class DepositHandler
+class RosettaRestApiTest
 {
 	private string $host;
 	private string $username;
@@ -21,8 +30,9 @@ class DepositHandler
 
 	public string $userAgent = 'OJSRosettaExportPlugin';
 
+	private int $depositHistoryInDays;
 
-	public function __construct(string $settingsFile)
+	function __construct(string $settingsFile)
 	{
 		$settings = json_decode(file_get_contents($settingsFile), true);
 		$this->host = $settings['host'];
@@ -38,7 +48,6 @@ class DepositHandler
 			'headers' => ['User-Agent' => $this->userAgent],
 			'verify' => false
 		]);
-
 	}
 
 	private function getDepositEndpoint(string $apiType = ''): string
@@ -100,11 +109,11 @@ class DepositHandler
 }
 
 $settingsFile = __DIR__ . DIRECTORY_SEPARATOR . 'RosettaSettings.json';
-$depositHandler = new DepositHandler($settingsFile);
+$depositHandler = new RosettaRestApiTest($settingsFile);
 $deposits = $depositHandler->getDepositsFromRosettaApi(0);
 
 echo date('Y-m-d H:i:s', time());
 foreach ($deposits as $deposit) {
-	print_r(json_encode($deposit).PHP_EOL);
+	print_r(json_encode($deposit) . PHP_EOL);
 }
 echo date('Y-m-d H:i:s', time());

@@ -1,43 +1,56 @@
 <?php
 
-namespace TIBHannover\Rosetta\Mets;
+/**
+ * @file plugins/importexport/rosetta/classes/xml/mets/RosettaMetsDom.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaMetsDom
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-import('plugins.importexport.rosetta.classes.xml.mods.ModsDOM');
-import('plugins.importexport.rosetta.classes.xml.XMLUtils');
-import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.importexport.rosetta.classes.files.RosettaFileService');
+namespace APP\plugins\importexport\rosetta\classes\xml\mets;
+
+use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
+use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDCDom;
+use APP\plugins\importexport\rosetta\classes\xml\mods\ModsDom;
+use APP\plugins\importexport\rosetta\classes\xml\XmlUtils;
+use APP\plugins\importexport\rosetta\RosettaExportPlugin;
+use APP\publication\Publication;
+use APP\submission\Submission;
+use DOMDocument;
+use DOMElement;
+use PKP\config\Config;
+use PKP\context\Context;
 
 define('MASTER_PATH', 'MASTER');
 
-use Context;
-use DOMDocument;
-use DOMElement;
-use Plugin;
-use Publication;
-use Submission;
-use TIBHannover\Rosetta\Dc\RosettaDCDom;
-use TIBHannover\Rosetta\Files\RosettaFileService;
-use TIBHannover\Rosetta\Mods\ModsDOM;
-use TIBHannover\Rosetta\Xml\XMLUtils;
-
-class RosettaMETSDom extends DOMDocument
+class RosettaMetsDom extends DOMDocument
 {
 	public Context $context;
 	public string $metsNS = 'http://www.exlibrisgroup.com/xsd/dps/rosettaMets';
-	public Plugin $plugin;
+	public RosettaExportPlugin $plugin;
 	public Publication $publication;
 	public DOMElement $record;
 	public Submission $submission;
+	public string $filesDirPath = '';
 
-	public function __construct(Context $context, Submission $submission, Publication $publication, Plugin $plugin, bool $isTest = false)
+	public function __construct(Context $context, Submission $submission, Publication $publication, RosettaExportPlugin $plugin, bool $isTest = false)
 	{
 		parent::__construct('1.0', 'UTF-8');
+
 		$this->preserveWhiteSpace = false;
 		$this->formatOutput = true;
 		$this->context = $context;
 		$this->plugin = $plugin;
 		$this->publication = $publication;
 		$this->submission = $submission;
+		$this->filesDirPath = Config::getVar('files', 'files_dir');
 
 		// Create the METS XML structure.
 		$this->createInstance($isTest);
@@ -61,16 +74,13 @@ class RosettaMETSDom extends DOMDocument
 		$adminSec = $this->createElementNS($this->metsNS, 'mets:amdSec');
 		$adminSec->setAttribute('ID', $ieAmd);
 
-
-		XMLUtils::createIEAmdSections($this, array(array('id' => 'generalIECharacteristics', 'records' => array(
-				['id' => 'status', 'value' => 'ACTIVE'],
-				['id' => 'IEEntityType', 'value' => 'Article'],
-				['id' => 'UserDefinedA', 'value' => 'OJS_born-digital'],
-			)))
-			, 'techMD', 'tech', $ieAmd, $adminSec);
+		XmlUtils::createIEAmdSections($this, [['id' => 'generalIECharacteristics', 'records' => [
+			['id' => 'status', 'value' => 'ACTIVE'],
+			['id' => 'IEEntityType', 'value' => 'Article'],
+			['id' => 'UserDefinedA', 'value' => 'OJS_born-digital']
+		]]], 'techMD', 'tech', $ieAmd, $adminSec);
 
 		$this->createAmdSecMods($adminSec);
-
 
 		$repId = '1';
 
@@ -86,7 +96,7 @@ class RosettaMETSDom extends DOMDocument
 		$divNode->setAttribute('LABEL', 'Preservation Master');
 
 		$repIdSuffix = '1';
-		$recordId = (string) $this->context->getData('urlPath') . '-' . (string)$this->submission->getData('id') . '-v' . (string)$this->publication->getData('version');
+		$recordId = (string)$this->context->getData('urlPath') . '-' . (string)$this->submission->getData('id') . '-v' . (string)$this->publication->getData('version');
 		$structMapDiv = $this->createStructDiv($repId, $repIdSuffix);
 
 		$galleyFiles = RosettaFileService::getGalleyFiles($this->publication);
@@ -106,7 +116,6 @@ class RosettaMETSDom extends DOMDocument
 				$structMapDiv->appendChild($structMap);
 				$galleyFilesCount += 1;
 			}
-
 		}
 		$structMapNode = $this->createElementNS($this->metsNS, 'mets:structMap');
 		$structMapNode->setAttribute('ID', 'rep' . $repId . '-' . $repIdSuffix);
@@ -115,18 +124,16 @@ class RosettaMETSDom extends DOMDocument
 		$structMapNode->appendChild($divNode);
 		$this->record->appendChild($fileSec);
 		$this->record->appendChild($structMapNode);
-
-
 	}
 
-	function createMetsElement(): void
+	public function createMetsElement(): void
 	{
 		$this->record = $this->createElementNS($this->metsNS, 'mets:mets');
 		$this->record->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
 		$this->appendChild($this->record);
 	}
 
-	function createMetsDCElement(string $id, string $sec, string $mdType, DOMElement $child): DOMElement
+	public function createMetsDCElement(string $id, string $sec, string $mdType, DOMElement $child): DOMElement
 	{
 		$dmdSec = $this->createElementNS($this->metsNS, $sec);
 		$dmdSec->setAttribute('ID', $id);
@@ -141,7 +148,7 @@ class RosettaMETSDom extends DOMDocument
 
 	private function createAmdSecMods(DomElement $adminSec): void
 	{
-		$mods = new ModsDOM($this->context, $this->publication);
+		$mods = new ModsDom($this->context, $this->publication);
 		$sourceMD = $this->createElementNS($this->metsNS, 'sourceMD');
 		$sourceMD->setAttribute('ID', 'ie-amd-source-1');
 		$mdWrap = $this->createElementNS($this->metsNS, 'mets:mdWrap');
@@ -156,17 +163,14 @@ class RosettaMETSDom extends DOMDocument
 		//<mets:amdSec ID='rep1-amd'>
 		$adminSecRep = $this->createElementNS($this->metsNS, 'mets:amdSec');
 		$adminSecRep->setAttribute('ID', 'rep1-amd');
-		XMLUtils::createIEAmdSections($this,
-			array(
-				array('id' => 'generalRepCharacteristics', 'records' => array(
-					['id' => 'preservationType', 'value' => 'PRESERVATION_MASTER'],
-					['id' => 'usageType', 'value' => 'VIEW'],
-					['id' => 'RevisionNumber', 'value' => '0'],
-				))), 'techMD', 'tech', 'rep1-amd', $adminSecRep);
+		XmlUtils::createIEAmdSections($this, [['id' => 'generalRepCharacteristics', 'records' => [
+			['id' => 'preservationType', 'value' => 'PRESERVATION_MASTER'],
+			['id' => 'usageType', 'value' => 'VIEW'],
+			['id' => 'RevisionNumber', 'value' => '0']
+		]]], 'techMD', 'tech', 'rep1-amd', $adminSecRep);
 
 		$this->record->appendChild($adminSecRep);
 	}
-
 
 	private function createStructDiv(string $repId, string $repIdSuffix): bool|DOMElement
 	{
@@ -176,30 +180,29 @@ class RosettaMETSDom extends DOMDocument
 		return $divDivNode;
 	}
 
-
 	private function createFileCharacteristics(int $index, string $repIdSuffix, string $recordId, $file): void
 	{
-		$filePath = $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'];
+		$filePath = $this->filesDirPath . DIRECTORY_SEPARATOR . $file['fullFilePath'];
 		$generalFileChars = $this->createElementNS($this->metsNS, 'mets:amdSec');
 		$generalFileChars->setAttribute('ID', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd');
 
 		$md5_file = md5_file($filePath);
 
-		XMLUtils::createIEAmdSections($this, array(
-				array('id' => 'generalFileCharacteristics', 'records' => array(
-					['id' => 'fileOriginalPath', 'value' => '/' . $recordId . '/content/streams/' . $file['path'] . '/' . basename($file['fullFilePath'])],
-				)),
-				array('id' => 'fileFixity', 'records' => array(
-					['id' => 'fixityType', 'value' => 'MD5'],
-					['id' => 'fixityValue', 'value' => $md5_file],
-				))
-			)
-			, 'techMD', 'tech', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
-		$this->record->appendChild($generalFileChars);
+		XmlUtils::createIEAmdSections($this, [
+			['id' => 'generalFileCharacteristics', 'records' => [
+				['id' => 'fileOriginalPath', 'value' => '/' . $recordId . '/content/streams/' . $file['path'] . '/' . basename($file['fullFilePath'])]]
+			],
+			['id' => 'fileFixity', 'records' => [
+				['id' => 'fixityType', 'value' => 'MD5'],
+				['id' => 'fixityValue', 'value' => $md5_file],
+			]]
+		],
+			'techMD', 'tech', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd', $generalFileChars);
 
+		$this->record->appendChild($generalFileChars);
 	}
 
-	function createMetsFileSecChildElements(string $fid, string $id, array $file): DOMElement
+	public function createMetsFileSecChildElements(string $fid, string $id, array $file): DOMElement
 	{
 		$fileNode = $this->createElementNS($this->metsNS, 'mets:file');
 		$fileNode->setAttribute('ID', 'fid' . $id . '-' . $fid);
@@ -213,7 +216,7 @@ class RosettaMETSDom extends DOMDocument
 		return $fileNode;
 	}
 
-	function createMetsStructSecElement(string $fid, string $id, array $file): DOMElement
+	public function createMetsStructSecElement(string $fid, string $id, array $file): DOMElement
 	{
 		$divDivDivNode = $this->createElementNS($this->metsNS, 'mets:div');
 		$divDivDivNode->setAttribute('LABEL', '');
@@ -223,7 +226,6 @@ class RosettaMETSDom extends DOMDocument
 		$divDivDivNode->appendChild($fptrNode);
 		return $divDivDivNode;
 	}
-
 
 	public function getContext(): Context
 	{
@@ -235,6 +237,3 @@ class RosettaMETSDom extends DOMDocument
 		$this->context = $context;
 	}
 }
-
-
-

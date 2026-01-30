@@ -21,6 +21,9 @@ msgstr ""
 
 ""
 
+msgid "plugins.importexport.rosetta.config.info"
+msgstr "Plugin Settings are set in the config.inc.php"
+
 msgid "plugins.importexport.rosetta.dc.abstractNotDefined"
 msgstr "Abstract not defined"
 
@@ -75,7 +78,6 @@ msgstr "Rosetta Host"
 msgid "plugins.importexport.rosetta.subDirectoryName"
 msgstr "Rosetta Deposit Share"
 
-
 msgid "plugins.importexport.rosetta.rosettaProducerId"
 msgstr "Producer Id"
 
@@ -99,5 +101,3 @@ msgstr "Rosetta Settings"
 
 msgid "manager.plugins.zipCommandNotFound"
 msgstr "Zip Command not found"
-
-

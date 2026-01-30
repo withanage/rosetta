@@ -1,13 +1,27 @@
 <?php
 
-namespace TIBHannover\Rosetta\Xml;
+/**
+ * @file plugins/importexport/rosetta/classes/xml/XmlUtils.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class XmlUtils
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
+namespace APP\plugins\importexport\rosetta\classes\xml;
+
+use APP\plugins\importexport\rosetta\classes\xml\mets\RosettaMetsDom;
 use DOMElement;
-use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 
-class XMLUtils
+class XmlUtils
 {
-		public static function createIEAmdSections(RosettaMETSDom $document, array $sectionsArray, string $name,
+	public static function createIEAmdSections(RosettaMetsDom $document, array $sectionsArray, string $name,
 											   string         $type, string $ieAmd, DOMElement $adminSec): void
 	{
 		$mdType = $document->createElementNS($document->metsNS, $name);

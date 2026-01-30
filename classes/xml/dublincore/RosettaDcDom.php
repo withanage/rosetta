@@ -1,33 +1,43 @@
 <?php
 
-namespace TIBHannover\Rosetta\Dc;
+/**
+ * @file plugins/importexport/rosetta/classes/xml/dublincore/RosettaDCDom.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaDCDom
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-use Context;
-use DAORegistry;
+namespace APP\plugins\importexport\rosetta\classes\xml\dublincore;
+
+use APP\plugins\importexport\rosetta\classes\utilities\Utils;
+use APP\publication\Publication;
+use APP\submission\Submission;
 use DOMDocument;
 use DOMElement;
-use DOMException;
-use Publication;
-use Submission;
-use Utils;
+use PKP\context\Context;
+use PKP\db\DAORegistry;
 
-
-class RosettaDCDom extends DOMDocument
+class RosettaDcDom extends DOMDocument
 {
-
 	public string $XML_NS = 'http://www.w3.org/2000/xmlns/';
 	public DOMElement $record;
 	public Publication $publication;
 	public Context $context;
 	public string $locale;
-	public  bool $isMultilingual = true;
+	public bool $isMultilingual = true;
 	public array $supportedFormLocales;
 	public Submission $submission;
 
 	public function __construct(Context $context, Publication $publication, Submission $submission)
 	{
 		parent::__construct('1.0', 'UTF-8');
-
 		$this->context = $context;
 		$this->publication = $publication;
 		$this->preserveWhiteSpace = false;
@@ -43,52 +53,29 @@ class RosettaDCDom extends DOMDocument
 		$acronym = $this->context->getData('acronym', 'en_US');
 
 		$this->createDCElement();
-
 		$this->createQualifiedElement('dc:type', 'status-type:publishedVersion');
-
 		$this->createQualifiedElement('dc:type', 'doc-type:article');
-
 		$this->createQualifiedElement('dcterms:license', 'TIB_OJS_Lizenzvereinbarung');
-
 		$this->createTitle();
-
 		$this->createAuthors();
-
 		$this->createPublishedDate();
-
 		$this->createIssue();
-
 		$this->createAbstracts();
-
 		$this->createCopyrightYear();
-
-
 		$this->createIdentifier();
-
-
 		$this->createLastModifiedDate();
-
-
 		$this->createPublisherInstitution();
-
 		$this->createLanguage();
-
 		$this->createLicenseURL();
-
 		$this->createCopyrightHolderOther();
-
 		$this->createISSN();
-
-		$this->createQualifiedElement('dcterms:hasVersion', 'Version '.$this->publication->getData('version'));
+		$this->createQualifiedElement('dcterms:hasVersion', 'Version ' . $this->publication->getData('version'));
 	}
 
 	private function createDCElement(): void
 	{
-
-
 		$this->record = $this->createElementNS('http://purl.org/dc/elements/1.1/',
 			'dc:record');
-
 		$this->record->setAttributeNS($this->XML_NS, 'xmlns:dcterms',
 			'http://purl.org/dc/terms/');
 		$this->record->setAttributeNS($this->XML_NS, 'xmlns:xsi',
@@ -97,7 +84,6 @@ class RosettaDCDom extends DOMDocument
 			'http://purl.org/dc/elements/1.1/');
 		$this->appendChild($this->record);
 	}
-
 
 	private function createQualifiedElement(string $qName, string $value, string $locale = ''): void
 	{
@@ -116,42 +102,29 @@ class RosettaDCDom extends DOMDocument
 	{
 		$authors = $this->publication->getData('authors');
 		foreach ($authors as $author) {
-			{
-				$this->createQualifiedElement('dc:creator', $author->getFullName());
-			}
+			$this->createQualifiedElement('dc:creator', $author->getFullName());
 		}
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createPublishedDate(): void
 	{
 		$datePublished = $this->publication->getData('datePublished');
 		$this->createQualifiedElement('dc:date', $datePublished);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createIssue(): void
 	{
 		$issn = $this->context->getData('onlineIssn');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		$issue = $issueDao->getById($this->publication->getData('issueId'));
 		if ($issue) {
-			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' .$issue->getData('volume')  ;
+			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' . $issue->getData('volume');
 			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);
+		} else {
+			error_log('Issue id ' . $this->publication->getId() . ' not found\n', 3, Utils::logFilePath());
 		}
-		else {
-			error_log('Issue id '.$this->publication->getId().' not found\n', 3, \TIBHannover\Rosetta\Utils\Utils::logFilePath());
-		}
-
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createAbstracts(): void
 	{
 		$abstracts = $this->publication->getData('abstract');
@@ -163,9 +136,6 @@ class RosettaDCDom extends DOMDocument
 		}
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createCopyrightYear(): void
 	{
 		$copyrightYear = $this->publication->getData('copyrightYear');
@@ -174,42 +144,29 @@ class RosettaDCDom extends DOMDocument
 		}
 	}
 
-	/**
-	 * @return void
-	 * @throws DOMException
-	 */
 	public function createIdentifier(): void
 	{
 		$node = $this->createElement('dc:identifier', htmlspecialchars(
 			'DOI:' . $this->publication->getStoredPubId('doi'), ENT_COMPAT, 'UTF-8'));
 		$typeAttribute = $this->createAttribute('xsi:type');
-		$typeAttribute->value ='dcterms:URI' ;
+		$typeAttribute->value = 'dcterms:URI';
 		$node->appendChild($typeAttribute);
 
 		$this->record->appendChild($node);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createLastModifiedDate(): void
 	{
 		$dateModified = $this->publication->getData('lastModified');
 		$this->createQualifiedElement('dcterms:modified', $dateModified);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createPublisherInstitution(): void
 	{
 		$publisher = $this->context->getData('publisherInstitution');
 		$this->createQualifiedElement('dc:publisher', $publisher);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function createLanguage(): void
 	{
 		$this->createQualifiedElement('dc:language',
@@ -219,8 +176,8 @@ class RosettaDCDom extends DOMDocument
 	public function createLicenseURL(): void
 	{
 		if ($this->publication->getData('licenseUrl')) {
-			$this->createQualifiedElement('dc:rights', $this->publication->getData('licenseUrl'));}
-		elseif ($this->context->getData('licenseUrl')) {
+			$this->createQualifiedElement('dc:rights', $this->publication->getData('licenseUrl'));
+		} elseif ($this->context->getData('licenseUrl')) {
 			$this->createQualifiedElement('dc:rights', $this->context->getData('licenseUrl'));
 		}
 	}
@@ -234,14 +191,15 @@ class RosettaDCDom extends DOMDocument
 			}
 		}
 	}
+
 	public function createISSN(): void
 	{
 		$issn = $this->context->getData('onlineIssn');
 
 		if ($issn) {
-			$node = $this->createElement('dc:identifier',$issn);
+			$node = $this->createElement('dc:identifier', $issn);
 			$typeAttribute = $this->createAttribute('xsi:type');
-			$typeAttribute->value ='dcterms:ISSN' ;
+			$typeAttribute->value = 'dcterms:ISSN';
 			$node->appendChild($typeAttribute);
 			$this->record->appendChild($node);
 		}
@@ -252,16 +210,9 @@ class RosettaDCDom extends DOMDocument
 		return $this->record;
 	}
 
-	/**
-	 * @return void
-	 * @throws DOMException
-	 */
 	public function createTitle(): void
 	{
-			$node = $this->createElement('dc:title', $this->publication->getLocalizedTitle());
-			$this->record->appendChild($node);
-
+		$node = $this->createElement('dc:title', $this->publication->getLocalizedTitle());
+		$this->record->appendChild($node);
 	}
-
-
 }

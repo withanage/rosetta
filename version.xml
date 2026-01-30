@@ -4,7 +4,6 @@
 <version>
 	<application>RosettaExportPlugin</application>
 	<type>plugins.importexport</type>
-	<release>3.3.0.0</release>
-	<date>2022-08-03</date>
+	<release>3.5.0.0</release>
+	<date>2025-11-01</date>
 </version>
-

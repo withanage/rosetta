@@ -10,7 +10,6 @@
   * DOAJ Plugin Deposit
   *
   * This file describes the schedule task that will send deposits to DOAJ and update statuses in the background.
-  *
   -->
 
 <!DOCTYPE scheduled_tasks SYSTEM "../../../lib/pkp/dtd/scheduledTasks.dtd">

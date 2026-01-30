@@ -1,31 +1,43 @@
 <?php
 
+/**
+ * @file plugins/importexport/rosetta/tests/classes/TestJournal.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class TestJournal
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
-use PHPUnit\Framework\MockObject\MockObject;
+namespace APP\plugins\importexport\rosetta\tests\classes;
 
-import('classes.article.ArticleGalley');
-import('classes.article.ArticleGalleyDAO');
-import('classes.journal.Journal');
-
+use APP\journal\Journal;
+use APP\oai\ojs\OAIDAO;
+use PKP\db\DAORegistry;
 
 class TestJournal extends Journal
 {
 	protected string $primaryLocale = 'en_US';
 	private int $journalId = 10000;
 
-
-
 	public function __construct()
 	{
-		$this->initialize($this->getPrimaryLocale());
+		parent::__construct();
 
-		//$this->createOAI($this->getSection(), $this->getIssue());
+		$this->initialize();
+
+		// $this->createOAI($this->getSection(), $this->getIssue());
 	}
 
-		public function initialize()
+	public function initialize(): self
 	{
 		$this->setPrimaryLocale($this->primaryLocale);
-		$this->setData('acronym', 'Testjournal', $this->primaryLocale);
+		$this->setData('acronym', 'TestJournal', $this->primaryLocale);
 		$this->setData('supportedFormLocales', ['en_US']);
 
 		$journalSettings = array(
@@ -33,7 +45,7 @@ class TestJournal extends Journal
 			'urlPath' => 'journal-path',
 			'publisherInstitution' => 'Publisher',
 			'name' => 'Test Journal',
-			'onlineIssn'=> '2747-9986'
+			'onlineIssn' => '2747-9986'
 		);
 		foreach ($journalSettings as $key => $value) {
 			$this->setData($key, $value);
@@ -41,29 +53,23 @@ class TestJournal extends Journal
 		return $this;
 	}
 
-		public function getPrimaryLocale(): string
+	public function getPrimaryLocale(): string
 	{
 		return $this->primaryLocale;
 	}
 
-		public function getJournalId(): int
+	public function getJournalId(): int
 	{
 		return $this->journalId;
 	}
 
-		public function setJournalId(int $journalId): void
+	public function setJournalId(int $journalId): void
 	{
 		$this->journalId = $journalId;
 	}
 
-
-
-
-
-
 	public function createOAI(): void
 	{
-		import('classes.oai.ojs.OAIDAO');
 		$oaiDao = $this->functionalRosettaExportTest->getMockBuilder(OAIDAO::class)
 			->setMethods(array('getJournal', 'getSection', 'getIssue'))
 			->getMock();
@@ -78,6 +84,4 @@ class TestJournal extends Journal
 			->will($this->functionalRosettaExportTest->returnValue($this->getIssue()));
 		DAORegistry::registerDAO('OAIDAO', $oaiDao);
 	}
-
-
 }

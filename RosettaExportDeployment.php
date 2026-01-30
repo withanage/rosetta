@@ -1,46 +1,47 @@
 <?php
 
+/**
+ * @file plugins/importexport/rosetta/RosettaExportDeployment.php
+ *
+ * Copyright (c) 2014-2025 Simon Fraser University
+ * Copyright (c) 2003-2025 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * @class RosettaExportDeployment
+ *
+ * @ingroup plugins_importexport_rosetta
+ *
+ * @brief Rosetta export plugin
+ */
 
+namespace APP\plugins\importexport\rosetta;
 
-namespace TIBHannover\Rosetta;
-
-import('classes.core.Services');
-import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.importexport.rosetta.classes.xml.mets.RosettaMETSDom');
-import('plugins.importexport.rosetta.classes.files.RosettaFileService');
-import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
-import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
-import('plugins.importexport.rosetta.classes.utilities.Utils');
-
-use Context;
-use Core;
+use APP\core\Services;
+use APP\facades\Repo;
+use APP\plugins\importexport\rosetta\classes\Constants;
+use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
+use APP\plugins\importexport\rosetta\classes\models\DepositActivityModel;
+use APP\plugins\importexport\rosetta\classes\models\DepositStatusModel;
+use APP\plugins\importexport\rosetta\classes\utilities\Utils;
+use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDcDom;
+use APP\plugins\importexport\rosetta\classes\xml\mets\RosettaMetsDom;
+use APP\publication\Publication;
+use APP\submission\Submission;
 use DOMDocument;
 use DOMXPath;
 use Exception;
 use GuzzleHttp\Client;
-use PKPString;
-use Publication;
-use PublicationDAO;
-use RosettaExportPlugin;
-use Services;
-use Submission;
-use SubmissionDAO;
-use TIBHannover\Rosetta\Dc\RosettaDCDom;
-use TIBHannover\Rosetta\Files\RosettaFileService;
-use TIBHannover\Rosetta\Mets\RosettaMETSDom;
-use TIBHannover\Rosetta\Models\DepositActivityModel;
-use TIBHannover\Rosetta\Models\DepositStatusModel;
-use TIBHannover\Rosetta\Utils\Utils;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-
+use PKP\config\Config;
+use PKP\context\Context;
+use PKP\core\Core;
+use Psr\Http\Message\ResponseInterface;
 
 class RosettaExportDeployment
 {
 	protected bool $isTest = false;
 	protected Context $context;
 	protected RosettaExportPlugin $plugin;
+	protected string $filesDirPath = '';
 	protected object $client;
 	protected array $depositAcceptedStatuses = ['approved', 'finished'];
 	protected array $depositRejectedStatuses = ['declined', 'deleted'];
@@ -52,10 +53,11 @@ class RosettaExportDeployment
 	private string $subDirectory;
 	private string $host;
 
-	function __construct(RosettaExportPlugin $plugin, Context $context)
+	public function __construct(RosettaExportPlugin $plugin, Context $context)
 	{
 		$this->context = $context;
 		$this->plugin = $plugin;
+		$this->filesDirPath = Config::getVar('files', 'files_dir');
 
 		$this->username = $this->plugin->getSetting($this->context->getId(), 'rosettaUsername');
 		$this->password = $this->plugin->getSetting($this->context->getId(), 'rosettaPassword');
@@ -69,7 +71,7 @@ class RosettaExportDeployment
 		if (!empty($isTest)) $this->isTest = (bool)$isTest;
 
 		$this->client = new Client([
-			'headers' => ['User-Agent' => $this->plugin->userAgent],
+			'headers' => ['User-Agent' => Constants::USER_AGENT],
 			'verify' => false
 		]);
 	}
@@ -78,19 +80,15 @@ class RosettaExportDeployment
 	{
 		// Check if the folder is mounted and return if not.
 		if (!is_dir($this->subDirectory)) {
-			$this->plugin->logError('The Rosetta drive ' . $this->subDirectory . ' is not mounted');
+			Utils::logError('The Rosetta drive ' . $this->subDirectory . ' is not mounted');
 			return;
 		}
-
-
-
 
 		// Update the database with the latest data from the Rosetta server.
 		$this->updateIsDeposited();
 
-
 		$localizedAcronymLowerCase = strtolower($this->context->getLocalizedAcronym());
-		$currentContextSettings = $this->plugin->rosettaContextSettings[$localizedAcronymLowerCase];
+		$currentContextSettings = Constants::getContextSettings()[$localizedAcronymLowerCase];
 
 		// Retrieve published submissions based on specific criteria.
 		$submissions = $this->getPublishedSubmissions();
@@ -99,7 +97,7 @@ class RosettaExportDeployment
 		foreach ($submissions as $submission) {
 			if (is_a($submission, 'Submission')) {
 
-				$this->plugin->logInfo('Submission being processed: ' . $submission->getData('id'));
+				Utils::logInfo('Submission being processed: ' . $submission->getData('id'));
 
 				// Skip if production and there is no DOI for the submission.
 				$publications = $submission->getData('publications');
@@ -112,30 +110,28 @@ class RosettaExportDeployment
 					$galleyFileMissing = false;
 					foreach ($galleyFiles as $galleyFile) {
 
-						$fileFullPath = $this->getPlugin()->getBasePath() . DIRECTORY_SEPARATOR . $galleyFile['fullFilePath'];
+						$fileFullPath = $this->filesDirPath . DIRECTORY_SEPARATOR . $galleyFile['fullFilePath'];
 						if (!file_exists($fileFullPath)) {
 							$galleyFileMissing = true;
-							var_dump('File ' . $fileFullPath . ' does not exist');
 						}
 					}
 
 					// Skip if test and publication DOI is empty and no gallery files
 					if ($publication->getStoredPubId('doi') == null && count($galleyFiles) == 0 || $galleyFileMissing) {
-
 						continue;
 					}
 
 					// Skip based on deposit status and on deposit activity status.
 					$depositStatus = new DepositStatusModel(
-						json_decode($publication->getData($this->plugin->depositStatusSettingName), true));
+						json_decode($publication->getData(Constants::DEPOSIT_STATUS_SETTING_NAME), true));
 					$depositActivity = new DepositActivityModel(
-						json_decode($publication->getData($this->plugin->depositActivitySettingName), true));
+						json_decode($publication->getData(Constants::DEPOSIT_ACTIVITY_SETTING_NAME), true));
 
 					// Decide if this publication should be skipped or deposited
 					if ($depositStatus->status) {
 						// Log if publication modified date is before deposit date.
 						if ($depositStatus->date >= $publication->getData('lastModified')) {
-							$this->plugin->logInfo('Publication has changed after deposit > ' .
+							Utils::logInfo('Publication has changed after deposit > ' .
 								'submission:' . $submission->getId() . '|publication:' . $publication->getId());
 						}
 
@@ -149,7 +145,6 @@ class RosettaExportDeployment
 						// skip if deposit entry is present.
 						continue;
 					}
-
 
 					// Deposit the publication to Rosetta based on specified settings.
 					if ($currentContextSettings == null) {
@@ -182,8 +177,7 @@ class RosettaExportDeployment
 			$submissionId = $subdirectory[count($subdirectory) - 2];
 
 			// Retrieve the submission object based on the extracted submission ID.
-			$submissionDao = new SubmissionDAO();
-			$submission = $submissionDao->getById($submissionId);
+			$submission = Repo::submission()->get($submissionId);
 
 			if (is_a($submission, 'Submission')) {
 				// Get the list of publications associated with the submission.
@@ -193,9 +187,8 @@ class RosettaExportDeployment
 					// Check if the subdirectory matches the publication's version.
 					if ($subdirectory[count($subdirectory) - 1] === 'v' . $publication->getData('version')) {
 						// Update the publication's deposit activity data and save it to the database.
-						$publication->setData($this->plugin->depositActivitySettingName, json_encode($row));
-						$publicationDao = new PublicationDAO();
-						$publicationDao->updateObject($publication);
+						$publication->setData(Constants::DEPOSIT_ACTIVITY_SETTING_NAME, json_encode($row));
+						Repo::publication()->edit($publication, []);
 					}
 				}
 			}
@@ -210,7 +203,7 @@ class RosettaExportDeployment
 		$params = [
 			'producer' => $this->producerId,
 			'material_flow' => $this->materialFlowId,
-			'creation_date_from' => date('d/m/Y', strtotime('-' . $this->plugin->depositHistoryInDays . ' days')),
+			'creation_date_from' => date('d/m/Y', strtotime('-' . Constants::DEPOSIT_HISTORY_IN_DAYS . ' days')),
 			'creation_date_to' => date('d/m/Y', strtotime('+1 days')),
 			'offset' => $offset
 		];
@@ -242,7 +235,7 @@ class RosettaExportDeployment
 				}
 			}
 		} catch (Exception $e) {
-			$this->plugin->logError($e->getMessage());
+			Utils::logError($e->getMessage());
 		}
 
 		// If offset is 0, sort and log the total record count.
@@ -253,8 +246,6 @@ class RosettaExportDeployment
 			}
 			ksort($local);
 			$deposits = $local;
-
-
 		}
 		return $deposits;
 	}
@@ -264,8 +255,7 @@ class RosettaExportDeployment
 		$protocol = explode(':', $this->host)[0]; // Extract the protocol (e.g., 'https')
 
 		// Extract the host parts after removing the protocol.
-		$hostParts = explode('/',
-			str_replace($protocol . '://', '', $this->host));
+		$hostParts = explode('/', str_replace($protocol . '://', '', $this->host));
 
 		return match ($apiType) {
 			'soap' => $protocol . '://' . $hostParts[0] . '/dpsws/deposit/DepositWebServices?wsdl',
@@ -287,8 +277,7 @@ class RosettaExportDeployment
 	{
 		$oldMask = umask(0);
 
-
-		$INGEST_PATH = PKPString::strtolower(
+		$INGEST_PATH = strtolower(
 				$this->context->getLocalizedAcronym()) . '-' .
 			$submission->getId() .
 			'-v' . $publication->getData('version');
@@ -304,10 +293,10 @@ class RosettaExportDeployment
 		if (!is_dir($STREAM_PATH)) mkdir($STREAM_PATH, 0777);
 		if (!is_dir($MASTER_PATH)) mkdir($MASTER_PATH, 0777);
 
-		$metsDom = new RosettaMETSDom($this->context, $submission, $publication, $this->plugin);
+		$metsDom = new RosettaMetsDom($this->context, $submission, $publication, $this->plugin);
 		file_put_contents($IE_PATH, $metsDom->saveXML(), LOCK_EX);
 
-		$dcDom = new RosettaDCDom($this->context, $publication, $submission, false);
+		$dcDom = new RosettaDcDom($this->context, $publication, $submission, false);
 		file_put_contents($DC_PATH, $dcDom->saveXML(), LOCK_EX);
 		//TODO remove this
 		/**
@@ -322,7 +311,7 @@ class RosettaExportDeployment
 		foreach ($galleyFiles as $file) {
 
 
-			$sourceFilePath = $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $file['fullFilePath'];
+			$sourceFilePath = $this->filesDirPath . DIRECTORY_SEPARATOR . $file['fullFilePath'];
 			if (!file_exists($sourceFilePath)) {
 				$failedFiles [] = $file['fullFilePath'];
 				continue;
@@ -334,7 +323,7 @@ class RosettaExportDeployment
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
 				$copySuccess = copy(
-					$this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
+					$this->filesDirPath . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
 					join(DIRECTORY_SEPARATOR,
 						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
 
@@ -344,11 +333,11 @@ class RosettaExportDeployment
 		}
 
 		// change permissions of stream path recursively
-		$this->plugin->setPermissionsRecursively($STREAM_PATH, 0775);
+		Utils::setPermissionsRecursively($STREAM_PATH, 0775);
 
 		if (count($failedFiles) > 0) {
 			foreach ($failedFiles as $failedFile) {
-				var_dump('Copy of file failed for ' . $failedFile);
+				error_log('Copy of file failed for ' . $failedFile);
 			}
 		}
 
@@ -361,9 +350,8 @@ class RosettaExportDeployment
 
 		// if not testMode and validated
 		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
-			var_dump($submission->getData('id').'-'.$publication->getData('id').': ('.$publication->getLocalizedFullTitle('title').')');
 			$this->doDeposit($INGEST_PATH, $publication);
-			$this->plugin->removeDirRecursively($SIP_PATH);
+			Utils::removeDirRecursively($SIP_PATH);
 		}
 
 
@@ -395,7 +383,7 @@ class RosettaExportDeployment
 
 			// Handle error messages if present
 			if (!empty($errorMessage)) {
-				$this->plugin->logError($errorMessage);
+				Utils::logError($errorMessage);
 			}
 
 			// Create a deposit status model
@@ -413,9 +401,7 @@ class RosettaExportDeployment
 				sleep(120);
 
 				// Log deposit information
-				$this->plugin->logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
-
-				var_dump($this->context->getData('id') . '-' . $publication->getData('id'));
+				Utils::logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
 			} else {
 				// Handle deposit failure
 				$depositStatus->id = '';
@@ -424,16 +410,15 @@ class RosettaExportDeployment
 				$depositStatus->doi = '';
 
 				// Log the response in case of an error
-				$this->plugin->logError($responseBody);
+				Utils::logError($responseBody);
 			}
 
 			// Update the publication object with deposit status
-			$publicationDao = new PublicationDAO();
-			$publication->setData($this->plugin->depositStatusSettingName, json_encode($depositStatus));
-			$publicationDao->updateObject($publication);
+			$publication->setData(Constants::DEPOSIT_STATUS_SETTING_NAME, json_encode($depositStatus));
+			Repo::publication()->edit($publication, []);
 
 		} catch (Exception $e) {
-			$this->plugin->logError($e->getMessage());
+			Utils::logError($e->getMessage());
 		}
 	}
 
@@ -473,34 +458,22 @@ class RosettaExportDeployment
 		return $xpath;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getPublishedSubmissions()
+	public function getPublishedSubmissions(): mixed
 	{
 		$submissions = Services::get('submission')->getMany([
 			'contextId' => $this->context->getId(),
 			'orderBy' => 'seq',
 			'orderDirection' => 'ASC',
-			'status' => STATUS_PUBLISHED,
+			'status' => Submission::STATUS_PUBLISHED,
 		]);
 		return $submissions;
 	}
 
-	/**
-	 * @param string $endpoint
-	 * @param array $headers
-	 * @return \Psr\Http\Message\ResponseInterface
-	 */
-	public function apiRequest(string $endpoint, array $headers): \Psr\Http\Message\ResponseInterface
+	public function apiRequest(string $endpoint, array $headers): ResponseInterface
 	{
 		return $this->client->get($endpoint, ['headers' => $headers]);
 	}
 
-	/**
-	 * @param array $deposits
-	 * @return void
-	 */
 	public function logDeposits(array $deposits): string
 	{
 		$result = '';
@@ -508,17 +481,14 @@ class RosettaExportDeployment
 		foreach ($deposits as $deposit) {
 			foreach (array_values($deposit) as $value) {
 				if (gettype($value) == 'array') {
-					$result.= '|'.implode(' |', $value);
+					$result .= '|' . implode(' |', $value);
 				} else {
-					$result.='|'.$value;
+					$result .= '|' . $value;
 				}
 
 			}
 			$result .= PHP_EOL;
-
-
 		}
 		return $result;
-
 	}
 }
