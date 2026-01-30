@@ -19,9 +19,9 @@ namespace APP\plugins\importexport\rosetta;
 use APP\core\Services;
 use APP\facades\Repo;
 use APP\plugins\importexport\rosetta\classes\Constants;
-use APP\plugins\importexport\rosetta\classes\Files\RosettaFileService;
-use APP\plugins\importexport\rosetta\classes\Models\DepositActivityModel;
-use APP\plugins\importexport\rosetta\classes\Models\DepositStatusModel;
+use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
+use APP\plugins\importexport\rosetta\classes\models\DepositActivityModel;
+use APP\plugins\importexport\rosetta\classes\models\DepositStatusModel;
 use APP\plugins\importexport\rosetta\classes\utilities\Utils;
 use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDcDom;
 use APP\plugins\importexport\rosetta\classes\xml\mets\RosettaMetsDom;
@@ -113,13 +113,11 @@ class RosettaExportDeployment
 						$fileFullPath = $this->filesDirPath . DIRECTORY_SEPARATOR . $galleyFile['fullFilePath'];
 						if (!file_exists($fileFullPath)) {
 							$galleyFileMissing = true;
-							var_dump('File ' . $fileFullPath . ' does not exist');
 						}
 					}
 
 					// Skip if test and publication DOI is empty and no gallery files
 					if ($publication->getStoredPubId('doi') == null && count($galleyFiles) == 0 || $galleyFileMissing) {
-
 						continue;
 					}
 
@@ -339,7 +337,7 @@ class RosettaExportDeployment
 
 		if (count($failedFiles) > 0) {
 			foreach ($failedFiles as $failedFile) {
-				var_dump('Copy of file failed for ' . $failedFile);
+				error_log('Copy of file failed for ' . $failedFile);
 			}
 		}
 
@@ -352,7 +350,6 @@ class RosettaExportDeployment
 
 		// if not testMode and validated
 		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
-			var_dump($submission->getData('id') . '-' . $publication->getData('id') . ': (' . $publication->getLocalizedFullTitle('title') . ')');
 			$this->doDeposit($INGEST_PATH, $publication);
 			Utils::removeDirRecursively($SIP_PATH);
 		}
@@ -405,8 +402,6 @@ class RosettaExportDeployment
 
 				// Log deposit information
 				Utils::logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
-
-				var_dump($this->context->getData('id') . '-' . $publication->getData('id'));
 			} else {
 				// Handle deposit failure
 				$depositStatus->id = '';

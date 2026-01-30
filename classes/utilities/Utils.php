@@ -36,7 +36,7 @@ class Utils
 			// Write the log entry to the log file.
 			error_log($logEntry, 3, self::logFilePath());
 		} catch (Exception $e) {
-			var_dump($e->getMessage());
+			error_log($e->getMessage());
 		}
 	}
 
@@ -83,8 +83,9 @@ class Utils
 
 	public static function removeDirRecursively(string $dir): void
 	{
-
-		if (empty($dir)) return;
+		if (empty($dir) || !realpath($dir)) {
+			return;
+		}
 
 		try {
 			if (is_dir($dir)) {
@@ -110,7 +111,9 @@ class Utils
 
 	public static function setPermissionsRecursively(string $dir, int $permissions = 0777): void
 	{
-		if (empty($dir)) return;
+		if (empty($dir) || !realpath($dir)) {
+			return;
+		}
 
 		try {
 			if (is_dir($dir)) {

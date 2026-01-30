@@ -48,7 +48,7 @@ class RosettaInfoSender extends ScheduledTask
 		return __('plugins.importexport.rosetta.senderTask.name');
 	}
 
-	public function _addLogEntry($result)
+	public function _addLogEntry($result): void
 	{
 		if (is_array($result)) {
 			foreach ($result as $error) {
@@ -68,7 +68,9 @@ class RosettaInfoSender extends ScheduledTask
 
 	protected function executeActions(): bool
 	{
-		if (!$this->getPlugin()) return false;
+		if (!$this->getPlugin()) {
+			return false;
+		}
 
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journals = $journalDao->getAll();
@@ -78,5 +80,7 @@ class RosettaInfoSender extends ScheduledTask
 				$this->_registerObjects($unregisteredArticles, 'article=>rosetta-xml', $journal, 'articles');
 			}
 		}
+
+		return true;
 	}
 }
