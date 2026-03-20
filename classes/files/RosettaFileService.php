@@ -17,9 +17,13 @@
 namespace APP\plugins\importexport\rosetta\classes\files;
 
 use APP\core\Application;
-use APP\core\Services;
+use APP\facades\Repo;
 use APP\publication\Publication;
 use PKP\submissionFile\SubmissionFile;
+
+if (!defined('MASTER_PATH')) {
+	define('MASTER_PATH', 'MASTER');
+}
 
 class RosettaFileService
 {
@@ -27,7 +31,9 @@ class RosettaFileService
 	{
 		$files = array();
 
-		$galleysIterator = Services::get('galley')->getMany(['publicationIds' => $publication->getId()]);
+		$galleysIterator = Repo::galley()->getCollector()
+			->filterByPublicationIds([$publication->getId()])
+			->getMany();
 		foreach ($galleysIterator as $galley) {
 			$fileId = $galley->getData('submissionFileId');
 			$galleyFile = $galley->getFile();
@@ -49,13 +55,12 @@ class RosettaFileService
 
 	public static function getDependentFilePaths(int $submissionId, int $fileId, string $path): array
 	{
-		$submissionFile = Services::get('submissionFile')->get($fileId);
-		$dependentFilesIterator = Services::get('submissionFile')->getMany([
-			'includeDependentFiles' => true,
-			'fileStages' => [SubmissionFile::SUBMISSION_FILE_DEPENDENT],
-			'assocTypes' => [Application::ASSOC_TYPE_SUBMISSION_FILE],
-			'assocIds' => [$submissionFile->getId()],
-		]);
+		$submissionFile = Repo::submissionFile()->get($fileId);
+		$dependentFilesIterator = Repo::submissionFile()->getCollector()
+			->includeDependentFiles(true)
+			->filterByFileStages([SubmissionFile::SUBMISSION_FILE_DEPENDENT])
+			->filterByAssoc(Application::ASSOC_TYPE_SUBMISSION_FILE, [$submissionFile->getId()])
+			->getMany();
 
 		$dependentFilePaths = array();
 		foreach ($dependentFilesIterator as $dependentFile) {

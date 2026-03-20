@@ -1,11 +1,26 @@
 <?xml version="1.0"?>
-<xsd:schema version="5.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+<!-- July 2021 -->
+<!-- Rosetta Version 7.1 -->
+<!-- Change History -->
+<!-- Version 7.1 Changes:
+	1. The fileValidation section now includes also the error id
+	2. Version was updated to 2.0
+-->
+
+<!-- January 2022 -->
+<!-- Rosetta Version 7.2 -->
+<!-- Change History -->
+<!-- Version 7.2 Changes:
+	1. New IERelationship section was added for strcutural IE relationships
+	2. Version was updated to 3.0
+-->
+
+<xsd:schema version="3.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://www.exlibrisgroup.com/dps/dnx"
 	targetNamespace="http://www.exlibrisgroup.com/dps/dnx"
 	elementFormDefault="qualified">
-
 	<xsd:element name="dnx" type="dnxType"/>
-
 	<xsd:complexType name="dnxType">
 		<xsd:annotation>
 			<xsd:documentation source="http://linktodoc"/>
@@ -47,9 +62,8 @@
 				<xsd:alternative type="errorType"/>
 			</xsd:element>
 		</xsd:all>
-		<xsd:assert test=" count(*[@id='generalIECharacteristics']) = (0,1) and  count(*[@id='generalRepCharacteristics']) = (0,1) and  count(*[@id='generalFileCharacteristics']) = (0,1) and  count(*[@id='objectCharacteristics']) = (0,1) and  count(*[@id='CMS']) = (0,1) and  count(*[@id='webHarvesting']) = (0,1) and  count(*[@id='objectIdentifier']) = (0,1) and  count(*[@id='preservationLevel']) = (0,1) and  count(*[@id='significantProperties']) = (0,1) and  count(*[@id='fileFixity']) = (0,1) and  count(*[@id='creatingApplication']) = (0,1) and  count(*[@id='inhibitors']) = (0,1) and  count(*[@id='objectCharacteristicsExtension']) = (0,1) and  count(*[@id='environment']) = (0,1) and  count(*[@id='environmentDependencies']) = (0,1) and  count(*[@id='environmentSoftware']) = (0,1) and  count(*[@id='envSoftwareRegistry']) = (0,1) and  count(*[@id='environmentHardware']) = (0,1) and  count(*[@id='envHardwareRegistry']) = (0,1) and  count(*[@id='environmentExtension']) = (0,1) and  count(*[@id='signatureInformation']) = (0,1) and  count(*[@id='signatureInformationExtension']) = (0,1) and  count(*[@id='IERelationship']) = (0,1) and  count(*[@id='relationship']) = (0,1) and  count(*[@id='linkingIEIdentifier']) = (0,1) and  count(*[@id='event']) = (0,1) and  count(*[@id='linkingRightsStatementIdentifier']) = (0,1) and  count(*[@id='accessRightsPolicy']) = (0,1) and  count(*[@id='retentionPolicy']) = (0,1) and  count(*[@id='grantedRightsStatement']) = (0,1) and  count(*[@id='workProduct']) = (0,1) and  count(*[@id='Collection']) = (0,1)"/>
+		<xsd:assert test=" count(*[@id='generalIECharacteristics']) = (0,1) and count(*[@id='generalRepCharacteristics']) = (0,1) and count(*[@id='generalFileCharacteristics']) = (0,1) and count(*[@id='objectCharacteristics']) = (0,1) and count(*[@id='CMS']) = (0,1) and count(*[@id='webHarvesting']) = (0,1) and count(*[@id='objectIdentifier']) = (0,1) and count(*[@id='preservationLevel']) = (0,1) and count(*[@id='significantProperties']) = (0,1) and count(*[@id='fileFixity']) = (0,1) and count(*[@id='creatingApplication']) = (0,1) and count(*[@id='inhibitors']) = (0,1) and count(*[@id='objectCharacteristicsExtension']) = (0,1) and count(*[@id='environment']) = (0,1) and count(*[@id='environmentDependencies']) = (0,1) and count(*[@id='environmentSoftware']) = (0,1) and count(*[@id='envSoftwareRegistry']) = (0,1) and count(*[@id='environmentHardware']) = (0,1) and count(*[@id='envHardwareRegistry']) = (0,1) and count(*[@id='environmentExtension']) = (0,1) and count(*[@id='signatureInformation']) = (0,1) and count(*[@id='signatureInformationExtension']) = (0,1) and count(*[@id='IERelationship']) = (0,1) and count(*[@id='relationship']) = (0,1) and count(*[@id='linkingIEIdentifier']) = (0,1) and count(*[@id='event']) = (0,1) and count(*[@id='linkingRightsStatementIdentifier']) = (0,1) and count(*[@id='accessRightsPolicy']) = (0,1) and count(*[@id='retentionPolicy']) = (0,1) and count(*[@id='grantedRightsStatement']) = (0,1) and count(*[@id='workProduct']) = (0,1) and count(*[@id='Collection']) = (0,1)"/>
 	</xsd:complexType>
-
 	<xsd:complexType name="generalIECharacteristicsSection">
 		<xsd:annotation>
 			<xsd:documentation></xsd:documentation>
@@ -58,7 +72,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='submissionReason'" type="nullableString"/>
 							<xsd:alternative test="@id='status'" type="nullableString"/>
 							<xsd:alternative test="@id='IEEntityType'" type="nullableString"/>
@@ -82,7 +96,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='label'" type="nullableString"/>
 							<xsd:alternative test="@id='preservationType'" type="nullableString"/>
 							<xsd:alternative test="@id='usageType'" type="nullableString"/>
@@ -119,7 +133,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='label'" type="nullableString"/>
 							<xsd:alternative test="@id='note'" type="nullableString"/>
 							<xsd:alternative test="@id='fileCreationDate'" type="nullableString"/>
@@ -148,7 +162,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='objectType'" type="nullableString"/>
 							<xsd:alternative test="@id='groupID'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
@@ -168,7 +182,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='system'" type="nullableString"/>
 							<xsd:alternative test="@id='recordId'" type="nullableString"/>
 							<xsd:alternative test="@id='mId'" type="nullableString"/>
@@ -189,7 +203,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='primarySeedURL'" type="nullableString"/>
 							<xsd:alternative test="@id='WCTIdentifier'" type="nullableString"/>
 							<xsd:alternative test="@id='targetName'" type="nullableString"/>
@@ -213,7 +227,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='objectIdentifierType'" type="stringType"/>
 							<xsd:alternative test="@id='objectIdentifierValue'" type="stringType"/>
 							<xsd:alternative type="errorType"/>
@@ -233,7 +247,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='preservationLevelValue'" type="stringType"/>
 							<xsd:alternative test="@id='preservationLevelRole'" type="nullableString"/>
 							<xsd:alternative test="@id='preservationLevelRationale'" type="nullableString"/>
@@ -256,7 +270,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='significantPropertiesType'" type="nullableString"/>
 							<xsd:alternative test="@id='significantPropertiesValue'" type="nullableString"/>
 							<xsd:alternative test="@id='significantPropertiesExtension'" type="nullableString"/>
@@ -277,7 +291,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='agent'" type="nullableString"/>
 							<xsd:alternative test="@id='pluginName'" type="nullableString"/>
 							<xsd:alternative test="@id='fixityType'" type="stringType"/>
@@ -299,7 +313,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='creatingApplicationName'" type="nullableString"/>
 							<xsd:alternative test="@id='creatingApplicationVersion'" type="nullableString"/>
 							<xsd:alternative test="@id='dateCreatedByApplication'" type="nullableString"/>
@@ -321,7 +335,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='inhibitorType'" type="stringType"/>
 							<xsd:alternative test="@id='inhibitorTarget'" type="nullableString"/>
 							<xsd:alternative test="@id='inhibitorKey'" type="nullableString"/>
@@ -342,7 +356,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='objectCharacteristicsExtension'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -361,7 +375,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='environmentCharacteristic'" type="nullableString"/>
 							<xsd:alternative test="@id='environmentPurpose'" type="nullableString"/>
 							<xsd:alternative test="@id='environmentNote'" type="nullableString"/>
@@ -382,7 +396,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='dependencyName'" type="nullableString"/>
 							<xsd:alternative test="@id='dependencyIdentifierType1'" type="nullableString"/>
 							<xsd:alternative test="@id='dependencyIdentifierValue1'" type="nullableString"/>
@@ -407,7 +421,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='softwareName'" type="stringType"/>
 							<xsd:alternative test="@id='softwareVersion'" type="nullableString"/>
 							<xsd:alternative test="@id='softwareType'" type="stringType"/>
@@ -430,7 +444,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='registryId'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -449,7 +463,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='hardwareName'" type="nullableString"/>
 							<xsd:alternative test="@id='hardwareType'" type="nullableString"/>
 							<xsd:alternative test="@id='hardwareOtherInformation'" type="nullableString"/>
@@ -470,7 +484,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='registryId'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -489,7 +503,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='environmentExtension'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -508,7 +522,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='signatureInformationEncoding'" type="stringType"/>
 							<xsd:alternative test="@id='signer'" type="nullableString"/>
 							<xsd:alternative test="@id='signatureMethod'" type="stringType"/>
@@ -533,7 +547,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='signatureInformationExtension'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -552,7 +566,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='relationshipType'" type="stringType"/>
 							<xsd:alternative test="@id='relationshipSubType'" type="stringType"/>
 							<xsd:alternative test="@id='relatedObjectIdentifierType'" type="stringType"/>
@@ -575,7 +589,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='relationshipType'" type="stringType"/>
 							<xsd:alternative test="@id='relationshipSubType'" type="stringType"/>
 							<xsd:alternative test="@id='relatedObjectIdentifierType1'" type="stringType"/>
@@ -604,7 +618,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='linkingIEIdentifierType'" type="stringType"/>
 							<xsd:alternative test="@id='linkingIEIdentifierValue'" type="stringType"/>
 							<xsd:alternative type="errorType"/>
@@ -624,7 +638,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='eventIdentifierType'" type="stringType"/>
 							<xsd:alternative test="@id='eventIdentifierValue'" type="nullableString"/>
 							<xsd:alternative test="@id='eventType'" type="stringType"/>
@@ -668,7 +682,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='linkingRightsStatementIdentifierType'" type="stringType"/>
 							<xsd:alternative test="@id='linkingRightsStatementIdentifierValue'" type="stringType"/>
 							<xsd:alternative type="errorType"/>
@@ -688,7 +702,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='policyId'" type="nullableString"/>
 							<xsd:alternative test="@id='policyParameters'" type="nullableString"/>
 							<xsd:alternative test="@id='policyDescription'" type="nullableString"/>
@@ -709,7 +723,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='policyId'" type="nullableString"/>
 							<xsd:alternative test="@id='policyDescription'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
@@ -729,7 +743,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='grantedRightsStatementIdentifier'" type="nullableString"/>
 							<xsd:alternative test="@id='grantedRightsStatementValue'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
@@ -749,7 +763,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='publishingHistory'" type="nullableString"/>
 							<xsd:alternative type="errorType"/>
 						</xsd:element>
@@ -768,7 +782,7 @@
 			<xsd:element name="record" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="key"  minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="key" minOccurs="0" maxOccurs="unbounded">
 							<xsd:alternative test="@id='collectionId'" type="nullableString"/>
 							<xsd:alternative test="@id='name'" type="nullableString"/>
 							<xsd:alternative test="@id='externalId'" type="nullableString"/>
@@ -826,7 +840,7 @@
 	</xsd:complexType>
 	<xsd:simpleType name="nullOrInteger">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="\d*|\s{0}" />
+			<xsd:pattern value="\d*|\s{0}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:complexType name="nullableInt">

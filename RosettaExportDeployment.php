@@ -16,7 +16,6 @@
 
 namespace APP\plugins\importexport\rosetta;
 
-use APP\core\Services;
 use APP\facades\Repo;
 use APP\plugins\importexport\rosetta\classes\Constants;
 use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
@@ -150,7 +149,7 @@ class RosettaExportDeployment
 					if ($currentContextSettings == null) {
 						$this->depositPublication($submission, $publication, $galleyFiles);
 					} else {
-						$issue = Services::get('issue')->get($publication->getData('issueId'));
+						$issue = Repo::issue()->get($publication->getData('issueId'));
 						foreach ($currentContextSettings as $setting) {
 							if ($issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) {
 								$this->depositPublication($submission, $publication, $galleyFiles);
@@ -298,62 +297,53 @@ class RosettaExportDeployment
 
 		$dcDom = new RosettaDcDom($this->context, $publication, $submission, false);
 		file_put_contents($DC_PATH, $dcDom->saveXML(), LOCK_EX);
-		//TODO remove this
-		/**
-		 * list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-		 * shell_exec('php' . ' ' . $_SERVER['argv'][0] . '  NativeImportExportPlugin export ' .
-		 * $xmlExport . ' ' . $_SERVER['argv'][2] . ' article ' . $submission->getData('id'));
-		 * if (file_exists($xmlExport)) $galleyFiles[] = $tmpExportFile;
-		 */
-
 		$failedFiles = [];
 
 		foreach ($galleyFiles as $file) {
-
-
 			$sourceFilePath = $this->filesDirPath . DIRECTORY_SEPARATOR . $file['fullFilePath'];
 			if (!file_exists($sourceFilePath)) {
 				$failedFiles [] = $file['fullFilePath'];
 				continue;
 			}
-			$copySuccess = copy(
+			if (!copy(
 				$sourceFilePath,
 				join(DIRECTORY_SEPARATOR,
-					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))));
+					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))))) {
+				$failedFiles[] = $file['fullFilePath'];
+			}
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
-				$copySuccess = copy(
+				if (!copy(
 					$this->filesDirPath . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
 					join(DIRECTORY_SEPARATOR,
-						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
-
-				if (!$copySuccess)
-					$failedFiles [] = $dependentFile['fullFilePath'];
+						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))))) {
+					$failedFiles[] = $dependentFile['fullFilePath'];
+				}
 			}
 		}
 
-		// change permissions of stream path recursively
 		Utils::setPermissionsRecursively($STREAM_PATH, 0775);
 
 		if (count($failedFiles) > 0) {
 			foreach ($failedFiles as $failedFile) {
-				error_log('Copy of file failed for ' . $failedFile);
+				Utils::logError('Copy of file failed for ' . $failedFile);
 			}
 		}
 
-		// Run validation
-		exec('java -jar ' . $this->plugin->getPluginPath() . '/bin/xsd11-validator.jar ' .
-			'-if ' . $IE_PATH . ' ' .
-			'-sf ' . $this->plugin->getPluginPath() . '/schema/mets_rosetta.xsd ',
+		exec('java -jar ' . escapeshellarg($this->plugin->getPluginPath() . '/bin/xsd11-validator.jar') . ' ' .
+			'-if ' . escapeshellarg($IE_PATH) . ' ' .
+			'-sf ' . escapeshellarg($this->plugin->getPluginPath() . '/schema/mets_rosetta.xsd'),
 			$validationOutPut,
 			$validationStatus);
 
-		// if not testMode and validated
-		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
+		if ($validationStatus !== 0) {
+			Utils::logError('XML validation failed for ' . $IE_PATH . ': ' . implode("\n", $validationOutPut));
+		}
+
+		if (!$this->isTest && $validationStatus === 0 && count($failedFiles) === 0) {
 			$this->doDeposit($INGEST_PATH, $publication);
 			Utils::removeDirRecursively($SIP_PATH);
 		}
-
 
 		umask($oldMask);
 	}
@@ -460,13 +450,10 @@ class RosettaExportDeployment
 
 	public function getPublishedSubmissions(): mixed
 	{
-		$submissions = Services::get('submission')->getMany([
-			'contextId' => $this->context->getId(),
-			'orderBy' => 'seq',
-			'orderDirection' => 'ASC',
-			'status' => Submission::STATUS_PUBLISHED,
-		]);
-		return $submissions;
+		return Repo::submission()->getCollector()
+			->filterByContextIds([$this->context->getId()])
+			->filterByStatus([Submission::STATUS_PUBLISHED])
+			->getMany();
 	}
 
 	public function apiRequest(string $endpoint, array $headers): ResponseInterface

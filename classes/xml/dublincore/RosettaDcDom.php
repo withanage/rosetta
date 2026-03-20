@@ -16,13 +16,13 @@
 
 namespace APP\plugins\importexport\rosetta\classes\xml\dublincore;
 
+use APP\facades\Repo;
 use APP\plugins\importexport\rosetta\classes\utilities\Utils;
 use APP\publication\Publication;
 use APP\submission\Submission;
 use DOMDocument;
 use DOMElement;
 use PKP\context\Context;
-use PKP\db\DAORegistry;
 
 class RosettaDcDom extends DOMDocument
 {
@@ -115,8 +115,7 @@ class RosettaDcDom extends DOMDocument
 	public function createIssue(): void
 	{
 		$issn = $this->context->getData('onlineIssn');
-		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issue = $issueDao->getById($this->publication->getData('issueId'));
+		$issue = Repo::issue()->get($this->publication->getData('issueId'));
 		if ($issue) {
 			$rosettaIssue = 'Open Access E-Journals/TIB OP/' . $issn . '/' . $issue->getData('year') . '/' . $issue->getData('volume');
 			$this->createQualifiedElement('dcterms:isPartOf', $rosettaIssue);

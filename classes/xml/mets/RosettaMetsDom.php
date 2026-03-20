@@ -17,7 +17,7 @@
 namespace APP\plugins\importexport\rosetta\classes\xml\mets;
 
 use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
-use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDCDom;
+use APP\plugins\importexport\rosetta\classes\xml\dublincore\RosettaDcDom;
 use APP\plugins\importexport\rosetta\classes\xml\mods\ModsDom;
 use APP\plugins\importexport\rosetta\classes\xml\XmlUtils;
 use APP\plugins\importexport\rosetta\RosettaExportPlugin;
@@ -63,7 +63,7 @@ class RosettaMetsDom extends DOMDocument
 		$this->createMetsElement();
 
 		// create dmdSec
-		$dcDom = new RosettaDCDom($this->context, $this->publication, $this->submission, false);
+		$dcDom = new RosettaDcDom($this->context, $this->publication, $this->submission, false);
 		$dc = $this->importNode($dcDom->getRecord(), true);
 
 		// Dublin core Metadata
