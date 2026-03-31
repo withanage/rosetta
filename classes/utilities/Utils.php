@@ -21,6 +21,8 @@ use Exception;
 use FilesystemIterator;
 use PKP\config\Config;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 class Utils
 {
@@ -107,6 +109,37 @@ class Utils
 		} catch (Exception $e) {
 			self::logError($e->getMessage());
 		}
+	}
+
+	public static function createZip(string $sourceDir, string $zipFilePath): bool
+	{
+		if (empty($sourceDir) || !is_dir($sourceDir)) {
+			self::logError('createZip: source directory does not exist: ' . $sourceDir);
+			return false;
+		}
+
+		$zip = new ZipArchive();
+		if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+			self::logError('createZip: could not create zip file: ' . $zipFilePath);
+			return false;
+		}
+
+		$files = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::LEAVES_ONLY
+		);
+
+		foreach ($files as $file) {
+			if ($file->isFile()) {
+				$filePath = $file->getRealPath();
+				$relativePath = substr($filePath, strlen(realpath($sourceDir)) + 1);
+				$zip->addFile($filePath, $relativePath);
+			}
+		}
+
+		$zip->close();
+
+		return file_exists($zipFilePath);
 	}
 
 	public static function setPermissionsRecursively(string $dir, int $permissions = 0777): void

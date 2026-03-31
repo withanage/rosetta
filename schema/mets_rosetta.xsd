@@ -47,8 +47,9 @@
 	targetNamespace="http://www.exlibrisgroup.com/xsd/dps/rosettaMets"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="http://www.loc.gov/standards/xlink/xlink.xsd"/>
-
 	<xsd:import namespace="http://www.exlibrisgroup.com/dps/dnx" schemaLocation="dnx_sip.xsd"/>
+	<xsd:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>
+	<xsd:import namespace="http://purl.org/dc/terms/" schemaLocation="dcterms.xsd"/>
 	<xsd:element name="mets">
 		<xsd:annotation>
 			<xsd:documentation>METS: Metadata Encoding and Transmission Standard.

@@ -16,7 +16,6 @@
 
 namespace APP\plugins\importexport\rosetta;
 
-use APP\core\Services;
 use APP\facades\Repo;
 use APP\plugins\importexport\rosetta\classes\Constants;
 use APP\plugins\importexport\rosetta\classes\files\RosettaFileService;
@@ -92,8 +91,8 @@ class RosettaExportDeployment
 
 		// Retrieve published submissions based on specific criteria.
 		$submissions = $this->getPublishedSubmissions();
+		$depositedPublicationIds = [];
 
-		// Iterate through the retrieved submissions.
 		foreach ($submissions as $submission) {
 			if (is_a($submission, 'Submission')) {
 
@@ -146,14 +145,24 @@ class RosettaExportDeployment
 						continue;
 					}
 
-					// Deposit the publication to Rosetta based on specified settings.
+					if (in_array($publication->getId(), $depositedPublicationIds)) {
+						continue;
+					}
+
+					if (!empty($depositActivity->status) &&
+						!in_array(strtolower($depositActivity->status), $this->depositRejectedStatuses, true)) {
+						continue;
+					}
+
 					if ($currentContextSettings == null) {
 						$this->depositPublication($submission, $publication, $galleyFiles);
+						$depositedPublicationIds[] = $publication->getId();
 					} else {
-						$issue = Services::get('issue')->get($publication->getData('issueId'));
+						$issue = Repo::issue()->get($publication->getData('issueId'));
 						foreach ($currentContextSettings as $setting) {
 							if ($issue->getData('volume') == $setting['volume'] && $issue->getData('year') == $setting['year']) {
 								$this->depositPublication($submission, $publication, $galleyFiles);
+								$depositedPublicationIds[] = $publication->getId();
 							}
 						}
 					}
@@ -275,6 +284,15 @@ class RosettaExportDeployment
 
 	private function depositPublication(Submission $submission, Publication $publication, array $galleyFiles): void
 	{
+		$validationErrors = $this->validateGalleyFiles($galleyFiles);
+		if (!empty($validationErrors)) {
+			foreach ($validationErrors as $error) {
+				Utils::logError('Skipping deposit for submission:' . $submission->getId() .
+					'|publication:' . $publication->getId() . ' - ' . $error);
+			}
+			return;
+		}
+
 		$oldMask = umask(0);
 
 		$INGEST_PATH = strtolower(
@@ -298,62 +316,54 @@ class RosettaExportDeployment
 
 		$dcDom = new RosettaDcDom($this->context, $publication, $submission, false);
 		file_put_contents($DC_PATH, $dcDom->saveXML(), LOCK_EX);
-		//TODO remove this
-		/**
-		 * list($xmlExport, $tmpExportFile) = $metsDom->appendImportExportFile();
-		 * shell_exec('php' . ' ' . $_SERVER['argv'][0] . '  NativeImportExportPlugin export ' .
-		 * $xmlExport . ' ' . $_SERVER['argv'][2] . ' article ' . $submission->getData('id'));
-		 * if (file_exists($xmlExport)) $galleyFiles[] = $tmpExportFile;
-		 */
-
 		$failedFiles = [];
 
 		foreach ($galleyFiles as $file) {
-
-
 			$sourceFilePath = $this->filesDirPath . DIRECTORY_SEPARATOR . $file['fullFilePath'];
 			if (!file_exists($sourceFilePath)) {
 				$failedFiles [] = $file['fullFilePath'];
 				continue;
 			}
-			$copySuccess = copy(
+			if (!copy(
 				$sourceFilePath,
 				join(DIRECTORY_SEPARATOR,
-					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))));
+					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))))) {
+				$failedFiles[] = $file['fullFilePath'];
+			}
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
-				$copySuccess = copy(
+				if (!copy(
 					$this->filesDirPath . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
 					join(DIRECTORY_SEPARATOR,
-						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
-
-				if (!$copySuccess)
-					$failedFiles [] = $dependentFile['fullFilePath'];
+						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))))) {
+					$failedFiles[] = $dependentFile['fullFilePath'];
+				}
 			}
 		}
 
-		// change permissions of stream path recursively
 		Utils::setPermissionsRecursively($STREAM_PATH, 0775);
 
 		if (count($failedFiles) > 0) {
 			foreach ($failedFiles as $failedFile) {
-				error_log('Copy of file failed for ' . $failedFile);
+				Utils::logError('Copy of file failed for ' . $failedFile);
 			}
 		}
 
-		// Run validation
-		exec('java -jar ' . $this->plugin->getPluginPath() . '/bin/xsd11-validator.jar ' .
-			'-if ' . $IE_PATH . ' ' .
-			'-sf ' . $this->plugin->getPluginPath() . '/schema/mets_rosetta.xsd ',
+		exec('java -cp ' . escapeshellarg($this->plugin->getPluginPath() . '/bin/saxon-he-10.6.jar') . ' ' .
+			'net.sf.saxon.Transform ' .
+			'-s:' . escapeshellarg($IE_PATH) . ' ' .
+			'-xsl:' . escapeshellarg($this->plugin->getPluginPath() . '/schema/xslt/validate-mets.xsl'),
 			$validationOutPut,
 			$validationStatus);
 
-		// if not testMode and validated
-		if (!$this->isTest and $validationStatus == 0 && count($failedFiles) == 0) {
+		if ($validationStatus !== 0) {
+			Utils::logError('XML validation failed for ' . $IE_PATH . ': ' . implode("\n", $validationOutPut));
+		}
+
+		if (!$this->isTest && $validationStatus === 0 && count($failedFiles) === 0) {
 			$this->doDeposit($INGEST_PATH, $publication);
 			Utils::removeDirRecursively($SIP_PATH);
 		}
-
 
 		umask($oldMask);
 	}
@@ -397,8 +407,12 @@ class RosettaExportDeployment
 				if (!empty($publication->getStoredPubId('doi')))
 					$depositStatus->doi = $publication->getStoredPubId('doi');
 
+				// Save deposit status BEFORE sleeping to prevent duplicates on crash
+				$publication->setData(Constants::DEPOSIT_STATUS_SETTING_NAME, json_encode($depositStatus));
+				Repo::publication()->edit($publication, []);
+
 				// Wait for network to finish ingestion (adjust sleep time as needed)
-				sleep(120);
+				sleep((int)Config::getVar('rosetta', 'depositWaitSeconds', 120));
 
 				// Log deposit information
 				Utils::logInfo($this->context->getData('id') . '-' . $publication->getData('id'));
@@ -411,11 +425,11 @@ class RosettaExportDeployment
 
 				// Log the response in case of an error
 				Utils::logError($responseBody);
-			}
 
-			// Update the publication object with deposit status
-			$publication->setData(Constants::DEPOSIT_STATUS_SETTING_NAME, json_encode($depositStatus));
-			Repo::publication()->edit($publication, []);
+				// Save failed status
+				$publication->setData(Constants::DEPOSIT_STATUS_SETTING_NAME, json_encode($depositStatus));
+				Repo::publication()->edit($publication, []);
+			}
 
 		} catch (Exception $e) {
 			Utils::logError($e->getMessage());
@@ -458,15 +472,65 @@ class RosettaExportDeployment
 		return $xpath;
 	}
 
+	private function validateGalleyFiles(array $galleyFiles): array
+	{
+		$errors = [];
+		$xmlTypes = ['application/xml', 'text/xml'];
+		$htmlTypes = ['text/html', 'application/xhtml+xml'];
+
+		foreach ($galleyFiles as $file) {
+			$filePath = $this->filesDirPath . DIRECTORY_SEPARATOR . $file['fullFilePath'];
+			$declaredType = $file['mimetype'] ?? '';
+
+			if (!file_exists($filePath)) {
+				continue;
+			}
+
+			$finfo = new \finfo(FILEINFO_MIME_TYPE);
+			$detectedType = $finfo->file($filePath);
+
+			$declaredIsXml = in_array($declaredType, $xmlTypes);
+			$detectedIsHtml = in_array($detectedType, $htmlTypes);
+
+			if ($declaredIsXml && $detectedIsHtml) {
+				$errors[] = 'MIME type mismatch: ' . $file['fullFilePath'] . ' declared as ' . $declaredType . ' but detected as ' . $detectedType;
+				continue;
+			}
+
+			if (!$declaredIsXml && !in_array($declaredType, $htmlTypes) && $declaredType !== $detectedType) {
+				$errors[] = 'MIME type mismatch: ' . $file['fullFilePath'] . ' declared as ' . $declaredType . ' but detected as ' . $detectedType;
+				continue;
+			}
+
+			if (stripos($declaredType, 'html') !== false) {
+				$content = file_get_contents($filePath, false, null, 0, 1024);
+				if ($content !== false && stripos($content, '<!DOCTYPE') === false) {
+					$errors[] = 'HTML file missing DOCTYPE: ' . $file['fullFilePath'] . ' (mimetype: ' . $declaredType . ')';
+				}
+			}
+
+			if (stripos($declaredType, 'xml') !== false) {
+				$doc = new DOMDocument();
+				$prev = libxml_use_internal_errors(true);
+				$loaded = $doc->load($filePath);
+				$xmlErrors = libxml_get_errors();
+				libxml_clear_errors();
+				libxml_use_internal_errors($prev);
+				if (!$loaded || !empty($xmlErrors)) {
+					$errorMessages = array_map(fn($e) => trim($e->message), $xmlErrors);
+					$errors[] = 'Invalid XML file: ' . $file['fullFilePath'] . ' (' . implode('; ', $errorMessages) . ')';
+				}
+			}
+		}
+		return $errors;
+	}
+
 	public function getPublishedSubmissions(): mixed
 	{
-		$submissions = Services::get('submission')->getMany([
-			'contextId' => $this->context->getId(),
-			'orderBy' => 'seq',
-			'orderDirection' => 'ASC',
-			'status' => Submission::STATUS_PUBLISHED,
-		]);
-		return $submissions;
+		return Repo::submission()->getCollector()
+			->filterByContextIds([$this->context->getId()])
+			->filterByStatus([Submission::STATUS_PUBLISHED])
+			->getMany();
 	}
 
 	public function apiRequest(string $endpoint, array $headers): ResponseInterface

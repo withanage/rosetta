@@ -57,17 +57,20 @@ class ModsDom extends DOMDocument
 		//subjects
 
 		$subjects = 'keywords';
-		//TODO add to array
-		// $this->createDataElement('subjects', $this->publication, $this->record, 'subject', array('authority' => 'subjects'));
 		$keywords = $this->publication->getData($subjects);
 		if ($keywords) {
-			$localKeywords = reset($keywords);
-			foreach ($localKeywords as $topic) {
-				$subject = $this->createElementNS(MODS_NS, 'subject');
-				$topic = $this->createElementNS(MODS_NS, 'topic', $topic);
-				$topic->setAttribute('authority', $subjects);
-				$subject->appendChild($topic);
-				$this->record->appendChild($subject);
+			foreach ($keywords as $locale => $localKeywords) {
+				if (is_array($localKeywords)) {
+					foreach ($localKeywords as $topic) {
+						if (is_string($topic) && strlen($topic) > 0) {
+							$subject = $this->createElementNS(MODS_NS, 'subject');
+							$topicEl = $this->createElementNS(MODS_NS, 'topic', $topic);
+							$topicEl->setAttribute('authority', $subjects);
+							$subject->appendChild($topicEl);
+							$this->record->appendChild($subject);
+						}
+					}
+				}
 			}
 		}
 
@@ -177,6 +180,7 @@ class ModsDom extends DOMDocument
 				$nameDom->setAttribute('type', $authorType);
 				if ($author->getData('familyName') && array_key_exists($locale, $author->getData('familyName'))) {
 					$familyNamePartDom = $this->createElementNS(MODS_NS, 'namePart', $author->getData('familyName')[$locale]);
+					$shortLocale = $locale;
 					if (preg_match('/^([a-z]{2})_/i', $locale, $matches)) {
 						$shortLocale = $matches[1];
 					}
@@ -250,11 +254,11 @@ class ModsDom extends DOMDocument
 				$locale = $matches[1];
 			}
 			$role = $this->createElementNS(MODS_NS, 'mods:role');
-			$roleTerm = $this->createElementNS(MODS_NS, 'mods:roleTerm', $userGroup->getName($locale));
+			$roleTerm = $this->createElementNS(MODS_NS, 'mods:roleTerm', $userGroup->getLocalizedData('name', $locale));
 			$roleTerm->setAttribute('xml:lang', $locale);
 			$roleTerm->setAttribute('type', 'text');
 			$role->appendChild($roleTerm);
-			$roleTerm = $this->createElementNS(MODS_NS, 'mods:roleTerm', $userGroup->getAbbrev($locale));
+			$roleTerm = $this->createElementNS(MODS_NS, 'mods:roleTerm', $userGroup->getLocalizedData('abbrev', $locale));
 			$roleTerm->setAttribute('xml:lang', $locale);
 			$roleTerm->setAttribute('type', 'code');
 			$role->appendChild($roleTerm);
@@ -265,7 +269,7 @@ class ModsDom extends DOMDocument
 	private function createNameOrcid(Author $author, DOMElement|false $nameDom): void
 	{
 		$orcidValue = $author->getData('orcid');
-		if (strlen($orcidValue) > 0) {
+		if (!empty($orcidValue)) {
 			$orcid = $this->createElementNS(MODS_NS, 'mods:affiliation', $orcidValue);
 			$orcid->setAttribute('script', 'orcid');
 			$nameDom->appendChild($orcid);
@@ -275,7 +279,7 @@ class ModsDom extends DOMDocument
 	private function createNameURL(Author $author, DOMElement|false $nameDom): void
 	{
 		$orcidValue = $author->getData('url');
-		if (strlen($orcidValue) > 0) {
+		if (!empty($orcidValue)) {
 			$orcid = $this->createElementNS(MODS_NS, 'mods:affiliation', $orcidValue);
 			$orcid->setAttribute('script', 'url');
 			$nameDom->appendChild($orcid);
@@ -285,7 +289,7 @@ class ModsDom extends DOMDocument
 	private function createNameCountry(Author $author, DOMElement|false $nameDom): void
 	{
 		$orcidValue = $author->getData('country');
-		if (strlen($orcidValue) > 0) {
+		if (!empty($orcidValue)) {
 			$orcid = $this->createElementNS(MODS_NS, 'mods:affiliation', $orcidValue);
 			$orcid->setAttribute('script', 'country');
 			$nameDom->appendChild($orcid);

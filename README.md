@@ -65,40 +65,70 @@ git checkout stable-3_3_0 # e.g. for OJS 3.3.0
 Add the following variables to your OJS global configuration file in`\$OJS/config.inc.php`.
 Rosetta Service provider provides you this information.
 
-```bash
+```ini
 [rosetta]
-# mandatory
-subDirectoryName  =  $LOCAL_FILE_MOUNT_OF_ROSETTA_FILESHARE
-# only required for production, for development purposes, do not required.
-institution_code = $INSTITUTE_NAME
-username = $ROSETTA_USER
-password = $ROSETTA_PASSWORD
-host = $ROSETTA_DEPOSIT_URL e.g. https://<host>:<port>
-materialFlowId = $MATERIAL_FLOWID_FOR_OJS_ROSETTA
-producerId = $PRODUCER_ID_FOR_OJS_ROSETTA
-testMode = true e.g. true false
+; mandatory - local mount point of the Rosetta fileshare where SIP packages are created
+subDirectoryName = /mnt/rosetta-deposit
 
-#### 2. Add  Journals or specific issues to be deposited
-To select the individual Journals , add the acronym of the journal in the [settings.json](settings.json) file in the plugin folder.
-e.g. `$OJS/plugins/importexport/rosetta`
+; only required for production, not required for development/testing
+institution_code = YOUR_INSTITUTION_CODE
+username = rosetta_username
+password = rosetta_password
+host = https://rosetta-host:port
+materialFlowId = 12345
+producerId = 67890
+
+; set to true for testing (creates SIP files but does not submit via SOAP)
+testMode = true
+
+; waiting time in seconds between deposits (default: 120)
+depositWaitSeconds = 120
+```
+
+#### How it works
+
+1. The plugin reads journal settings from `settings.json` to determine which journals/issues to deposit
+2. For each matching submission, a SIP package is created under the `subDirectoryName` mount point
+3. Galley files are copied from the OJS `files_dir` (defined in `[files]` section of `config.inc.php`) into the SIP structure
+4. If `testMode` is `false`, the SIP is submitted to Rosetta via the SOAP API and the local SIP folder is removed
+
+The SIP folder structure created under `subDirectoryName`:
+
+```
+<subDirectoryName>/
+└── <journal-acronym>-<submissionId>-v<version>/
+    ├── dc.xml                  (Dublin Core metadata)
+    └── content/
+        ├── ie1.xml             (METS intellectual entity)
+        └── streams/
+            └── MASTER/
+                ├── article.pdf (galley files)
+                └── image.png   (dependent files)
+```
+
+#### 2. Add Journals or specific issues to be deposited
+
+To select individual journals for deposit, add the **lowercase acronym** of the journal as a key in the [settings.json](settings.json) file located at `$OJS/plugins/importexport/rosetta/settings.json`.
+
+An empty array means **all published submissions** of that journal will be deposited:
 
 ```json
 {
-"businessjournal": [],
-"JPKJPK": [],
+  "businessjournal": [],
+  "jpkjpk": []
 }
 ```
 
-To select only specific issues, add the volume, number and year for each issue in the json array.
+To deposit only specific issues, add objects with `VOLUME`, `NUMBER`, and `YEAR` for each issue:
 
 ```json
 {
-  "JPKJPK": [],
-  "journal": [
+  "jpkjpk": [],
+  "ocp": [
     {
-      "JPKJPK": 1,
-      "number": 1,
-      "year": 2022
+      "VOLUME": 1,
+      "NUMBER": 1,
+      "YEAR": 2022
     }
   ]
 }

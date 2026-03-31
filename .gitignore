@@ -12,3 +12,4 @@ node_modules/**
 
 # cypress logs
 cypress/logs/**
+tests/.phpunit.cache
