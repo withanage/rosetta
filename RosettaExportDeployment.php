@@ -154,7 +154,7 @@ class RosettaExportDeployment
 						continue;
 					}
 
-					if ($currentContextSettings == null) {
+					if (empty($currentContextSettings)) {
 						$this->depositPublication($submission, $publication, $galleyFiles);
 						$depositedPublicationIds[] = $publication->getId();
 					} else {
