@@ -327,10 +327,17 @@ class RosettaExportDeployment
 				$failedFiles [] = $file['fullFilePath'];
 				continue;
 			}
-			$copySuccess = copy(
-				$sourceFilePath,
-				join(DIRECTORY_SEPARATOR,
-					array($STREAM_PATH, $file['path'], basename($file['fullFilePath']))));
+			$targetFilePath = join(DIRECTORY_SEPARATOR,
+				array($STREAM_PATH, $file['path'], basename($file['fullFilePath'])));
+			if (strtolower(pathinfo($sourceFilePath, PATHINFO_EXTENSION)) === 'xml') {
+				$xml = file_get_contents($sourceFilePath);
+				$copySuccess = ($xml !== false)
+					&& (file_put_contents($targetFilePath, $this->normalizeJatsGalley($xml)) !== false);
+			} else {
+				$copySuccess = copy($sourceFilePath, $targetFilePath);
+			}
+			if (!$copySuccess)
+				$failedFiles [] = $file['fullFilePath'];
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
 				$copySuccess = copy(
@@ -370,6 +377,21 @@ class RosettaExportDeployment
 		umask($oldMask);
 	}
 
+	private function normalizeJatsGalley(string $xml): string
+	{
+		$xml = preg_replace('/<(\/?)copyright-license(\b)/', '<$1license$2', $xml);
+
+		$xml = preg_replace_callback(
+			'/<date\b[^>]*>/',
+			static function (array $m): string {
+				return preg_replace('/(?<![\w-])type(\s*=)/', 'date-type$1', $m[0]);
+			},
+			$xml
+		);
+
+		return $xml;
+	}
+
 	private function doDeposit(string $ingestPath, Publication $publication): void
 	{
 		// Get the deposit endpoint and SOAP payload
@@ -391,11 +413,14 @@ class RosettaExportDeployment
 
 			// Extract relevant data from the SOAP response
 			$sipIdNode = $this->getSoapResponseXpath($responseBody)->query('//ser:sip_id')[0];
-			$errorMessage = $this->getSoapResponseXpath($responseBody)->query('//ser:message_code')[0];
+			$errorMessageNode = $this->getSoapResponseXpath($responseBody)->query('//ser:message_code')[0];
 
-			// Handle error messages if present
+			// Handle error messages if present. message_code is a DOMElement, so log its
+			// text value (and the full response body for context) — never the node itself,
+			// which would fatal with "Object of class DOMElement could not be converted to string".
+			$errorMessage = is_null($errorMessageNode) ? '' : $errorMessageNode->nodeValue;
 			if (!empty($errorMessage)) {
-				$this->plugin->logError($errorMessage);
+				$this->plugin->logError('Rosetta message_code: ' . $errorMessage . ' | response: ' . $responseBody);
 			}
 
 			// Create a deposit status model
