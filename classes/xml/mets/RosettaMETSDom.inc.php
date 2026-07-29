@@ -2,10 +2,10 @@
 
 namespace TIBHannover\Rosetta\Mets;
 
-import('plugins.importexport.rosetta.classes.xml.mods.ModsDOM');
-import('plugins.importexport.rosetta.classes.xml.XMLUtils');
-import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.importexport.rosetta.classes.files.RosettaFileService');
+import('plugins.generic.rosetta.classes.xml.mods.ModsDOM');
+import('plugins.generic.rosetta.classes.xml.XMLUtils');
+import('plugins.generic.rosetta.classes.xml.dublincore.RosettaDCDom');
+import('plugins.generic.rosetta.classes.files.RosettaFileService');
 
 define('MASTER_PATH', 'MASTER');
 
@@ -183,7 +183,7 @@ class RosettaMETSDom extends DOMDocument
 		$generalFileChars = $this->createElementNS($this->metsNS, 'mets:amdSec');
 		$generalFileChars->setAttribute('ID', 'fid' . strval($index) . '-' . $repIdSuffix . '-amd');
 
-		$md5_file = md5_file($filePath);
+		$md5_file = XMLUtils::md5ForSip($filePath);
 
 		XMLUtils::createIEAmdSections($this, array(
 				array('id' => 'generalFileCharacteristics', 'records' => array(

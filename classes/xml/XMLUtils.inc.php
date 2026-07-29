@@ -7,6 +7,30 @@ use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 
 class XMLUtils
 {
+	public static function normalizeJatsGalley(string $xml): string
+	{
+		$xml = preg_replace('/<(\/?)copyright-license(\b)/', '<$1license$2', $xml);
+
+		$xml = preg_replace_callback(
+			'/<date\b[^>]*>/',
+			static function (array $m): string {
+				return preg_replace('/(?<![\w-])type(\s*=)/', 'date-type$1', $m[0]);
+			},
+			$xml
+		);
+
+		return $xml;
+	}
+
+	public static function md5ForSip(string $sourceFilePath): string
+	{
+		if (strtolower(pathinfo($sourceFilePath, PATHINFO_EXTENSION)) === 'xml') {
+			$xml = file_get_contents($sourceFilePath);
+			return $xml === false ? md5_file($sourceFilePath) : md5(self::normalizeJatsGalley($xml));
+		}
+		return md5_file($sourceFilePath);
+	}
+
 		public static function createIEAmdSections(RosettaMETSDom $document, array $sectionsArray, string $name,
 											   string         $type, string $ieAmd, DOMElement $adminSec): void
 	{

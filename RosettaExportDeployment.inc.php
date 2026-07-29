@@ -5,12 +5,13 @@
 namespace TIBHannover\Rosetta;
 
 import('classes.core.Services');
-import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.importexport.rosetta.classes.xml.mets.RosettaMETSDom');
-import('plugins.importexport.rosetta.classes.files.RosettaFileService');
-import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
-import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
-import('plugins.importexport.rosetta.classes.utilities.Utils');
+import('plugins.generic.rosetta.classes.xml.dublincore.RosettaDCDom');
+import('plugins.generic.rosetta.classes.xml.mets.RosettaMETSDom');
+import('plugins.generic.rosetta.classes.xml.XMLUtils');
+import('plugins.generic.rosetta.classes.files.RosettaFileService');
+import('plugins.generic.rosetta.classes.models.DepositActivityModel');
+import('plugins.generic.rosetta.classes.models.DepositStatusModel');
+import('plugins.generic.rosetta.classes.utilities.Utils');
 
 use Context;
 use Core;
@@ -19,6 +20,7 @@ use DOMXPath;
 use Exception;
 use GuzzleHttp\Client;
 use PKPString;
+use TIBHannover\Rosetta\Xml\XMLUtils;
 use Publication;
 use PublicationDAO;
 use RosettaExportPlugin;
@@ -31,8 +33,6 @@ use TIBHannover\Rosetta\Mets\RosettaMETSDom;
 use TIBHannover\Rosetta\Models\DepositActivityModel;
 use TIBHannover\Rosetta\Models\DepositStatusModel;
 use TIBHannover\Rosetta\Utils\Utils;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 
@@ -332,7 +332,7 @@ class RosettaExportDeployment
 			if (strtolower(pathinfo($sourceFilePath, PATHINFO_EXTENSION)) === 'xml') {
 				$xml = file_get_contents($sourceFilePath);
 				$copySuccess = ($xml !== false)
-					&& (file_put_contents($targetFilePath, $this->normalizeJatsGalley($xml)) !== false);
+					&& (file_put_contents($targetFilePath, XMLUtils::normalizeJatsGalley($xml)) !== false);
 			} else {
 				$copySuccess = copy($sourceFilePath, $targetFilePath);
 			}
@@ -375,21 +375,6 @@ class RosettaExportDeployment
 
 
 		umask($oldMask);
-	}
-
-	private function normalizeJatsGalley(string $xml): string
-	{
-		$xml = preg_replace('/<(\/?)copyright-license(\b)/', '<$1license$2', $xml);
-
-		$xml = preg_replace_callback(
-			'/<date\b[^>]*>/',
-			static function (array $m): string {
-				return preg_replace('/(?<![\w-])type(\s*=)/', 'date-type$1', $m[0]);
-			},
-			$xml
-		);
-
-		return $xml;
 	}
 
 	private function doDeposit(string $ingestPath, Publication $publication): void
