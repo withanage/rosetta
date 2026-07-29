@@ -1,7 +1,7 @@
 <?php
 
 import('classes.plugins.PubObjectsExportPlugin');
-import('plugins.generic.rosetta.RosettaExportDeployment');
+import('plugins.importexport.rosetta.RosettaExportDeployment');
 
 use TIBHannover\Rosetta\Form\RosettaSettingsForm;
 use TIBHannover\Rosetta\RosettaExportDeployment;

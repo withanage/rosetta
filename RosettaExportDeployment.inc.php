@@ -5,13 +5,13 @@
 namespace TIBHannover\Rosetta;
 
 import('classes.core.Services');
-import('plugins.generic.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.generic.rosetta.classes.xml.mets.RosettaMETSDom');
-import('plugins.generic.rosetta.classes.xml.XMLUtils');
-import('plugins.generic.rosetta.classes.files.RosettaFileService');
-import('plugins.generic.rosetta.classes.models.DepositActivityModel');
-import('plugins.generic.rosetta.classes.models.DepositStatusModel');
-import('plugins.generic.rosetta.classes.utilities.Utils');
+import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
+import('plugins.importexport.rosetta.classes.xml.mets.RosettaMETSDom');
+import('plugins.importexport.rosetta.classes.xml.XMLUtils');
+import('plugins.importexport.rosetta.classes.files.RosettaFileService');
+import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
+import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
+import('plugins.importexport.rosetta.classes.utilities.Utils');
 
 use Context;
 use Core;
