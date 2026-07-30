@@ -2,10 +2,10 @@
 
 namespace TIBHannover\Rosetta\Mets;
 
-import('plugins.generic.rosetta.classes.xml.mods.ModsDOM');
-import('plugins.generic.rosetta.classes.xml.XMLUtils');
-import('plugins.generic.rosetta.classes.xml.dublincore.RosettaDCDom');
-import('plugins.generic.rosetta.classes.files.RosettaFileService');
+import('plugins.importexport.rosetta.classes.xml.mods.ModsDOM');
+import('plugins.importexport.rosetta.classes.xml.XMLUtils');
+import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
+import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 
 define('MASTER_PATH', 'MASTER');
 
