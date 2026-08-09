@@ -200,6 +200,15 @@ class RosettaExportPlugin extends PubObjectsExportPlugin
 					$config_value = false;
 				}
 				break;
+			case 'javaPath':
+				$config_value = Config::getVar('rosetta', 'javaPath');
+				break;
+			case 'droidPath':
+				$config_value = Config::getVar('rosetta', 'droidPath');
+				break;
+			case 'droidMode':
+				$config_value = Config::getVar('rosetta', 'droidMode');
+				break;
 			default:
 				return parent::getSetting($contextId, $name);
 		}

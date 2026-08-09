@@ -8,6 +8,7 @@ require_mock_env('env2');
 
 import('plugins.importexport.rosetta.tests.functional.xml.mets.Mets');
 import('plugins.importexport.rosetta.tests.functional.xml.dublincore.DublinCore');
+import('plugins.importexport.rosetta.tests.functional.droid.Droid');
 import('plugins.importexport.rosetta.tests.classes.TestSubmission');
 import('plugins.importexport.rosetta.tests.classes.TestJournal');
 
@@ -45,6 +46,12 @@ class RosettaFunctionsTest extends PluginTestCase
 	{
 		$mets = new Mets();
 		$mets->testMets($this);
+	}
+
+	public function testDroid()
+	{
+		$droid = new Droid();
+		$droid->testDroid($this);
 	}
 
 	public function createRouter(): PKPRouter

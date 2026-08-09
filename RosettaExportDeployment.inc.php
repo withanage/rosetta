@@ -8,6 +8,7 @@ import('classes.core.Services');
 import('plugins.importexport.rosetta.classes.xml.dublincore.RosettaDCDom');
 import('plugins.importexport.rosetta.classes.xml.mets.RosettaMETSDom');
 import('plugins.importexport.rosetta.classes.xml.XMLUtils');
+import('plugins.importexport.rosetta.classes.droid.DroidService');
 import('plugins.importexport.rosetta.classes.files.RosettaFileService');
 import('plugins.importexport.rosetta.classes.models.DepositActivityModel');
 import('plugins.importexport.rosetta.classes.models.DepositStatusModel');
@@ -21,6 +22,8 @@ use Exception;
 use GuzzleHttp\Client;
 use PKPString;
 use TIBHannover\Rosetta\Xml\XMLUtils;
+use TIBHannover\Rosetta\Droid\DroidService;
+use TIBHannover\Rosetta\Droid\DroidException;
 use Publication;
 use PublicationDAO;
 use RosettaExportPlugin;
@@ -319,6 +322,9 @@ class RosettaExportDeployment
 
 		$failedFiles = [];
 
+		$droid = new DroidService($this->plugin, $this->context->getId());
+		$droidMode = $this->plugin->getSetting($this->context->getId(), 'droidMode') ?: 'block';
+
 		foreach ($galleyFiles as $file) {
 
 
@@ -338,14 +344,19 @@ class RosettaExportDeployment
 			}
 			if (!$copySuccess)
 				$failedFiles [] = $file['fullFilePath'];
+			else if (!$this->droidAccepts($droid, $droidMode, $targetFilePath, $file['fullFilePath']))
+				$failedFiles [] = $file['fullFilePath'];
 
 			foreach ($file['dependentFiles'] as $dependentFile) {
+				$dependentTargetPath = join(DIRECTORY_SEPARATOR,
+					array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath'])));
 				$copySuccess = copy(
 					$this->plugin->getBasePath() . DIRECTORY_SEPARATOR . $dependentFile['fullFilePath'],
-					join(DIRECTORY_SEPARATOR,
-						array($STREAM_PATH, $file['path'], basename($dependentFile['fullFilePath']))));
+					$dependentTargetPath);
 
 				if (!$copySuccess)
+					$failedFiles [] = $dependentFile['fullFilePath'];
+				else if (!$this->droidAccepts($droid, $droidMode, $dependentTargetPath, $dependentFile['fullFilePath']))
 					$failedFiles [] = $dependentFile['fullFilePath'];
 			}
 		}
@@ -375,6 +386,40 @@ class RosettaExportDeployment
 
 
 		umask($oldMask);
+	}
+
+	/**
+	 * Identify a copied file with DROID. Returns true if the file may be deposited.
+	 *
+	 * In 'block' mode a format that DROID cannot identify, or whose declared extension
+	 * contradicts its signature, returns false so the caller records it as a failed file.
+	 * In 'warn' mode findings are logged but never block. In 'off' mode DROID never runs.
+	 * Infrastructure failures (java/jar/signature missing, non-zero exit) always block
+	 * unless mode is 'off' — we cannot vouch for a file we could not check.
+	 */
+	private function droidAccepts(DroidService $droid, string $droidMode, string $targetFilePath, string $reportPath): bool
+	{
+		if ($droidMode === 'off') {
+			return true;
+		}
+
+		try {
+			$result = $droid->identify($targetFilePath);
+		} catch (DroidException $e) {
+			$this->plugin->logError($e->getMessage());
+			return $droidMode !== 'block' ? true : false;
+		}
+
+		if ($result->identified && !$result->extensionMismatch) {
+			return true;
+		}
+
+		$this->plugin->logError('DROID: ' . $reportPath
+			. ' puid=' . ($result->puid ?: 'UNKNOWN')
+			. ' identified=' . ($result->identified ? '1' : '0')
+			. ' extensionMismatch=' . ($result->extensionMismatch ? '1' : '0'));
+
+		return $droidMode !== 'block';
 	}
 
 	private function doDeposit(string $ingestPath, Publication $publication): void
